@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace apppasteleriav03.Models
+namespace apppasteleriav04.Models
 {
     // Asegúrate de usar este modelo (o que tu modelo existente implemente INotifyPropertyChanged)
     public class CartItem : INotifyPropertyChanged

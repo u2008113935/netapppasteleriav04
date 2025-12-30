@@ -1,11 +1,11 @@
-﻿using apppasteleriav03.Services;
+﻿using apppasteleriav04.Services;
 //using apppasteleriav04.Services.Core;
 using Microsoft.Maui.Controls;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 
-namespace apppasteleriav03.Converters
+namespace apppasteleriav04.Converters
 {
     public class ImagePathToUriConverter : IValueConverter
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace apppasteleriav03.Services
+namespace apppasteleriav04.Services
 {
     public static class SupabaseConfig
     {

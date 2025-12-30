@@ -1,5 +1,5 @@
-﻿using apppasteleriav03.Models;
-using apppasteleriav03.Services;
+﻿using apppasteleriav04.Models;
+using apppasteleriav04.Services;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Maps;
@@ -16,7 +16,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace apppasteleriav03.Views
+namespace apppasteleriav04.Views
 {
     public partial class LiveTrackingPage : ContentPage
     {

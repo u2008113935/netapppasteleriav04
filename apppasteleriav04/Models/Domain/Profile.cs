@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace apppasteleriav03.Models
+namespace apppasteleriav04.Models
 {
     public class Profile
     {
@@ -28,10 +28,10 @@ namespace apppasteleriav03.Models
             {
                 if (string.IsNullOrWhiteSpace(AvatarUrl)) return null;
 
-                var baseUrl = apppasteleriav03.Services.SupabaseConfig.SUPABASE_URL?.TrimEnd('/');
+                var baseUrl = apppasteleriav04.Services.SupabaseConfig.SUPABASE_URL?.TrimEnd('/');
                 if (string.IsNullOrWhiteSpace(baseUrl)) return AvatarUrl;
 
-                return $"{baseUrl}/storage/v1/object/public/{apppasteleriav03.Services.SupabaseConfig.BUCKET_NAME}/{Uri.EscapeDataString(AvatarUrl)}";
+                return $"{baseUrl}/storage/v1/object/public/{apppasteleriav04.Services.SupabaseConfig.BUCKET_NAME}/{Uri.EscapeDataString(AvatarUrl)}";
             }
         }
     }

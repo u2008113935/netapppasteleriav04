@@ -6,10 +6,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Essentials;
-using apppasteleriav03.Models;
-using apppasteleriav03.Services;
+using apppasteleriav04.Models;
+using apppasteleriav04.Services;
 
-namespace apppasteleriav03.Views
+namespace apppasteleriav04.Views
 {
     /// <summary>
     /// Code-behind de ProfilePage.xaml

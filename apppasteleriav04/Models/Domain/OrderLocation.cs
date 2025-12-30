@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace apppasteleriav03.Models
+namespace apppasteleriav04.Models
 {
     public class OrderLocation
     {

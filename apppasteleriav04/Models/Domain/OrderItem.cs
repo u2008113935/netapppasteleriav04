@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace apppasteleriav03.Models
+namespace apppasteleriav04.Models
 {
     public class OrderItem
     {

@@ -2,8 +2,8 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:conv="clr-namespace:apppasteleriav03.Converters"
-    x:Class="apppasteleriav03.Views.OrderPage"
+    xmlns:conv="clr-namespace:apppasteleriav04.Converters"
+    x:Class="apppasteleriav04.Views.OrderPage"
     Title="Mis pedidos">
 
     <ContentPage.Resources>

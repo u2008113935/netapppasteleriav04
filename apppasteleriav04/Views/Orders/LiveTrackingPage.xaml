@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
-    x:Class="apppasteleriav03.Views.LiveTrackingPage"
+    x:Class="apppasteleriav04.Views.LiveTrackingPage"
     Title="Seguimiento en vivo">
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="8">

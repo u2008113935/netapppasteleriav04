@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:conv="clr-namespace:apppasteleriav03.Converters"
-             x:Class="apppasteleriav03.Views.CartPage"
+             xmlns:conv="clr-namespace:apppasteleriav04.Converters"
+             x:Class="apppasteleriav04.Views.CartPage"
              Title="Carrito">
 
     <ContentPage.Resources>
