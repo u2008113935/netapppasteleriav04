@@ -41,4 +41,23 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+
+    <!-- AGREGAR AL FINAL DEL ARCHIVO (antes de </ResourceDictionary>) -->
+
+    <!-- TEMA OSCURO YOUTUBE STYLE -->
+    <Color x:Key="BackgroundPrimary">#000000</Color>
+    <Color x:Key="BackgroundSecondary">#1C1C1E</Color>
+    <Color x:Key="BackgroundTertiary">#2C2C2E</Color>
+
+    <Color x:Key="TextPrimary">#FFFFFF</Color>
+    <Color x:Key="TextSecondary">#AAAAAA</Color>
+    <Color x:Key="TextTertiary">#666666</Color>
+
+    <!-- Pastelería - Rosa -->
+    <Color x:Key="PinkPrimary">#FF6B9D</Color>
+    <Color x:Key="PinkDark">#E85A8A</Color>
+    <Color x:Key="PinkLight">#FFA8C5</Color>
+
+
 </ResourceDictionary>

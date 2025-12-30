@@ -1,14 +1,61 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:apppasteleriav04"
-             x:Class="apppasteleriav04.App">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
-</Application>
+﻿<!-- REEMPLAZAR COMPLETO -->
+<? xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="apppasteleriav04.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns: x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns: catalog="clr-namespace:apppasteleriav04.Views.Catalog"
+    xmlns:cart="clr-namespace:apppasteleriav04.Views. Cart"
+    xmlns:orders="clr-namespace:apppasteleriav04.Views. Orders"
+    xmlns:profile="clr-namespace:apppasteleriav04.Views.Profile"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False">
+
+    <!-- Tema oscuro para TabBar -->
+    <Shell.Resources>
+        <Style TargetType="TabBar">
+            <Setter Property="BackgroundColor" Value="#1C1C1E"/>
+        </Style>
+        </Shell. Resources>
+
+        <!-- NAVEGACIÓN INFERIOR (5 TABS) -->
+        <TabBar>
+
+            <!-- 🏠 INICIO (CATÁLOGO) -->
+            <Tab Title="Inicio" Icon="icon_home. png">
+                <ShellContent 
+                Route="catalog"
+                ContentTemplate="{DataTemplate catalog:CatalogPage}" />
+            </Tab>
+
+            <!-- 🛒 CARRITO -->
+            <Tab Title="Carrito" Icon="icon_cart. png">
+                <ShellContent 
+                Route="cart"
+                ContentTemplate="{DataTemplate cart:CartPage}" />
+            </Tab>
+
+            <!-- ➕ CREAR -->
+            <Tab Title="Crear" Icon="icon_add.png">
+                <ShellContent 
+                Route="create"
+                ContentTemplate="{DataTemplate catalog:CatalogPage}" />
+            </Tab>
+
+            <!-- 📦 PEDIDOS -->
+            <Tab Title="Pedidos" Icon="icon_orders.png">
+                <ShellContent 
+                Route="orders"
+                ContentTemplate="{DataTemplate orders:OrdersPage}" />
+            </Tab>
+
+            <!-- 👤 PERFIL -->
+            <Tab Title="Tú" Icon="icon_profile.png">
+                <ShellContent 
+                Route="profile"
+                ContentTemplate="{DataTemplate profile:ProfilePage}" />
+            </Tab>
+
+        </TabBar>
+
+</Shell>

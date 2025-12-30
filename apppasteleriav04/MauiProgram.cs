@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// REEMPLAZAR COMPLETO
+using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 
 namespace apppasteleriav04
 {
@@ -7,16 +10,20 @@ namespace apppasteleriav04
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Regular. ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // TODO: Cuando agregues servicios, configurarlos aquí
+            // builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
