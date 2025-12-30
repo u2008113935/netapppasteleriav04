@@ -1,12 +1,88 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\models\\local\\syncqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\models\\local\\syncqueue.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\platforms\\android\\androidmanifest.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\platforms\\android\\androidmanifest.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml",
+              "RelativeDocumentMoniker": "apppasteleriav04\\App.xaml",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml",
+              "RelativeToolTip": "apppasteleriav04\\App.xaml",
+              "ViewState": "AgIAABsAAAAAAAAAAAAUwDsAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-12-30T02:06:26.915Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\App.xaml.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
+              "RelativeToolTip": "apppasteleriav04\\App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T02:06:24.977Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SyncQueue.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Models\\Local\\SyncQueue.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\Models\\Local\\SyncQueue.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Models\\Local\\SyncQueue.cs",
+              "RelativeToolTip": "apppasteleriav04\\Models\\Local\\SyncQueue.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T02:03:21.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AndroidManifest.xml",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Platforms\\Android\\AndroidManifest.xml",
+              "RelativeDocumentMoniker": "apppasteleriav04\\Platforms\\Android\\AndroidManifest.xml",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Platforms\\Android\\AndroidManifest.xml",
+              "RelativeToolTip": "apppasteleriav04\\Platforms\\Android\\AndroidManifest.xml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
+              "WhenOpened": "2025-12-30T02:00:22.834Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -68,8 +68,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\Catalog\Catalog.xaml.cs">
-	    <DependentUpon>Catalog.xaml</DependentUpon>
+	  <Compile Update="Views\Catalog\CatalogPage.xaml.cs">
+	    <DependentUpon>CatalogPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
