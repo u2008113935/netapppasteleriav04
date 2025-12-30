@@ -12,28 +12,28 @@
     <TabBar>
 
         <!-- 🏠 INICIO -->
-        <Tab Title="Inicio">
+        <Tab Title="Inicio" Icon="home.svg">
             <ShellContent 
                 Route="catalog"
                 ContentTemplate="{DataTemplate catalog:CatalogPage}" />
         </Tab>
 
         <!-- 🛒 CARRITO -->
-        <Tab Title="Carrito">
+        <Tab Title="Carrito" Icon="cart.svg">
             <ShellContent 
                 Route="cart"
                 ContentTemplate="{DataTemplate cart:CartPage}" />
         </Tab>
 
         <!-- 📦 PEDIDOS -->
-        <Tab Title="Pedidos">
+        <Tab Title="Pedidos" Icon="orders.svg">
             <ShellContent 
                 Route="orders"
                 ContentTemplate="{DataTemplate orders:OrdersPage}" />
         </Tab>
 
         <!-- 👤 PERFIL -->
-        <Tab Title="Perfil">
+        <Tab Title="Perfil" Icon="user.svg">
             <ShellContent 
                 Route="profile"
                 ContentTemplate="{DataTemplate profile:ProfilePage}" />

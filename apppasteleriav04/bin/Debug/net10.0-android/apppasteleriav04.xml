@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>apppasteleriav04</name>
+    </assembly>
+    <members>
+        <member name="M:apppasteleriav04.App.InitializeAppAsync">
+            <summary>
+            Inicializar datos de la app (mínimo 2 segundos para mostrar splash)
+            </summary>
+        </member>
+        <member name="T:apppasteleriav04.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+    </members>
+</doc>

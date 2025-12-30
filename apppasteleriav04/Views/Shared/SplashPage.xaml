@@ -5,17 +5,16 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#1C1C1E">
 
-    <Grid>
-        <!-- Gradiente de fondo -->
-        <BoxView>
-            <BoxView.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#FF6B9D" Offset="0.0" />
-                    <GradientStop Color="#FFA8C5" Offset="1.0" />
-                </LinearGradientBrush>
-                </BoxView.Background>
-        </BoxView>
+    <!-- Gradiente de fondo -->
+    <ContentPage.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FF6B9D" Offset="0.0" />
+                <GradientStop Color="#FFA8C5" Offset="1.0" />
+            </LinearGradientBrush>
+    </ContentPage.Background>
+    
 
+    <Grid>     
         <!-- Contenido -->
         <VerticalStackLayout VerticalOptions="Center" 
                             HorizontalOptions="Center"
