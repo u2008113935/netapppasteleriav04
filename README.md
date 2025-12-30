@@ -20,7 +20,7 @@ Aplicación móvil para gestión de pedidos de pastelería con .NET MAUI.
 \\\ash
 git clone https://github.com/u2008113935/netapppasteleriav04.git
 \\\`n
-Abrir en Visual Studio 2022 y ejecutar.
+Abrir en Visual Studio 2026 y ejecutar.
 
 ## Estructura
 - Models/ - Modelos de datos
