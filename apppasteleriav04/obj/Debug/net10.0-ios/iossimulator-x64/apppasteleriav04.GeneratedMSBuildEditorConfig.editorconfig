@@ -1,0 +1,317 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.VerifyReferenceTrimCompatibility = 
+build_property.VerifyReferenceAotCompatibility = 
+build_property.MauiXamlNoWarn = 
+build_property.EnableMauiXamlDiagnostics = true
+build_property.MauiXamlLineInfo = 
+build_property.Configuration = Debug
+build_property.TargetFramework = net10.0-ios
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = apppasteleriav04
+build_property.ProjectDir = D:\NetApp\apppasteleriav04\apppasteleriav04\apppasteleriav04\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Auth/LoginPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Auth.LoginPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\LoginPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\LoginPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Auth/RegisterPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Auth.RegisterPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\RegisterPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\RegisterPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Billing/BoletaPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Billing.BoletaPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Billing\BoletaPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Billing\BoletaPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Billing/ComprobantesPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Billing.ComprobantesPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Billing\ComprobantesPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Billing\ComprobantesPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Billing/FacturaPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Billing.FacturaPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Billing\FacturaPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Billing\FacturaPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Cart/CartPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Cart.CartPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Cart\CartPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Cart\CartPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Cart/CheckoutPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Cart.CheckoutPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Cart\CheckoutPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Cart\CheckoutPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Cart/PaymentPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Cart.PaymentPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Cart\PaymentPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Cart\PaymentPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Catalog/Catalog.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Catalog.Catalog.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Catalog\Catalog.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Catalog\Catalog.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Orders/LiveTrackingPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Orders.LiveTrackingPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Orders\LiveTrackingPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Orders\LiveTrackingPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Orders/OrdersPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Orders.OrdersPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Orders\OrdersPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Orders\OrdersPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Employee/EmployeeDashboardPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Employee.EmployeeDashboardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Employee\EmployeeDashboardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Employee\EmployeeDashboardPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Employee/EmployeePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Employee.EmployeePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Employee\EmployeePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Employee\EmployeePage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Employee/EmployeeSyncPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Employee.EmployeeSyncPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Employee\EmployeeSyncPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Employee\EmployeeSyncPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Manager/ManagerPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Manager.ManagerPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Manager\ManagerPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Manager\ManagerPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Manager/ManagerReportsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Manager.ManagerReportsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Manager\ManagerReportsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Manager\ManagerReportsPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Manager/ManagerSyncPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Manager.ManagerSyncPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Manager\ManagerSyncPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Manager\ManagerSyncPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/ProfilePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.ProfilePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\ProfilePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\ProfilePage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Vendor/VendorPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Vendor.VendorPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Vendor\VendorPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Vendor\VendorPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Vendor/VendorSalesPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Vendor.VendorSalesPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Vendor\VendorSalesPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Vendor\VendorSalesPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Profile/Vendor/VendorSyncPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Profile.Vendor.VendorSyncPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\Vendor\VendorSyncPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\Vendor\VendorSyncPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Shared/EmptyStateView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Shared.EmptyStateView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Shared\EmptyStateView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Shared\EmptyStateView.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Shared/LoadingOverlay.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Shared.LoadingOverlay.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Shared\LoadingOverlay.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Shared\LoadingOverlay.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Sync/SyncSettingsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Sync.SyncSettingsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Sync\SyncSettingsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Sync\SyncSettingsPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/Views/Sync/SyncStatusPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = apppasteleriav04.Views.Sync.SyncStatusPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Sync\SyncStatusPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Sync\SyncStatusPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
