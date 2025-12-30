@@ -13,7 +13,7 @@ namespace apppasteleriav04.Views.Profile
 {
     public partial class ProfilePage : ContentPage
     {
-        private Profile _profile;   // Usa SIEMPRE apppasteleriav04.Models.Profile como modelo
+        private UserProfile _profile;   // Usa SIEMPRE apppasteleriav04.Models.Profile como modelo
         private readonly SupabaseService _supabase = new SupabaseService();
 
         public ProfilePage()
@@ -148,7 +148,7 @@ namespace apppasteleriav04.Views.Profile
                 else
                 {
                     var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var list = JsonSerializer.Deserialize<Profile[]>(respText, options);
+                    var list = JsonSerializer.Deserialize<UserProfile[]>(respText, options);
                     if (list != null && list.Length > 0)
                     {
                         _profile = list[0];

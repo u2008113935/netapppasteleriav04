@@ -1,6 +1,6 @@
 ﻿using apppasteleriav04.Models;
 using apppasteleriav04.Models.Domain;
-//using apppasteleriav04.Services.Core;
+using apppasteleriav04.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -537,7 +537,7 @@ namespace apppasteleriav04.Services
 
         #region Profiles / Auth helpers
 
-        public async Task<Profile?> GetProfileAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<UserProfile?> GetProfileAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -548,7 +548,7 @@ namespace apppasteleriav04.Services
                     Debug.WriteLine($"GetProfileAsync failed: {resp.StatusCode} - {json}");
                     return null;
                 }
-                var list = JsonSerializer.Deserialize<List<Profile>>(json, _jsonOpts);
+                var list = JsonSerializer.Deserialize<List<UserProfile>>(json, _jsonOpts);
                 return (list != null && list.Count > 0) ? list[0] : null;
             }
             catch (Exception ex)
