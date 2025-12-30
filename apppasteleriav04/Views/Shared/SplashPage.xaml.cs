@@ -12,8 +12,11 @@ namespace apppasteleriav04.Views.Shared
 
         private async Task InitializeAndNavigate()
         {
-            // Esperar inicialización
+            // Esperar inicialización (si tu método tarda menos de 5 segundos)
             await App.InitializeAppAsync();
+
+            // Espera adicional para que el splash dure al menos 5 segundos
+            await Task.Delay(5000);
 
             // Navegar al Shell principal
             Application.Current!.MainPage = new AppShell();

@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="456" height="456" viewBox="0 0 456 456" xmlns="http://www.w3.org/2000/svg">
-  <!-- Fondo opcional, puedes quitarlo si quieres fondo transparente -->
-  <!-- <rect width="456" height="456" fill="#FF6B9D"/> -->
-  
-  <!-- Ejemplo de texto arriba -->
-  <text x="50%" y="65" text-anchor="middle" font-size="34" font-family="Arial, Helvetica, sans-serif" fill="#FF6B9D" font-weight="bold">Pastelería</text>
-  
-  <!-- Icono de pastel: esto es un ejemplo simple, puedes reemplazar con tu SVG favorito -->
-  <g>
-    <ellipse cx="228" cy="180" rx="60" ry="30" fill="#fffbe7" stroke="#e2b45c" stroke-width="3"/>
-    <rect x="168" y="180" width="120" height="55" rx="15" fill="#FFD180" stroke="#e2b45c" stroke-width="3"/>
-    <ellipse cx="228" cy="235" rx="60" ry="20" fill="#bc6c25" />
-    <!-- Fresa encima -->
-    <ellipse cx="228" cy="145" rx="16" ry="13" fill="#ff6464" />
-    <circle cx="231" cy="143" r="2.3" fill="#ffffff" />
-    <circle cx="225" cy="150" r="1.8" fill="#ffffff" />
-  </g>
-  
-  <!-- Ejemplo de texto abajo -->
-  <text x="50%" y="280" text-anchor="middle" font-size="38" font-family="Arial, Helvetica, sans-serif" fill="#FF6B9D" font-weight="bold">Delicia</text>
+	<!-- Fondo pastel cuadrado con 48px de radio para estilo launcher Android/iOS -->
+	<rect width="456" height="456" rx="48" fill="#FFF8FC"/>
+
+	<!-- Dona grande y visualmente fuerte -->
+	<ellipse cx="228" cy="135" rx="85" ry="73" fill="#FF60B2"/>
+	<ellipse cx="228" cy="138" rx="36" ry="28" fill="#FFF8FC"/>
+	<!-- Chorreado más visible -->
+	<path d="M154,154 Q178,197 210,167 Q224,197 228,161 Q250,186 267,162 Q290,150 298,184 Q330,150 285,125"
+		  fill="#FF7AC1" opacity="0.93"/>
+	<!-- Brillo principal -->
+	<ellipse cx="239" cy="112" rx="21" ry="8" fill="#fff" opacity="0.31"/>
+	<!-- Detalle lunar decorativo -->
+	<circle cx="209" cy="111" r="9" fill="#fff" opacity="0.18"/>
+	<circle cx="262" cy="121" r="5" fill="#fff" opacity="0.2"/>
+
+	<!-- Letras súper visibles: "Delicia" (más grande) arriba -->
+	<text x="228" y="250" text-anchor="middle" font-size="65"
+		  font-family="Montserrat, Arial Black, Arial, sans-serif"
+		  font-weight="bold" fill="#FF60B2" letter-spacing="2">
+		Delicia
+	</text>
+
+	<!-- Letras "Pastelería" más pequeño, pero en el centro del botón -->
+	<text x="228" y="318" text-anchor="middle" font-size="36"
+		  font-family="Montserrat, Arial Black, Arial, sans-serif"
+		  font-weight="600" fill="#FF7AC1" letter-spacing="2">
+		Pastelería
+	</text>
 </svg>

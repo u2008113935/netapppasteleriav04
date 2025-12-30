@@ -4,7 +4,7 @@
              x:Class="apppasteleriav04.Views.Catalog.CatalogPage"
              BackgroundColor="{StaticResource BackgroundPrimary}">
 
-    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
 
         <!-- HEADER SUPERIOR -->
         <Grid Grid.Row="0" 
@@ -12,12 +12,14 @@
               Padding="16,10"
               ColumnDefinitions="Auto,*,Auto,Auto">
 
+            <!-- Icono pastel -->
             <Label Grid.Column="0"
                    Text="🍰"
                    FontSize="30"
                    VerticalOptions="Center"
                    Margin="0,0,8,0"/>
 
+            <!-- Título -->
             <Label Grid.Column="1"
                    Text="Delicia"
                    FontSize="20"
@@ -25,32 +27,43 @@
                    TextColor="{StaticResource TextPrimary}"
                    VerticalOptions="Center"/>
 
+            <!-- Lupa (Busqueda) -->
             <ImageButton Grid.Column="2"
                         Source="icon_search.png"
                         HeightRequest="24"
                         WidthRequest="24"
                         Margin="8,0"
-                        BackgroundColor="Transparent"/>
+                        BackgroundColor="Transparent"
+                        Clicked="OnSearchClicked"/>
 
+            <!-- Filtros -->
             <ImageButton Grid.Column="3"
-                        Source="icon_cart. png"
+                        Source="icon_filter.png"
                         HeightRequest="24"
                         WidthRequest="24"
                         Margin="8,0,0,0"
-                        BackgroundColor="Transparent"/>
+                        BackgroundColor="Transparent"
+                        Clicked="OnFilterClicked"/>
         </Grid>
 
-        <!-- LISTA DE PRODUCTOS -->
-        <CollectionView Grid.Row="1"
-                       BackgroundColor="{StaticResource BackgroundPrimary}">
+        <!-- SEARCHBAR OCULTO/MUESTRA AL BUSCAR -->
+        <SearchBar x:Name="ProductSearchBar"
+                   Grid.Row="1"
+                   Placeholder="Buscar productos..."
+                   IsVisible="False"
+                   SearchCommand="{Binding SearchCommand}"
+                   TextChanged="OnSearchTextChanged"
+                   CancelButtonColor="#FF60B2"
+                   Margin="16,0"/>
 
+        <!-- LISTA DE PRODUCTOS -->
+        <CollectionView Grid.Row="2"
+                       BackgroundColor="{StaticResource BackgroundPrimary}">
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" 
                                     HorizontalOptions="Center"
                                     Padding="40">
-                    <Label Text="🍰" 
-                           FontSize="60"
-                           HorizontalOptions="Center"/>
+                    <Label Text="🍰" FontSize="60" HorizontalOptions="Center"/>
                     <Label Text="No hay productos disponibles" 
                            FontSize="18"
                            TextColor="{StaticResource TextPrimary}"
@@ -58,9 +71,6 @@
                            Margin="0,12,0,0"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
-
         </CollectionView>
-
     </Grid>
-
 </ContentPage>

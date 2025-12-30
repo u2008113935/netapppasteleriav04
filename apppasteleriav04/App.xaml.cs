@@ -7,6 +7,7 @@ namespace apppasteleriav04
         public static bool IsInitialized { get; private set; } = false;
 
         public App()
+
         {
             InitializeComponent();
         }
