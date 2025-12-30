@@ -13,7 +13,7 @@
                     <GradientStop Color="#FF6B9D" Offset="0.0" />
                     <GradientStop Color="#FFA8C5" Offset="1.0" />
                 </LinearGradientBrush>
-                </BoxView. Background>
+                </BoxView.Background>
         </BoxView>
 
         <!-- Contenido -->

@@ -1,5 +1,4 @@
-﻿// REEMPLAZAR COMPLETO
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace apppasteleriav04
 {
@@ -27,10 +26,6 @@ namespace apppasteleriav04
             await Task.Delay(2000);
 
             // TODO: Cargar datos iniciales
-            // - Token de autenticación
-            // - Configuración local
-            // - Base de datos SQLite
-
             IsInitialized = true;
         }
     }

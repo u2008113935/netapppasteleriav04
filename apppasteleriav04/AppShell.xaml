@@ -1,14 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="apppasteleriav04.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:apppasteleriav04"
-    Title="apppasteleriav04">
+<?xml version="1.0" encoding="utf-8"?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       x:Class="apppasteleriav04.AppShell"
+       xmlns:catalog="clr-namespace:apppasteleriav04.Views.Catalog"
+       xmlns:cart="clr-namespace:apppasteleriav04.Views.Cart"
+       xmlns:orders="clr-namespace:apppasteleriav04.Views.Orders"
+       xmlns:profile="clr-namespace:apppasteleriav04.Views.Profile"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+
+        <!-- 🏠 INICIO -->
+        <Tab Title="Inicio">
+            <ShellContent 
+                Route="catalog"
+                ContentTemplate="{DataTemplate catalog:CatalogPage}" />
+        </Tab>
+
+        <!-- 🛒 CARRITO -->
+        <Tab Title="Carrito">
+            <ShellContent 
+                Route="cart"
+                ContentTemplate="{DataTemplate cart:CartPage}" />
+        </Tab>
+
+        <!-- 📦 PEDIDOS -->
+        <Tab Title="Pedidos">
+            <ShellContent 
+                Route="orders"
+                ContentTemplate="{DataTemplate orders:OrdersPage}" />
+        </Tab>
+
+        <!-- 👤 PERFIL -->
+        <Tab Title="Perfil">
+            <ShellContent 
+                Route="profile"
+                ContentTemplate="{DataTemplate profile:ProfilePage}" />
+        </Tab>
+
+    </TabBar>
 
 </Shell>
