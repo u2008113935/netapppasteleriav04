@@ -1,4 +1,4 @@
-﻿using apppasteleriav04.Models;
+﻿using apppasteleriav04.Models.Domain;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
-namespace apppasteleriav04.Services
+namespace apppasteleriav04.Services.Core
 {
     // Mantener el carrito de compras en memoria
     public class CartService : INotifyPropertyChanged

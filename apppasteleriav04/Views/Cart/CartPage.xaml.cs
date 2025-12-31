@@ -1,11 +1,11 @@
-using apppasteleriav04.Services;
-//using apppasteleriav04.Views.Auth;
+using apppasteleriav04.Services.Core;
+using apppasteleriav04.Views.Auth;
 using apppasteleriav04.Views.Cart;
 using Microsoft.Maui.Controls;
 using System;
 using System.Linq;
 
-namespace apppasteleriav04.Views
+namespace apppasteleriav04.Views.Cart
 {
     public partial class CartPage : ContentPage
     {

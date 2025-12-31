@@ -1,10 +1,9 @@
-﻿using apppasteleriav04.Models;
-using apppasteleriav04.Services;
+﻿using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Services.Core;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Maps;
-// ❌ ELIMINAR esta línea para evitar la ambigüedad con Polyline
-// using Microsoft.Maui.Controls.Shapes;
+ using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Maps;
@@ -16,7 +15,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace apppasteleriav04.Views
+namespace apppasteleriav04.Views.Orders
 {
     public partial class LiveTrackingPage : ContentPage
     {

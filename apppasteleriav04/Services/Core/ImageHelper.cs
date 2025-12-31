@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace apppasteleriav04.Services
+namespace apppasteleriav04.Services.Core
 {
     /// <summary>
     /// Normaliza rutas de imagen provenientes del API.

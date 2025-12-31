@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace apppasteleriav04.Services
+namespace apppasteleriav04.Services.Core
 {
     public static class SupabaseConfig
     {

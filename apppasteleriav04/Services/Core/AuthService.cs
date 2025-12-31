@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
 using System.Diagnostics;
 
-namespace apppasteleriav04.Services
+namespace apppasteleriav04.Services.Core
 {
     public class AuthUser
     {

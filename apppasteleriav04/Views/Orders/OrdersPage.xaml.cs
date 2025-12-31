@@ -1,5 +1,5 @@
-using apppasteleriav04.Models;
-using apppasteleriav04.Services;
+using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Services.Core;
 //using apppasteleriav04.Views.Orders;
 using Microsoft.Maui.Controls;
 using System;
@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace apppasteleriav04.Views
+namespace apppasteleriav04.Views.Orders
 {
     public partial class OrderPage : ContentPage
     {

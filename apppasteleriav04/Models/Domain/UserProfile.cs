@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace apppasteleriav04.Models.Domian
+namespace apppasteleriav04.Models.Domain
 {
     public class UserProfile
     {
@@ -28,10 +28,10 @@ namespace apppasteleriav04.Models.Domian
             {
                 if (string.IsNullOrWhiteSpace(AvatarUrl)) return null;
 
-                var baseUrl = apppasteleriav04.Services.SupabaseConfig.SUPABASE_URL?.TrimEnd('/');
+                var baseUrl = apppasteleriav04.Services.Core.SupabaseConfig.SUPABASE_URL?.TrimEnd('/');
                 if (string.IsNullOrWhiteSpace(baseUrl)) return AvatarUrl;
 
-                return $"{baseUrl}/storage/v1/object/public/{apppasteleriav04.Services.SupabaseConfig.BUCKET_NAME}/{Uri.EscapeDataString(AvatarUrl)}";
+                return $"{baseUrl}/storage/v1/object/public/{apppasteleriav04.Services.Core.SupabaseConfig.BUCKET_NAME}/{Uri.EscapeDataString(AvatarUrl)}";
             }
         }
     }

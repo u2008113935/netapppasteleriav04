@@ -1,8 +1,9 @@
-﻿using apppasteleriav04.Services;
+﻿using apppasteleriav04.Services.Core;
 using System.Threading.Tasks;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+
 
 namespace apppasteleriav04
 {
@@ -15,33 +16,16 @@ namespace apppasteleriav04
 
         {
             InitializeComponent();
-
-            // Inicialización asíncrona (por ejemplo: cargar token)
-            InitializeAsync();
-
-            MainPage = new AppShell();
+            MainPage = new Views.Shared.SplashPage();  // ⬅ Splash primero
+            //InitializeAppAsync(); // Maneja la "transición" al real
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            // Mostrar SplashPage primero
-            return new Window(new Views.Shared.SplashPage());
-        }
-
-        /// <summary>
-        /// Inicializar datos de la app (mínimo 2 segundos para mostrar splash)
-        /// </summary>
+        // Inicialización asíncrona de la aplicación
         public static async Task InitializeAppAsync()
         {
             // Simular carga
             await Task.Delay(2000);
-
-            // TODO: Cargar datos iniciales
-            IsInitialized = true;
-        }
-
-        async void InitializeAsync()
-        {
+      
             try
             {
                 await AuthService.Instance.LoadFromStorageAsync();
@@ -50,6 +34,8 @@ namespace apppasteleriav04
                     SupabaseService.Instance.SetUserToken(token);
             }
             catch { }
+
+            IsInitialized = true;
         }
     }
 }

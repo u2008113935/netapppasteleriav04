@@ -1,5 +1,4 @@
-﻿using apppasteleriav04.Models;
-using apppasteleriav04.Models.Domain;
+﻿using apppasteleriav04.Models.Domain;
 using apppasteleriav04.Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace apppasteleriav04.Services
+namespace apppasteleriav04.Services.Core
 {
     /// Modelo de respuesta para autenticación
     /// </summary>

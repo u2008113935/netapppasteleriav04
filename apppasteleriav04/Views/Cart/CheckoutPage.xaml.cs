@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Essentials;
-using apppasteleriav04.Services;
-using apppasteleriav04.Models;
+using apppasteleriav04.Services.Core;
+using apppasteleriav04.Models.Domain;
 //using Kotlin.Jvm.Internal;
 using System.Diagnostics;
 using Microsoft.Maui.Storage;
 
-namespace apppasteleriav04.Views
+namespace apppasteleriav04.Views.Cart
 {
     /// <summary>
     /// Code-behind para CheckoutPage.xaml

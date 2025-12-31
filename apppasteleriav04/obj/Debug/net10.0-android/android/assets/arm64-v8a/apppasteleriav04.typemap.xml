@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="apppasteleriav04" mvid="26cc600460bb4de88d94203a7241e7c4">
+  <java-to-managed>
+    <entry java-name="crc64cac8205d792c3606/MainActivity" managed-name="com.delicia.apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554444" />
+    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554448" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc64cac8205d792c3606/MainActivity" managed-name="com.delicia.apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554444" />
+    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554448" />
+  </managed-to-java>
+</api>

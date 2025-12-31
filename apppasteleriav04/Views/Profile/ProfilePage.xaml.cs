@@ -6,8 +6,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using apppasteleriav04.Services.Core;
 using apppasteleriav04.Models.Domain;
-using apppasteleriav04.Services;
 
 namespace apppasteleriav04.Views.Profile
 {

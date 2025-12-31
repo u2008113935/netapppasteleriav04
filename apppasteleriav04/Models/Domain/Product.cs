@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace apppasteleriav04.Models
+namespace apppasteleriav04.Models.Domain
 {
     /// <summary>
     /// Clase Product mínima y didáctica.

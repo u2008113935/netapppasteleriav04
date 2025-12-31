@@ -1,8 +1,8 @@
 using System;
 using Microsoft.Maui.Controls;
-using apppasteleriav04.Services;
+using apppasteleriav04.Services.Core;
 
-namespace apppasteleriav04.Views
+namespace apppasteleriav04.Views.Auth
 {
     public partial class RegisterPage : ContentPage
     {

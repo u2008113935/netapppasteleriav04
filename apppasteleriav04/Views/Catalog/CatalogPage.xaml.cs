@@ -1,4 +1,6 @@
-﻿namespace apppasteleriav04.Views.Catalog
+﻿using apppasteleriav04.Services.Core;
+
+namespace apppasteleriav04.Views.Catalog
 {
     public partial class CatalogPage : ContentPage
     {

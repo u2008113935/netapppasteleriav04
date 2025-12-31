@@ -1,5 +1,4 @@
-﻿using apppasteleriav04.Services;
-//using apppasteleriav04.Services.Core;
+﻿using apppasteleriav04.Services.Core;
 using Microsoft.Maui.Controls;
 using System;
 using System.Diagnostics;
