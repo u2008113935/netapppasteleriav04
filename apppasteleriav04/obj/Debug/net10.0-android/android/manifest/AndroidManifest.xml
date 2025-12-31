@@ -9,8 +9,6 @@
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <!-- Permisos -->
   <permission android:name="com.delicia.apppasteleriav04.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="signature" />
   <uses-permission android:name="com.delicia.apppasteleriav04.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
@@ -19,16 +17,10 @@
     <!-- Needs to be explicitly declared on Android R+ -->
     <package android:name="com.google.android.apps.maps" />
   </queries>
-  <application android:name="crc64133ded79689fceef.MainApplication" android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:debuggable="true" android:extractNativeLibs="true" android:icon="@mipmap/appicon" android:label="Pastelería Delicia" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
-    <!-- SPLASH SCREEN ACTIVITY -->
-    <activity android:name="com.delicia.apppasteleriav04.MainActivity" android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" android:exported="true" android:theme="@style/Maui.SplashTheme">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+  <application android:name="crc64133ded79689fceef.MainApplication" android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:debuggable="true" android:extractNativeLibs="true" android:icon="@mipmap/appicon" android:label="Delicia" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true">
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCIsviIEQoJSyJn34QARPuz-3bAfOKe-v0" />
     <uses-library android:name="org.apache.http.legacy" android:required="false" />
-    <activity android:name="crc64cac8205d792c3606.MainActivity" android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:exported="true" android:launchMode="singleTop" android:theme="@style/Maui.SplashTheme">
+    <activity android:name="crc64133ded79689fceef.MainActivity" android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:exported="true" android:launchMode="singleTop" android:theme="@style/Maui.SplashTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

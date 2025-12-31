@@ -5,22 +5,14 @@
     Changes to this file may cause incorrect behavior and will be lost if
     the contents are regenerated.
     -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.delicia.apppasteleriav04" android:versionCode="1" android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" package="com.delicia.apppasteleriav04" android:versionName="1.0">
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-  <application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:label="Pastelería Delicia" android:name="crc64133ded79689fceef.MainApplication" android:debuggable="true" android:extractNativeLibs="true">
-    <!-- SPLASH SCREEN ACTIVITY -->
-    <activity android:name=".MainActivity" android:exported="true" android:theme="@style/Maui.SplashTheme" android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+  <application android:allowBackup="true" android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:name="crc64133ded79689fceef.MainApplication" android:label="Delicia" android:debuggable="true" android:extractNativeLibs="true">
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCIsviIEQoJSyJn34QARPuz-3bAfOKe-v0" />
     <uses-library android:name="org.apache.http.legacy" android:required="false" />
-    <activity android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:launchMode="singleTop" android:theme="@style/Maui.SplashTheme" android:name="crc64cac8205d792c3606.MainActivity" android:exported="true">
+    <activity android:configChanges="density|orientation|smallestScreenSize|screenLayout|screenSize|uiMode" android:launchMode="singleTop" android:theme="@style/Maui.SplashTheme" android:name="crc64133ded79689fceef.MainActivity" android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

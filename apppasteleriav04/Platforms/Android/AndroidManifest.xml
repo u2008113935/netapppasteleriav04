@@ -1,33 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="com.delicia.apppasteleriav04">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 	<application
         android:allowBackup="true"
         android:icon="@mipmap/appicon"
         android:roundIcon="@mipmap/appicon_round"
-        android:supportsRtl="true"
-        android:label="Pastelería Delicia">
+        android:supportsRtl="true">
 
-		<!-- SPLASH SCREEN ACTIVITY -->
-		<activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Maui.SplashTheme"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
-
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+		<meta-data android:name="com.google.android.geo.API_KEY"
+		  android:value="AIzaSyCIsviIEQoJSyJn34QARPuz-3bAfOKe-v0" />
 
 	</application>
 
 	<!-- Permisos -->
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>

@@ -2074,6 +2074,9 @@ androidx.window.layout.WindowMetricsCalculator;androidx.window.layout.WindowMetr
 AndroidX.Window.Layout.IWindowMetricsCalculatorDecorator, Xamarin.AndroidX.Window;androidx.window.layout.WindowMetricsCalculatorDecorator
 AndroidX.Window.Layout.IWindowMetricsCalculatorDecorator;androidx.window.layout.WindowMetricsCalculatorDecorator
 androidx.window.layout.WindowMetricsCalculatorDecorator;androidx.window.layout.WindowMetricsCalculatorDecorator
+apppasteleriav04.MainActivity, apppasteleriav04;crc64133ded79689fceef.MainActivity
+apppasteleriav04.MainActivity;crc64133ded79689fceef.MainActivity
+apppasteleriav04.MainActivity;crc64133ded79689fceef.MainActivity
 apppasteleriav04.MainApplication, apppasteleriav04;crc64133ded79689fceef.MainApplication
 apppasteleriav04.MainApplication;crc64133ded79689fceef.MainApplication
 apppasteleriav04.MainApplication;crc64133ded79689fceef.MainApplication
@@ -2296,9 +2299,6 @@ com.bumptech.glide.util.pool.FactoryPools$Poolable;com.bumptech.glide.util.pool.
 Bumptech.Glide.Util.Pool.FactoryPools+IResetter, Xamarin.Android.Glide;com.bumptech.glide.util.pool.FactoryPools$Resetter
 Bumptech.Glide.Util.Pool.FactoryPools.IResetter;com.bumptech.glide.util.pool.FactoryPools$Resetter
 com.bumptech.glide.util.pool.FactoryPools$Resetter;com.bumptech.glide.util.pool.FactoryPools$Resetter
-com.delicia.apppasteleriav04.MainActivity, apppasteleriav04;crc64cac8205d792c3606.MainActivity
-com.delicia.apppasteleriav04.MainActivity;crc64cac8205d792c3606.MainActivity
-com.delicia.apppasteleriav04.MainActivity;crc64cac8205d792c3606.MainActivity
 Google.Android.Gms.Common.SignatureVerification.ISignatureVerificationConfiguration, Xamarin.GooglePlayServices.Basement;com.google.android.gms.common.signatureverification.SignatureVerificationConfiguration
 Google.Android.Gms.Common.SignatureVerification.ISignatureVerificationConfiguration;com.google.android.gms.common.signatureverification.SignatureVerificationConfiguration
 com.google.android.gms.common.signatureverification.SignatureVerificationConfiguration;com.google.android.gms.common.signatureverification.SignatureVerificationConfiguration
