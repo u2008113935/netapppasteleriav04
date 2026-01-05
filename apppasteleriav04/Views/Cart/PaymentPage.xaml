@@ -22,8 +22,7 @@
 
             <!-- Selector de método de pago -->
             <Label Text="Método de Pago" FontSize="16" FontAttributes="Bold" />
-            <Picker x:Name="PaymentMethodPicker" 
-                    SelectedItem="{Binding SelectedPaymentMethod}"
+            <Picker SelectedItem="{Binding SelectedPaymentMethod}"
                     Title="Seleccione método de pago">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">

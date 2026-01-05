@@ -8,8 +8,7 @@
             
             <!-- Selector tipo de comprobante -->
             <Label Text="Tipo de Comprobante" FontSize="16" FontAttributes="Bold" />
-            <Picker x:Name="InvoiceTypePicker"
-                    SelectedItem="{Binding InvoiceType}"
+            <Picker SelectedItem="{Binding InvoiceType}"
                     Title="Seleccione tipo de comprobante">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">

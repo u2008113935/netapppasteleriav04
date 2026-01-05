@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -46,7 +44,7 @@ namespace apppasteleriav04.ViewModels.Base
 
         protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+            if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
 
             backingStore = value;
@@ -74,6 +72,29 @@ namespace apppasteleriav04.ViewModels.Base
         public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
 
         public void Execute(object? parameter) => _execute();
+
+        public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Generic RelayCommand implementation for commands with parameter
+    /// </summary>
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly Action<T?> _execute;
+        private readonly Func<T?, bool>? _canExecute;
+
+        public event EventHandler? CanExecuteChanged;
+
+        public RelayCommand(Action<T?> execute, Func<T?, bool>? canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object? parameter) => _canExecute?.Invoke((T?)parameter) ?? true;
+
+        public void Execute(object? parameter) => _execute((T?)parameter);
 
         public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
