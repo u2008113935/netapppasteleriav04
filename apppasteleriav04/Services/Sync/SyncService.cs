@@ -216,19 +216,6 @@ namespace apppasteleriav04.Services.Sync
             }
         }
 
-        private async Task UpdatePendingCountAsync()
-        {
-            try
-            {
-                _pendingSyncCount = await Database.Table<SyncQueueItem>().CountAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[SyncService] UpdatePendingCountAsync error: {ex}");
-                _pendingSyncCount = 0;
-            }
-        }
-
         private void RaiseSyncProgress(int total, int processed, int failed, string? currentEntity, bool isComplete, string? errorMessage)
         {
             SyncProgress?.Invoke(this, new SyncProgressEventArgs

@@ -883,7 +883,13 @@ namespace apppasteleriav04.Services.Core
                             }).ToList()
                         };
                         
-                        await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload));
+                        var jsonOptions = new JsonSerializerOptions
+                        {
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            WriteIndented = false
+                        };
+                        
+                        await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload, jsonOptions));
                         Debug.WriteLine($"[SupabaseService] Order {orderId} enqueued for sync");
                     }
                     else
