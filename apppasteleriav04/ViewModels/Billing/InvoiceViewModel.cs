@@ -24,8 +24,8 @@ namespace apppasteleriav04.ViewModels.Billing
         {
             _billingService = new BillingService();
 
-            GenerateInvoiceCommand = new AsyncRelayCommand(GenerateInvoiceAsync);
-            DownloadPdfCommand = new AsyncRelayCommand(DownloadPdfAsync, CanDownloadPdf);
+            GenerateInvoiceCommand = new AsyncRelayCommand(GenerateInvoiceAsync, () => CanGenerateInvoice());
+            DownloadPdfCommand = new AsyncRelayCommand(DownloadPdfAsync, () => CanDownloadPdf());
             SendEmailCommand = new AsyncRelayCommand<string>(SendEmailAsync, CanSendEmail);
         }
 
@@ -177,7 +177,7 @@ namespace apppasteleriav04.ViewModels.Billing
             return Order != null;
         }
 
-        private bool CanDownloadPdf(object? parameter)
+        private bool CanDownloadPdf()
         {
             return Invoice != null && !IsLoading;
         }
