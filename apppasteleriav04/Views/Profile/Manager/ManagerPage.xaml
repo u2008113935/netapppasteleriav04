@@ -2,11 +2,137 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Profile.Manager.ManagerPage"
-             Title="ManagerPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Dashboard Admin">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Título -->
+            <Label Text="Dashboard Administrador" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Métricas del día -->
+            <Label Text="Métricas del Día" FontSize="18" FontAttributes="Bold" />
+            
+            <Grid RowDefinitions="Auto,Auto" 
+                  ColumnDefinitions="*,*"
+                  RowSpacing="10"
+                  ColumnSpacing="10">
+                
+                <!-- Ventas del día -->
+                <Frame Grid.Row="0" Grid.Column="0" 
+                       BorderColor="#E0E0E0" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="💰" FontSize="24" HorizontalOptions="Center" />
+                        <Label Text="Ventas Hoy" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="S/. 0.00" 
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#FF6B9D"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Pedidos del día -->
+                <Frame Grid.Row="0" Grid.Column="1" 
+                       BorderColor="#E0E0E0" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="📦" FontSize="24" HorizontalOptions="Center" />
+                        <Label Text="Pedidos Hoy" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="0" 
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Clientes nuevos -->
+                <Frame Grid.Row="1" Grid.Column="0" 
+                       BorderColor="#E0E0E0" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="👥" FontSize="24" HorizontalOptions="Center" />
+                        <Label Text="Clientes Nuevos" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="0" 
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#2196F3"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Pendientes -->
+                <Frame Grid.Row="1" Grid.Column="1" 
+                       BorderColor="#E0E0E0" 
+                       CornerRadius="10" 
+                       Padding="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="⏰" FontSize="24" HorizontalOptions="Center" />
+                        <Label Text="Pendientes" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="0" 
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Accesos rápidos a gestión -->
+            <Label Text="Gestión" FontSize="18" FontAttributes="Bold" />
+            
+            <VerticalStackLayout Spacing="10">
+                <Button Text="📊 Reportes y Análisis" 
+                        BackgroundColor="#FF6B9D"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+                
+                <Button Text="👥 Gestión de Usuarios" 
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+                
+                <Button Text="🍰 Gestión de Productos" 
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+                
+                <Button Text="📦 Gestión de Pedidos" 
+                        BackgroundColor="#FF9800"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+                
+                <Button Text="🔄 Sincronización" 
+                        BackgroundColor="#9C27B0"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+                
+                <Button Text="⚙️ Configuración" 
+                        BackgroundColor="#607D8B"
+                        TextColor="White"
+                        CornerRadius="25"
+                        HeightRequest="50" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

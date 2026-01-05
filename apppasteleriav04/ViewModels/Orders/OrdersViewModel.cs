@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using apppasteleriav04.Models.Domain;
@@ -14,182 +10,88 @@ namespace apppasteleriav04.ViewModels.Orders
 {
     public class OrdersViewModel : BaseViewModel
     {
-        private readonly SupabaseService _supabase = SupabaseService.Instance;
         private ObservableCollection<Order> _orders = new();
-        private Order? _selectedOrder;
-        private bool _isLoading;
-        private CancellationTokenSource? _cts;
-        private int _orderCount;
-
-        /// <summary>
-        /// Gets the collection of orders
-        /// </summary>
         public ObservableCollection<Order> Orders
         {
             get => _orders;
-            set
-            {
-                if (_orders != null)
-                {
-                    _orders.CollectionChanged -= Orders_CollectionChanged;
-                }
-                
-                if (SetProperty(ref _orders, value))
-                {
-                    if (_orders != null)
-                    {
-                        _orders.CollectionChanged += Orders_CollectionChanged;
-                    }
-                    UpdateOrderCount();
-                }
-            }
+            set => SetProperty(ref _orders, value);
         }
 
-        /// <summary>
-        /// Gets or sets the selected order
-        /// </summary>
+        private Order? _selectedOrder;
         public Order? SelectedOrder
         {
             get => _selectedOrder;
             set => SetProperty(ref _selectedOrder, value);
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether orders are being loaded
-        /// </summary>
+        private bool _isLoading;
         public bool IsLoading
         {
             get => _isLoading;
             set => SetProperty(ref _isLoading, value);
         }
 
-        /// <summary>
-        /// Gets the count of orders
-        /// </summary>
-        public int OrderCount
-        {
-            get => _orderCount;
-            private set => SetProperty(ref _orderCount, value);
-        }
-
-        /// <summary>
-        /// Command to load orders
-        /// </summary>
         public ICommand LoadOrdersCommand { get; }
-
-        /// <summary>
-        /// Command to view order details
-        /// </summary>
         public ICommand ViewOrderDetailsCommand { get; }
+        public ICommand RefreshCommand { get; }
+
+        public event EventHandler<Order>? OrderSelected;
 
         public OrdersViewModel()
         {
             Title = "Mis Pedidos";
             LoadOrdersCommand = new AsyncRelayCommand(LoadOrdersAsync);
             ViewOrderDetailsCommand = new RelayCommand<Order>(ViewOrderDetails);
-            
-            _orders.CollectionChanged += Orders_CollectionChanged;
+            RefreshCommand = new AsyncRelayCommand(LoadOrdersAsync);
         }
 
-        private void Orders_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            UpdateOrderCount();
-        }
-
-        private void UpdateOrderCount()
-        {
-            OrderCount = Orders?.Count ?? 0;
-        }
-
-        /// <summary>
-        /// Load orders for the current user
-        /// </summary>
         public async Task LoadOrdersAsync()
         {
+            if (!AuthService.Instance.IsAuthenticated)
+            {
+                ErrorMessage = "Debe iniciar sesión para ver sus pedidos";
+                return;
+            }
+
             IsLoading = true;
+            IsBusy = true;
             ErrorMessage = string.Empty;
 
             try
             {
-                // Cancel previous operation if any
-                _cts?.Cancel();
-                _cts = new CancellationTokenSource();
-
-                // Get userId from AuthService
-                string? userIdStr = AuthService.Instance?.UserId;
-                
-                if (string.IsNullOrWhiteSpace(userIdStr))
+                var userId = AuthService.Instance.UserId;
+                if (string.IsNullOrEmpty(userId))
                 {
-                    // Try to read from SecureStorage
-                    try
-                    {
-                        userIdStr = await Microsoft.Maui.Storage.SecureStorage.Default.GetAsync("auth_user_id");
-                    }
-                    catch { /* ignore if not exists */ }
-                }
-
-                if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userGuid))
-                {
-                    ErrorMessage = "No se encontró usuario autenticado.";
-                    Orders.Clear();
+                    ErrorMessage = "Usuario no válido";
                     return;
                 }
 
-                Debug.WriteLine($"[OrdersViewModel] Loading orders for user: {userGuid}");
-
-                // Load orders from service
-                var orders = await _supabase.GetOrdersByUserAsync(userGuid, includeItems: true, cancellationToken: _cts.Token);
-
-                // Update collection on UI thread
-                await Microsoft.Maui.ApplicationModel.MainThread.InvokeOnMainThreadAsync(() =>
+                var orders = await SupabaseService.Instance.GetOrdersByUserAsync(Guid.Parse(userId));
+                
+                Orders.Clear();
+                foreach (var order in orders)
                 {
-                    Orders.Clear();
-                    if (orders != null)
-                    {
-                        foreach (var order in orders.OrderByDescending(o => o.CreatedAt))
-                        {
-                            Orders.Add(order);
-                        }
-                    }
-                });
-
-                Debug.WriteLine($"[OrdersViewModel] Loaded {Orders.Count} orders");
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.WriteLine("[OrdersViewModel] LoadOrdersAsync cancelled");
+                    Orders.Add(order);
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[OrdersViewModel] Error loading orders: {ex}");
-                ErrorMessage = "No se pudieron cargar los pedidos. Revisa la conexión.";
+                ErrorMessage = $"Error al cargar pedidos: {ex.Message}";
             }
             finally
             {
                 IsLoading = false;
+                IsBusy = false;
             }
         }
 
-        /// <summary>
-        /// View details of an order
-        /// </summary>
         private void ViewOrderDetails(Order? order)
         {
             if (order != null)
             {
                 SelectedOrder = order;
-                Debug.WriteLine($"[OrdersViewModel] Viewing order details: {order.Id}");
-                // Navigation will be handled by the view
+                OrderSelected?.Invoke(this, order);
             }
-        }
-
-        /// <summary>
-        /// Cancel any ongoing operations
-        /// </summary>
-        public void CancelOperations()
-        {
-            _cts?.Cancel();
-            _cts = null;
         }
     }
 }

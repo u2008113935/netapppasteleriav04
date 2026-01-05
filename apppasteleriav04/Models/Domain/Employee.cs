@@ -8,22 +8,28 @@ namespace apppasteleriav04.Models.Domain
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("userid")]
+        [JsonPropertyName("user_id")]
         public Guid UserId { get; set; }
 
         [JsonPropertyName("full_name")]
         public string FullName { get; set; } = string.Empty;
 
-        [JsonPropertyName("role")]
-        public string Role { get; set; } = string.Empty; // cocina, reparto, backoffice
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
 
         [JsonPropertyName("phone")]
-        public string Phone { get; set; } = string.Empty;
+        public string? Phone { get; set; }
+
+        [JsonPropertyName("role")]
+        public string Role { get; set; } = "backoffice"; // cocina, reparto, backoffice
 
         [JsonPropertyName("is_active")]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         [JsonPropertyName("created_at")]
         public DateTime CreatedAt { get; set; }
+
+        [JsonPropertyName("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }

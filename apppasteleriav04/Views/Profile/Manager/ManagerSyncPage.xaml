@@ -2,11 +2,168 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Profile.Manager.ManagerSyncPage"
-             Title="ManagerSyncPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Sincronización">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Título -->
+            <Label Text="Estado de Sincronización" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Estado de sincronización -->
+            <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <HorizontalStackLayout Spacing="10">
+                        <BoxView WidthRequest="16" 
+                                HeightRequest="16" 
+                                CornerRadius="8"
+                                BackgroundColor="#4CAF50"
+                                VerticalOptions="Center" />
+                        <Label Text="Sistema en línea" 
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <BoxView HeightRequest="1" Color="#E0E0E0" />
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Última sincronización:" 
+                               VerticalOptions="Center" />
+                        <Label Text="Hace 2 minutos" 
+                               FontAttributes="Bold"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Items pendientes:" 
+                               VerticalOptions="Center" />
+                        <Label Text="0" 
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="#FF6B9D"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Items pendientes de sincronización -->
+            <Label Text="Cola de Sincronización" FontSize="18" FontAttributes="Bold" />
+            
+            <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="No hay items pendientes" 
+                           TextColor="#666"
+                           FontAttributes="Italic"
+                           HorizontalOptions="Center" />
+                    
+                    <!-- En una implementación real, aquí iría una lista de items -->
+                    <!-- 
+                    <CollectionView ItemsSource="{Binding PendingItems}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="#E0E0E0" Padding="10" Margin="0,5">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding Type}" FontAttributes="Bold" />
+                                        <Label Text="{Binding Description}" />
+                                        <Label Text="{Binding Timestamp}" FontSize="12" TextColor="#666" />
+                                    </HorizontalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    -->
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón de sincronización manual -->
+            <Button Text="🔄 Sincronizar Ahora" 
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="50" />
+
+            <!-- Log de errores -->
+            <Frame BorderColor="#F44336" 
+                   BackgroundColor="#FFEBEE"
+                   CornerRadius="10" 
+                   Padding="15"
+                   IsVisible="False">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="⚠️" FontSize="20" VerticalOptions="Center" />
+                        <Label Text="Errores de Sincronización" 
+                               FontAttributes="Bold"
+                               TextColor="#F44336"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <BoxView HeightRequest="1" Color="#F44336" />
+                    
+                    <Label Text="No hay errores registrados" 
+                           TextColor="#666"
+                           FontAttributes="Italic" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Opciones de configuración -->
+            <Label Text="Configuración" FontSize="18" FontAttributes="Bold" />
+            
+            <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Sincronización automática" 
+                               VerticalOptions="Center"
+                               HorizontalOptions="FillAndExpand" />
+                        <Switch IsToggled="True" 
+                               OnColor="#FF6B9D"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <BoxView HeightRequest="1" Color="#E0E0E0" />
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Solo sincronizar con WiFi" 
+                               VerticalOptions="Center"
+                               HorizontalOptions="FillAndExpand" />
+                        <Switch IsToggled="False" 
+                               OnColor="#FF6B9D"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <BoxView HeightRequest="1" Color="#E0E0E0" />
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Intervalo de sincronización" 
+                               VerticalOptions="Center"
+                               HorizontalOptions="FillAndExpand" />
+                        <Picker SelectedIndex="2"
+                               VerticalOptions="Center">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>1 min</x:String>
+                                    <x:String>5 min</x:String>
+                                    <x:String>15 min</x:String>
+                                    <x:String>30 min</x:String>
+                                    <x:String>1 hora</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón para limpiar cola -->
+            <Button Text="🗑️ Limpiar Cola de Sincronización" 
+                    BackgroundColor="Transparent"
+                    TextColor="#F44336"
+                    BorderColor="#F44336"
+                    BorderWidth="1"
+                    CornerRadius="25"
+                    HeightRequest="50" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

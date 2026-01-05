@@ -9,136 +9,80 @@ namespace apppasteleriav04.ViewModels.Auth
     public class LoginViewModel : BaseViewModel
     {
         private string _email = string.Empty;
-        private string _password = string.Empty;
-        private bool _isLoading;
-        private AsyncRelayCommand? _loginCommand;
-
-        public event EventHandler<LoginCompletedEventArgs>? LoginCompleted;
-
-        /// <summary>
-        /// Gets or sets the email address
-        /// </summary>
         public string Email
         {
             get => _email;
-            set
-            {
-                if (SetProperty(ref _email, value))
-                {
-                    _loginCommand?.RaiseCanExecuteChanged();
-                }
-            }
+            set => SetProperty(ref _email, value);
         }
 
-        /// <summary>
-        /// Gets or sets the password
-        /// </summary>
+        private string _password = string.Empty;
         public string Password
         {
             get => _password;
-            set
-            {
-                if (SetProperty(ref _password, value))
-                {
-                    _loginCommand?.RaiseCanExecuteChanged();
-                }
-            }
+            set => SetProperty(ref _password, value);
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether a login operation is in progress
-        /// </summary>
+        private bool _isLoading;
         public bool IsLoading
         {
             get => _isLoading;
             set => SetProperty(ref _isLoading, value);
         }
 
-        /// <summary>
-        /// Command to perform login
-        /// </summary>
-        public ICommand LoginCommand => _loginCommand ??= new AsyncRelayCommand(LoginAsync, CanLogin);
+        public event EventHandler? LoginCompleted;
+        public event EventHandler? RegisterRequested;
 
-        /// <summary>
-        /// Command to navigate to registration
-        /// </summary>
+        public ICommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
 
         public LoginViewModel()
         {
-            Title = "Iniciar sesión";
-            RegisterCommand = new RelayCommand(OnRegister);
-        }
-
-        private bool CanLogin()
-        {
-            return !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password) && !IsLoading;
+            Title = "Iniciar Sesión";
+            LoginCommand = new AsyncRelayCommand(LoginAsync, () => !IsLoading);
+            RegisterCommand = new RelayCommand(() => RegisterRequested?.Invoke(this, EventArgs.Empty));
         }
 
         private async Task LoginAsync()
         {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            ErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "Ingrese correo y contraseña";
+                ErrorMessage = "Por favor ingrese su correo electrónico";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Por favor ingrese su contraseña";
                 return;
             }
 
             IsLoading = true;
-            ErrorMessage = string.Empty;
+            IsBusy = true;
 
             try
             {
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Intentando login con: {Email}");
+                var success = await AuthService.Instance.SignInAsync(Email, Password);
 
-                bool success = await AuthService.Instance.SignInAsync(Email.Trim(), Password);
-
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Resultado del login: {success}");
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] UserEmail: {AuthService.Instance.UserEmail}");
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] UserId: {AuthService.Instance.UserId}");
-
-                if (success && AuthService.Instance.IsAuthenticated)
+                if (success)
                 {
-                    // Raise event to notify the view
-                    LoginCompleted?.Invoke(this, new LoginCompletedEventArgs(true, string.Empty));
+                    LoginCompleted?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
-                    ErrorMessage = "Credenciales incorrectas";
-                    LoginCompleted?.Invoke(this, new LoginCompletedEventArgs(false, "Credenciales incorrectas"));
+                    ErrorMessage = "Credenciales inválidas. Por favor intente nuevamente.";
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Error en login: {ex}");
-                ErrorMessage = $"Error de conexión: {ex.Message}";
-                LoginCompleted?.Invoke(this, new LoginCompletedEventArgs(false, ex.Message));
+                ErrorMessage = $"Error al iniciar sesión: {ex.Message}";
             }
             finally
             {
                 IsLoading = false;
+                IsBusy = false;
             }
-        }
-
-        private void OnRegister()
-        {
-            // This will be handled by the view for navigation
-            System.Diagnostics.Debug.WriteLine("[LoginViewModel] Register clicked");
-        }
-    }
-
-    /// <summary>
-    /// Event args for login completion
-    /// </summary>
-    public class LoginCompletedEventArgs : EventArgs
-    {
-        public bool Success { get; }
-        public string Message { get; }
-
-        public LoginCompletedEventArgs(bool success, string message)
-        {
-            Success = success;
-            Message = message;
         }
     }
 }

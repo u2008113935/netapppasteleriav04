@@ -8,7 +8,7 @@ namespace apppasteleriav04.Models.Domain
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("userid")]
+        [JsonPropertyName("user_id")]
         public Guid UserId { get; set; }
 
         [JsonPropertyName("full_name")]
@@ -18,7 +18,7 @@ namespace apppasteleriav04.Models.Domain
         public string Phone { get; set; } = string.Empty;
 
         [JsonPropertyName("is_available")]
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = true;
 
         [JsonPropertyName("current_latitude")]
         public double? CurrentLatitude { get; set; }
@@ -27,12 +27,18 @@ namespace apppasteleriav04.Models.Domain
         public double? CurrentLongitude { get; set; }
 
         [JsonPropertyName("vehicle_type")]
-        public string VehicleType { get; set; } = string.Empty;
+        public string VehicleType { get; set; } = "moto"; // moto, bicicleta, auto
 
         [JsonPropertyName("license_plate")]
-        public string LicensePlate { get; set; } = string.Empty;
+        public string? LicensePlate { get; set; }
 
         [JsonPropertyName("active_orders_count")]
-        public int ActiveOrdersCount { get; set; }
+        public int ActiveOrdersCount { get; set; } = 0;
+
+        [JsonPropertyName("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonPropertyName("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }

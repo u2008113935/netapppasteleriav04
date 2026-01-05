@@ -2,11 +2,100 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Cart.PaymentPage"
-             Title="PaymentPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Procesar Pago">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Resumen del pedido -->
+            <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Resumen del Pedido" FontSize="18" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" Color="#E0E0E0" />
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Total a pagar:" VerticalOptions="Center" />
+                        <Label Text="{Binding Amount, StringFormat='S/. {0:N2}'}" 
+                               FontSize="24" FontAttributes="Bold" 
+                               TextColor="#FF6B9D" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Selector de método de pago -->
+            <Label Text="Método de Pago" FontSize="16" FontAttributes="Bold" />
+            <Picker SelectedItem="{Binding SelectedPaymentMethod}"
+                    Title="Seleccione método de pago">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>efectivo</x:String>
+                        <x:String>tarjeta</x:String>
+                        <x:String>yape</x:String>
+                        <x:String>plin</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Formulario de tarjeta (solo si es tarjeta) -->
+            <VerticalStackLayout IsVisible="{Binding ShowCardFields}" Spacing="15">
+                <Label Text="Datos de la Tarjeta" FontSize="16" FontAttributes="Bold" />
+                
+                <Entry Placeholder="Número de tarjeta" 
+                       Text="{Binding CardNumber}"
+                       Keyboard="Numeric"
+                       MaxLength="16" />
+                
+                <HorizontalStackLayout Spacing="10">
+                    <Entry Placeholder="MM/AA" 
+                           Text="{Binding CardExpiry}"
+                           Keyboard="Numeric"
+                           MaxLength="5"
+                           HorizontalOptions="FillAndExpand" />
+                    <Entry Placeholder="CVV" 
+                           Text="{Binding CardCvv}"
+                           Keyboard="Numeric"
+                           MaxLength="4"
+                           IsPassword="True"
+                           HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+                
+                <Entry Placeholder="Nombre del titular" 
+                       Text="{Binding CardHolder}"
+                       Keyboard="Text" />
+            </VerticalStackLayout>
+
+            <!-- Estado del pago -->
+            <Label Text="{Binding PaymentStatus}" 
+                   IsVisible="{Binding IsProcessing}"
+                   HorizontalOptions="Center"
+                   FontAttributes="Italic" />
+
+            <!-- Indicador de procesamiento -->
+            <ActivityIndicator IsRunning="{Binding IsProcessing}" 
+                             IsVisible="{Binding IsProcessing}"
+                             Color="#FF6B9D"
+                             HorizontalOptions="Center" />
+
+            <!-- Mensaje de error -->
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red"
+                   IsVisible="{Binding HasError}"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Botones de acción -->
+            <Button Text="Procesar Pago" 
+                    Command="{Binding ProcessPaymentCommand}"
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="50" />
+
+            <Button Text="Cancelar" 
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="#666"
+                    BorderColor="#666"
+                    BorderWidth="1"
+                    CornerRadius="25"
+                    HeightRequest="50" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
