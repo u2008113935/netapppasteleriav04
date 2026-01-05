@@ -2,6 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
 using System.Diagnostics;
+using System.Text;         // Para Encoding.UTF8
+using System.Net.Http;     // Para HttpRequestMessage, StringContent
+using System.Net.Http.Headers; // Para MediaTypeWithQualityHeaderValue
+using System.Text.Json;    // Para JsonElement y JsonSerializer
 
 namespace apppasteleriav04.Services.Core
 {
@@ -137,5 +141,62 @@ namespace apppasteleriav04.Services.Core
                 return null;
             }
         }
+
+        public async Task<bool> RefreshAccessTokenAsync()
+        {
+            var refreshToken = await SecureStorage.Default.GetAsync(RefreshKey); // O la propiedad
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return false;
+
+            try
+            {
+                var payload = new
+                {
+                    refresh_token = refreshToken
+                };
+
+                // Cambia el endpoint de grant_type aquí:
+                using var req = new HttpRequestMessage(HttpMethod.Post, $"{SupabaseConfig.SUPABASE_URL.TrimEnd('/')}/auth/v1/token?grant_type=refresh_token")
+                {
+                    Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json")
+                };
+
+                req.Headers.Add("apikey", SupabaseConfig.SUPABASE_ANON_KEY);
+                req.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                var resp = await SupabaseService.Instance._http.SendAsync(req);
+                var json = await resp.Content.ReadAsStringAsync();
+
+                if (!resp.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"RefreshAccessTokenAsync failed: {resp.StatusCode}: {json}");
+                    return false;
+                }
+
+                var result = System.Text.Json.JsonSerializer.Deserialize<JsonElement>(json);
+                var newAccessToken = result.GetProperty("access_token").GetString();
+                var newRefreshToken = result.TryGetProperty("refresh_token", out var rt) ? rt.GetString() : null;
+
+                if (!string.IsNullOrWhiteSpace(newAccessToken))
+                {
+                    AccessToken = newAccessToken;
+                    await SecureStorage.Default.SetAsync(TokenKey, newAccessToken);
+
+                    if (!string.IsNullOrWhiteSpace(newRefreshToken))
+                        await SecureStorage.Default.SetAsync(RefreshKey, newRefreshToken);
+
+                    SupabaseService.Instance.SetUserToken(newAccessToken);
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"RefreshAccessTokenAsync error: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }

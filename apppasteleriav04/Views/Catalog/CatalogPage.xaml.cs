@@ -1,36 +1,54 @@
-﻿using apppasteleriav04.Services.Core;
+﻿using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Services.Core;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Essentials;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using apppasteleriav04.ViewModels.Catalog;
 
 namespace apppasteleriav04.Views.Catalog
 {
     public partial class CatalogPage : ContentPage
     {
+        CatalogViewModel vm;
+
         public CatalogPage()
         {
             InitializeComponent();
+            vm = new CatalogViewModel();
+            this.BindingContext = vm;
+            _ = vm.LoadProductsAsync();
         }
 
-        private void OnSearchClicked(object sender, EventArgs e)
+        void OnAddToCartClicked(object sender, EventArgs e)
         {
-            // Alterna visibilidad del buscador
-            ProductSearchBar.IsVisible = !ProductSearchBar.IsVisible;
-            if (ProductSearchBar.IsVisible)
+            if (sender is Button button && button.CommandParameter is Product product)
             {
-                ProductSearchBar.Focus();
+                CartService.Instance.Add(product, 1);
             }
         }
 
-        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        void OnSearchTextChanged(object sender, TextChangedEventArgs e)
         {
-            // Filtrar productos en base al texto
-            // Ejemplo:
-            // Products = FullProducts.Where(p => p.Name.Contains(e.NewTextValue, StringComparison.OrdinalIgnoreCase)).ToList();
-            // ProductsCollectionView.ItemsSource = Products;
-        }
+            var text = e.NewTextValue?.Trim();
 
-        private void OnFilterClicked(object sender, EventArgs e)
-        {
-            // Abre tu panel de filtros (puedes usar popup/modal)
-            // DisplayActionSheet("Filtros", "Cancelar", null, "Tortas", "Cupcakes", "Galletas", "Ofertas", "Favoritos");
+            if (string.IsNullOrEmpty(text))
+            {
+                ProductsCollection.ItemsSource = vm.Products;
+                return;
+            }
+
+            // Puedes agregar un filtro dinámico aquí sobre vm.Products...
+            var filtered = vm.Products
+                .Where(p =>
+                    (!string.IsNullOrEmpty(p.Nombre) && p.Nombre.Contains(text, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(p.Descripcion) && p.Descripcion.Contains(text, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            ProductsCollection.ItemsSource = filtered; // permite filtrado en tiempo real
         }
     }
 }

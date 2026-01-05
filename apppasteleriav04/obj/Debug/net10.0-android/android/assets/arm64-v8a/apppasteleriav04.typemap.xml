@@ -1,10 +1,10 @@
-<api type="debug" assembly-name="apppasteleriav04" mvid="a1bddbdbe6d44f0dbd1a1a7d26e9f46b">
+<api type="debug" assembly-name="apppasteleriav04" mvid="4c992d7691a14c818597351aaf0f1729">
   <java-to-managed>
-    <entry java-name="crc64133ded79689fceef/MainActivity" managed-name="apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554447" />
-    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554448" />
+    <entry java-name="crc64133ded79689fceef/MainActivity" managed-name="apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554448" />
+    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554449" />
   </java-to-managed>
   <managed-to-java>
-    <entry java-name="crc64133ded79689fceef/MainActivity" managed-name="apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554447" />
-    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554448" />
+    <entry java-name="crc64133ded79689fceef/MainActivity" managed-name="apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554448" />
+    <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554449" />
   </managed-to-java>
 </api>

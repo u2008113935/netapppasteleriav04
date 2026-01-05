@@ -47,9 +47,8 @@ namespace apppasteleriav04.Models.Domain
                 errors.Add("Precio no especificado");
             else if (Precio < 0m)
                 errors.Add("Precio no puede ser negativo");
-
-            // ImagenPath puede ser null (permitimos fallback), pero si existe comprobamos longitud mínima
-            if (ImagenPath != null && ImagenPath.Length < 3)
+                        
+            if (ImagenPath != null && ImagenPath != "" && ImagenPath.Length < 3)
                 errors.Add("ImagenPath inválida");
 
             return errors;

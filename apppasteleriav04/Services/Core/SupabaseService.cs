@@ -34,7 +34,7 @@ namespace apppasteleriav04.Services.Core
     {
         public static SupabaseService Instance { get; } = new SupabaseService();
 
-        readonly HttpClient _http;
+        internal readonly HttpClient _http;
         readonly string _url;
         readonly string _anon;
         readonly JsonSerializerOptions _jsonOpts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -95,7 +95,7 @@ namespace apppasteleriav04.Services.Core
                 };
 
                 var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-                using var req = new HttpRequestMessage(HttpMethod.Post, $"{_url}/auth/v1/token? grant_type=password")
+                using var req = new HttpRequestMessage(HttpMethod.Post, $"{_url}/auth/v1/token?grant_type=password")
                 {
                     Content = content
                 };
@@ -152,6 +152,27 @@ namespace apppasteleriav04.Services.Core
                 using var resp = await _http.GetAsync(url, cancellationToken);
                 var json = await resp.Content.ReadAsStringAsync(cancellationToken);
                 Debug.WriteLine($"GetProductsAsync: status={resp.StatusCode}; bodyLength={(json?.Length ?? 0)}");
+
+                if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized && json.Contains("JWT expired"))
+                {
+                    Debug.WriteLine("JWT expired: intentar refrescar token...");
+                    bool refreshed = await AuthService.Instance.RefreshAccessTokenAsync();
+                    if (refreshed)
+                    {
+                        // Vuelve a setear el header con el nuevo token
+                        SetUserToken(AuthService.Instance.AccessToken);
+                        Debug.WriteLine("Token renovado, reintentando petición...");
+                        // Reintentamos una vez (mucho cuidado: previene bucles infinitos)
+                        return await GetProductsAsync(limit, cancellationToken);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("No se pudo refrescar el token. Forzando logout.");
+                        AuthService.Instance.Logout();
+                        // Opcional: notifica al usuario o navega al login
+                        return new List<Product>();
+                    }
+                }
 
                 if (!resp.IsSuccessStatusCode)
                 {

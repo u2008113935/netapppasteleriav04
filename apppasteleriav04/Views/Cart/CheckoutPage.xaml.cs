@@ -179,7 +179,7 @@ namespace apppasteleriav04.Views.Cart
                 await DisplayAlert("Pedido confirmado", msg, "OK");
 
                 // Navegar a página de historial o página principal según tu flujo
-                await Shell.Current.GoToAsync("//main"); // ejemplo: navegar al root "main"
+                await Shell.Current.GoToAsync("//orders"); // ejemplo: navegar al root "main"
             }
             catch (Exception ex)
             {

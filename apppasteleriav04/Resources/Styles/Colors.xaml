@@ -45,7 +45,7 @@
 
     <!-- AGREGAR AL FINAL DEL ARCHIVO (antes de </ResourceDictionary>) -->
 
-    <!-- TEMA OSCURO YOUTUBE STYLE -->
+    <!-- TEMA OSCURO STYLE -->
     <Color x:Key="BackgroundPrimary">#000000</Color>
     <Color x:Key="BackgroundSecondary">#1C1C1E</Color>
     <Color x:Key="BackgroundTertiary">#2C2C2E</Color>
@@ -58,6 +58,23 @@
     <Color x:Key="PinkPrimary">#FF6B9D</Color>
     <Color x:Key="PinkDark">#E85A8A</Color>
     <Color x:Key="PinkLight">#FFA8C5</Color>
+        
+    <Color x:Key="PrimaryTextColor">#000000</Color>
+    <Color x:Key="SecondaryTextColor">#514F60</Color>
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
 
+    <Color x:Key="HeaderTitleTextColor">#FFFFFF</Color>
+    <!-- Blanco -->
+    <Color x:Key="HeaderSubtitleTextColor">#CCCCCC</Color>
+    <!-- Gris claro -->
+
+    <Color x:Key="EntryBackgroundColor">#2C2C2E</Color>
+    <!-- gris oscuro, para integrarse -->
+    <Color x:Key="EntryTextColor">#FFFFFF</Color>
+    <!-- blanco (texto principal) -->
+    <Color x:Key="EntryPlaceholderColor">#FFA8C5</Color>
+    <!-- rosa pastel: PinkLight -->
+    <Color x:Key="EntryBorderColor">#FF6B9D</Color>
+    <!-- rosa principal si quieres borde -->
 
 </ResourceDictionary>
