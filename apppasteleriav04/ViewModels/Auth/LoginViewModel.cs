@@ -11,7 +11,7 @@ namespace apppasteleriav04.ViewModels.Auth
         private string _email = string.Empty;
         private string _password = string.Empty;
         private bool _isLoading;
-        private RelayCommand? _loginCommand;
+        private AsyncRelayCommand? _loginCommand;
 
         public event EventHandler<LoginCompletedEventArgs>? LoginCompleted;
 
@@ -57,7 +57,7 @@ namespace apppasteleriav04.ViewModels.Auth
         /// <summary>
         /// Command to perform login
         /// </summary>
-        public ICommand LoginCommand => _loginCommand ??= new RelayCommand(async () => await LoginAsync(), CanLogin);
+        public ICommand LoginCommand => _loginCommand ??= new AsyncRelayCommand(LoginAsync, CanLogin);
 
         /// <summary>
         /// Command to navigate to registration

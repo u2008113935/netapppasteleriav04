@@ -37,18 +37,6 @@ namespace apppasteleriav04.Views.Orders
             _viewModel.CancelOperations();
         }
 
-        // Pull-to-refresh handler
-        private void RefreshView_Refreshing(object sender, EventArgs e)
-        {
-            _ = _viewModel.LoadOrdersAsync();
-        }
-
-        // Refresh button handler
-        private void OnRefreshClicked(object sender, EventArgs e)
-        {
-            _ = _viewModel.LoadOrdersAsync();
-        }
-
         // Selection changed handler
         private async void OrdersCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
