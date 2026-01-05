@@ -60,6 +60,9 @@
                                TextColor="#666"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnKitchenClicked" />
+                    </Frame.GestureRecognizers>
                 </Frame>
 
                 <!-- Reparto -->
@@ -79,6 +82,9 @@
                                TextColor="#666"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDeliveryClicked" />
+                    </Frame.GestureRecognizers>
                 </Frame>
 
                 <!-- Inventario -->
@@ -98,6 +104,9 @@
                                TextColor="#666"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnInventoryClicked" />
+                    </Frame.GestureRecognizers>
                 </Frame>
 
                 <!-- Soporte -->
@@ -117,6 +126,9 @@
                                TextColor="#666"
                                HorizontalOptions="Center" />
                     </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSyncClicked" />
+                    </Frame.GestureRecognizers>
                 </Frame>
             </Grid>
 
