@@ -29,6 +29,7 @@ namespace apppasteleriav04.ViewModels.Profile
         public ICommand EditProfileCommand { get; }
         public ICommand LoadProfileCommand { get; }
 
+        public event EventHandler? AuthenticationRequired;
         public event EventHandler? LogoutCompleted;
         public event EventHandler? EditProfileRequested;
 
@@ -38,6 +39,16 @@ namespace apppasteleriav04.ViewModels.Profile
             LogoutCommand = new RelayCommand(Logout);
             EditProfileCommand = new RelayCommand(() => EditProfileRequested?.Invoke(this, EventArgs.Empty));
             LoadProfileCommand = new AsyncRelayCommand(LoadProfileAsync);
+        }
+
+        public bool CheckAuthentication()
+        {
+            if (!AuthService.Instance.IsAuthenticated)
+            {
+                AuthenticationRequired?.Invoke(this, EventArgs.Empty);
+                return false;
+            }
+            return true;
         }
 
         public async Task LoadProfileAsync()

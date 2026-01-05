@@ -29,7 +29,7 @@ namespace apppasteleriav04.ViewModels.Auth
             set => SetProperty(ref _isLoading, value);
         }
 
-        public event EventHandler? LoginCompleted;
+        public event EventHandler<LoginCompletedEventArgs>? LoginCompleted;
         public event EventHandler? RegisterRequested;
 
         public ICommand LoginCommand { get; }
@@ -67,11 +67,22 @@ namespace apppasteleriav04.ViewModels.Auth
 
                 if (success)
                 {
-                    LoginCompleted?.Invoke(this, EventArgs.Empty);
+                    LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
+                    {
+                        Success = true,
+                        Message = "Sesión iniciada correctamente",
+                        UserId = AuthService.Instance.CurrentUserId?.ToString(),
+                        Email = Email
+                    });
                 }
                 else
                 {
                     ErrorMessage = "Credenciales inválidas. Por favor intente nuevamente.";
+                    LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
+                    {
+                        Success = false,
+                        Message = ErrorMessage
+                    });
                 }
             }
             catch (Exception ex)
