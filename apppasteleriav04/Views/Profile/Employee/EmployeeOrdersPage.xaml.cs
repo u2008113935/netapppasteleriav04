@@ -42,7 +42,12 @@ public partial class EmployeeOrdersPage : ContentPage
 			if (button == BtnAllOrders)
 			{
 				_viewModel.FilterStatus = "all";
-				OrdersCollectionView.ItemsSource = null; // Clear for now
+				// Show all orders combined
+				var allOrders = new System.Collections.ObjectModel.ObservableCollection<Order>();
+				foreach (var order in _viewModel.PendingOrders) allOrders.Add(order);
+				foreach (var order in _viewModel.InProgressOrders) allOrders.Add(order);
+				foreach (var order in _viewModel.CompletedOrders) allOrders.Add(order);
+				OrdersCollectionView.ItemsSource = allOrders;
 			}
 			else if (button == BtnPendingOrders)
 			{
@@ -57,7 +62,10 @@ public partial class EmployeeOrdersPage : ContentPage
 			else if (button == BtnReadyOrders)
 			{
 				_viewModel.FilterStatus = "listo";
-				OrdersCollectionView.ItemsSource = null; // Will be populated later
+				// Create a collection for ready orders
+				var readyOrders = new System.Collections.ObjectModel.ObservableCollection<Order>();
+				// TODO: Populate with ready orders from service
+				OrdersCollectionView.ItemsSource = readyOrders;
 			}
 		}
 	}

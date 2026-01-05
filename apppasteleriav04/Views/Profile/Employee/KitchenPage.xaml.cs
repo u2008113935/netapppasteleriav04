@@ -51,9 +51,10 @@ public partial class KitchenPage : ContentPage
 		{
 			await _viewModel.StartPreparingAsync(order);
 			
-			// Show current order panel
+			// Show current order panel with short ID format
 			CurrentOrderFrame.IsVisible = true;
-			LblCurrentOrderId.Text = $"Pedido #{order.Id:N}";
+			var shortId = order.Id.ToString("N")[..8].ToUpper();
+			LblCurrentOrderId.Text = $"Pedido #{shortId}";
 			
 			// TODO: Start timer
 			UpdateOrdersCount();

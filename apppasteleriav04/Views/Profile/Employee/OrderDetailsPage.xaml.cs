@@ -22,14 +22,15 @@ public partial class OrderDetailsPage : ContentPage
 
 		if (order == null) return;
 
-		// Update UI with order details
-		LblOrderId.Text = $"Pedido #{order.Id:N}";
+		// Update UI with order details - use short ID format for readability
+		var shortId = order.Id.ToString("N")[..8].ToUpper();
+		LblOrderId.Text = $"Pedido #{shortId}";
 		LblStatus.Text = order.Status;
 		LblOrderDate.Text = $"Fecha: {order.CreatedAt:dd/MM/yyyy HH:mm}";
 		LblTotal.Text = $"S/ {order.Total:F2}";
 
 		// Update customer information (placeholder for now)
-		LblCustomerName.Text = $"Cliente ID: {order.UserId}";
+		LblCustomerName.Text = $"Cliente ID: {order.UserId.ToString("N")[..8].ToUpper()}";
 		LblCustomerEmail.Text = "Email no disponible";
 		LblCustomerPhone.Text = "Teléfono no disponible";
 
@@ -44,7 +45,7 @@ public partial class OrderDetailsPage : ContentPage
 
 		if (hasDeliveryInfo)
 		{
-			LblDeliveryPerson.Text = order.RepartidorAsignado?.ToString() ?? "No asignado";
+			LblDeliveryPerson.Text = order.RepartidorAsignado?.ToString("N")[..8].ToUpper() ?? "No asignado";
 			LblDeliveryStatus.Text = order.Status;
 			LblEstimatedTime.Text = order.HoraEstimadaLlegada?.ToString("HH:mm") ?? "--";
 		}
