@@ -33,54 +33,6 @@
                        Keyboard="Text" />
             </VerticalStackLayout>
 
-            <!-- Vista previa del comprobante -->
-            <Frame BorderColor="#E0E0E0" 
-                   CornerRadius="10" 
-                   Padding="20"
-                   IsVisible="{Binding Invoice, Converter={StaticResource NotNullConverter}}">
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Vista Previa del Comprobante" 
-                           FontSize="18" 
-                           FontAttributes="Bold" 
-                           HorizontalOptions="Center" />
-                    
-                    <BoxView HeightRequest="2" Color="#FF6B9D" />
-                    
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="{Binding Invoice.Type, StringFormat='Tipo: {0}'}" 
-                               FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.SerialNumber, StringFormat='Serie: {0}'}" />
-                        <Label Text="{Binding Invoice.CorrelativeNumber, StringFormat='N°: {0}'}" />
-                    </HorizontalStackLayout>
-                    
-                    <Label Text="{Binding Invoice.CustomerName, StringFormat='Cliente: {0}'}" />
-                    <Label Text="{Binding Invoice.CustomerRuc, StringFormat='RUC: {0}'}" 
-                           IsVisible="{Binding IsFactura}" />
-                    
-                    <BoxView HeightRequest="1" Color="#E0E0E0" />
-                    
-                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                        <Label Text="Subtotal:" />
-                        <Label Text="{Binding Invoice.Subtotal, StringFormat='S/. {0:N2}'}" 
-                               FontAttributes="Bold" />
-                    </HorizontalStackLayout>
-                    
-                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                        <Label Text="IGV (18%):" />
-                        <Label Text="{Binding Invoice.Igv, StringFormat='S/. {0:N2}'}" 
-                               FontAttributes="Bold" />
-                    </HorizontalStackLayout>
-                    
-                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                        <Label Text="Total:" FontSize="18" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.Total, StringFormat='S/. {0:N2}'}" 
-                               FontSize="18" 
-                               FontAttributes="Bold"
-                               TextColor="#FF6B9D" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
-
             <!-- Indicador de generación -->
             <ActivityIndicator IsRunning="{Binding IsGenerating}" 
                              IsVisible="{Binding IsGenerating}"
@@ -99,26 +51,7 @@
                     BackgroundColor="#FF6B9D"
                     TextColor="White"
                     CornerRadius="25"
-                    HeightRequest="50"
-                    IsEnabled="{Binding IsGenerating, Converter={StaticResource InvertedBoolConverter}}" />
-
-            <!-- Botones de acción (solo visible si ya se generó) -->
-            <HorizontalStackLayout Spacing="10" 
-                                  IsVisible="{Binding Invoice, Converter={StaticResource NotNullConverter}}">
-                <Button Text="Descargar PDF" 
-                        Command="{Binding DownloadPdfCommand}"
-                        BackgroundColor="#4CAF50"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HorizontalOptions="FillAndExpand" />
-                
-                <Button Text="Enviar Email" 
-                        Command="{Binding SendEmailCommand}"
-                        BackgroundColor="#2196F3"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HorizontalOptions="FillAndExpand" />
-            </HorizontalStackLayout>
+                    HeightRequest="50" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

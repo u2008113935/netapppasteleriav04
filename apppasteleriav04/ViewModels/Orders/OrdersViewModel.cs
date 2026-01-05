@@ -66,7 +66,7 @@ namespace apppasteleriav04.ViewModels.Orders
                     return;
                 }
 
-                var orders = await SupabaseService.Instance.GetUserOrdersAsync(Guid.Parse(userId));
+                var orders = await SupabaseService.Instance.GetOrdersByUserAsync(Guid.Parse(userId));
                 
                 Orders.Clear();
                 foreach (var order in orders)

@@ -87,8 +87,7 @@
                     BackgroundColor="#FF6B9D"
                     TextColor="White"
                     CornerRadius="25"
-                    HeightRequest="50"
-                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InvertedBoolConverter}}" />
+                    HeightRequest="50" />
 
             <Button Text="Cancelar" 
                     Command="{Binding CancelCommand}"

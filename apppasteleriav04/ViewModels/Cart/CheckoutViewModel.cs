@@ -89,17 +89,18 @@ namespace apppasteleriav04.ViewModels.Cart
 
             try
             {
-                var order = new Order
+                var userId = Guid.Parse(AuthService.Instance.UserId ?? Guid.Empty.ToString());
+                
+                // Convert CartItems to OrderItems
+                var orderItems = Items.Select(item => new OrderItem
                 {
-                    Id = Guid.NewGuid(),
-                    UserId = Guid.Parse(AuthService.Instance.UserId ?? Guid.Empty.ToString()),
-                    Total = Total,
-                    Status = "pendiente",
-                    CreatedAt = DateTime.UtcNow
-                };
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                }).ToList();
 
                 // Create order in Supabase
-                var createdOrder = await SupabaseService.Instance.CreateOrderAsync(order, Items.ToList());
+                var createdOrder = await SupabaseService.Instance.CreateOrderAsync(userId, orderItems);
 
                 if (createdOrder != null)
                 {

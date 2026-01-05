@@ -58,7 +58,7 @@ namespace apppasteleriav04.ViewModels.Profile
                 var userId = AuthService.Instance.UserId;
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    var profile = await SupabaseService.Instance.GetUserProfileAsync(Guid.Parse(userId));
+                    var profile = await SupabaseService.Instance.GetProfileAsync(Guid.Parse(userId));
                     UserProfile = profile;
                 }
             }
