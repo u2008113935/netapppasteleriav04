@@ -49,7 +49,7 @@ public partial class KitchenPage : ContentPage
 	{
 		if (sender is Button button && button.BindingContext is Order order)
 		{
-			await _viewModel.StartPreparingCommand.Execute(order);
+			await _viewModel.StartPreparingAsync(order);
 			
 			// Show current order panel
 			CurrentOrderFrame.IsVisible = true;
@@ -81,7 +81,7 @@ public partial class KitchenPage : ContentPage
 
 		if (confirm)
 		{
-			await _viewModel.MarkReadyCommand.Execute(null);
+			await _viewModel.MarkOrderReadyAsync();
 			CurrentOrderFrame.IsVisible = false;
 			UpdateOrdersCount();
 			await DisplayAlert("Éxito", "Pedido marcado como listo", "OK");

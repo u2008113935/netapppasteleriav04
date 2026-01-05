@@ -92,7 +92,7 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             }
         }
 
-        private async Task StartPreparingAsync(Order order)
+        public async Task StartPreparingAsync(Order order)
         {
             if (order == null) return;
 
@@ -110,7 +110,7 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             }
         }
 
-        private async Task MarkOrderReadyAsync()
+        public async Task MarkOrderReadyAsync()
         {
             if (CurrentOrder == null) return;
 

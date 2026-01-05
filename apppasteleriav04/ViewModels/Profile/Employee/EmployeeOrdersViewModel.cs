@@ -71,7 +71,19 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
                 if (_filterStatus == value) return;
                 _filterStatus = value;
                 OnPropertyChanged();
-                _ = LoadOrdersAsync();
+                
+                // Trigger load asynchronously but handle exceptions
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await LoadOrdersAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[EmployeeOrdersViewModel] Error in FilterStatus load: {ex.Message}");
+                    }
+                });
             }
         }
 

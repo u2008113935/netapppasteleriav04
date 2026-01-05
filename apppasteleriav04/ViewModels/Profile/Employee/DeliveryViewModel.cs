@@ -130,8 +130,18 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
                 // TODO: Update order status to "en_camino" via EmployeeService
                 await Task.Delay(100);
 
-                // Start location tracking
-                _ = UpdateLocationAsync();
+                // Start location tracking in background
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await UpdateLocationAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error in background location update: {ex.Message}");
+                    }
+                });
             }
             catch (Exception ex)
             {
