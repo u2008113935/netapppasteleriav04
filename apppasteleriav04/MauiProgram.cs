@@ -41,6 +41,7 @@ namespace apppasteleriav04
             var app = builder.Build();
 
             // Initialize database on startup
+            // Note: This is fire-and-forget, but database initialization is fast and services handle uninitialized state gracefully
             Task.Run(async () =>
             {
                 try

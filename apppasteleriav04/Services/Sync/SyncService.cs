@@ -183,7 +183,8 @@ namespace apppasteleriav04.Services.Sync
                         Price = i.UnitPrice
                     }).ToList();
 
-                    // Send to Supabase
+                    // Send to Supabase using singleton instance
+                    // Note: SupabaseService is designed as singleton throughout the codebase
                     var createdOrder = await SupabaseService.Instance.CreateOrderAsync(
                         orderData.UserId,
                         orderItems
