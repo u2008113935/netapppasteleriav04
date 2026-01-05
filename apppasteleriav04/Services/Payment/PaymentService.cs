@@ -74,7 +74,7 @@ namespace apppasteleriav04.Services.Payment
         {
             await Task.Delay(500); // Simulate processing
 
-            var payment = new Payment
+            var payment = new Models.Domain.Payment
             {
                 Id = Guid.NewGuid(),
                 OrderId = orderId,
@@ -120,7 +120,7 @@ namespace apppasteleriav04.Services.Payment
                 };
             }
 
-            var payment = new Payment
+            var payment = new Models.Domain.Payment
             {
                 Id = Guid.NewGuid(),
                 OrderId = request.OrderId,
@@ -151,7 +151,7 @@ namespace apppasteleriav04.Services.Payment
         {
             await Task.Delay(1000); // Simulate processing
 
-            var payment = new Payment
+            var payment = new Models.Domain.Payment
             {
                 Id = Guid.NewGuid(),
                 OrderId = request.OrderId,
@@ -178,7 +178,7 @@ namespace apppasteleriav04.Services.Payment
         {
             await Task.Delay(1000); // Simulate processing
 
-            var payment = new Payment
+            var payment = new Models.Domain.Payment
             {
                 Id = Guid.NewGuid(),
                 OrderId = request.OrderId,
@@ -218,7 +218,7 @@ namespace apppasteleriav04.Services.Payment
             };
         }
 
-        public async Task<Payment?> GetPaymentAsync(Guid paymentId)
+        public async Task<Models.Domain.Payment?> GetPaymentAsync(Guid paymentId)
         {
             await Task.CompletedTask;
             // TODO: Implement database query
@@ -226,13 +226,13 @@ namespace apppasteleriav04.Services.Payment
             return null;
         }
 
-        public async Task<List<Payment>> GetPaymentsByOrderAsync(Guid orderId)
+        public async Task<List<Models.Domain.Payment>> GetPaymentsByOrderAsync(Guid orderId)
         {
             await Task.CompletedTask;
             // TODO: Implement database query
             // return await _supabaseService.QueryAsync<Domain.Payment>("payments", 
             //     p => p.OrderId == orderId);
-            return new List<Payment>();
+            return new List<Models.Domain.Payment>();
         }
 
         public async Task<bool> ValidateCardAsync(string cardNumber)

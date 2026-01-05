@@ -11,8 +11,8 @@ namespace apppasteleriav04.Services.Payment
         Task<PaymentResult> ProcessPaymentAsync(PaymentRequestDto request);
         Task<PaymentResult> ProcessCashPaymentAsync(Guid orderId, decimal amount);
         Task<PaymentResult> RefundPaymentAsync(Guid paymentId, decimal? amount = null);
-        Task<Payment?> GetPaymentAsync(Guid paymentId);
-        Task<List<Payment>> GetPaymentsByOrderAsync(Guid orderId);
+        Task<Models.Domain.Payment?> GetPaymentAsync(Guid paymentId);
+        Task<List<Models.Domain.Payment>> GetPaymentsByOrderAsync(Guid orderId);
         Task<bool> ValidateCardAsync(string cardNumber);
     }
 }
