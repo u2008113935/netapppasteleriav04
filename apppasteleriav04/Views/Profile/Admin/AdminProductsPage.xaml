@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Admin.AdminProductsPage"
+             Title="Gestión de Productos"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Header with Search and Add Button -->
+        <Grid Grid.Row="0" Padding="16" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <Entry x:Name="SearchEntry"
+                   Placeholder="Buscar producto..."
+                   TextChanged="OnSearchTextChanged"
+                   BackgroundColor="{StaticResource EntryBackgroundColor}"
+                   TextColor="{StaticResource EntryTextColor}"/>
+            
+            <Button Grid.Column="1"
+                    Text="+ Nuevo"
+                    Clicked="OnAddProductClicked"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="White"
+                    CornerRadius="8"/>
+        </Grid>
+
+        <!-- Products List -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="8">
+                
+                <CollectionView x:Name="ProductsCollection"
+                                ItemsSource="{Binding Products}"
+                                EmptyView="No hay productos">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4" 
+                                   Padding="12"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   CornerRadius="8">
+                                <Grid ColumnDefinitions="60,*,Auto" ColumnSpacing="12">
+                                    
+                                    <!-- Product Image Placeholder -->
+                                    <Frame Grid.Column="0" 
+                                           WidthRequest="60" 
+                                           HeightRequest="60"
+                                           CornerRadius="8"
+                                           Padding="0"
+                                           BackgroundColor="LightGray">
+                                        <Label Text="📷" 
+                                               FontSize="24"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Frame>
+
+                                    <!-- Product Info -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="{Binding DisplayName}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Categoria}" 
+                                               FontSize="12"
+                                               TextColor="{StaticResource SecondaryTextColor}"/>
+                                        <Label Text="{Binding Precio, StringFormat='${0:F2}'}" 
+                                               FontSize="14" 
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource PrimaryColor}"/>
+                                    </VerticalStackLayout>
+
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Column="2" Spacing="4">
+                                        <Button Text="✏️"
+                                                Clicked="OnEditProductClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource PrimaryColor}"
+                                                TextColor="White"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                CornerRadius="20"/>
+                                        <Button Text="🗑️"
+                                                Clicked="OnDeleteProductClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Red"
+                                                TextColor="White"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                CornerRadius="20"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator x:Name="LoadingIndicator" 
+                                   IsRunning="False" 
+                                   IsVisible="False"
+                                   Color="{StaticResource PrimaryColor}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Edit/Add Product Modal (shown when IsEditing) -->
+        <Frame x:Name="EditModal"
+               Grid.Row="0" Grid.RowSpan="2"
+               IsVisible="False"
+               BackgroundColor="#CC000000"
+               Padding="0">
+            <Frame BackgroundColor="{StaticResource PageBackgroundColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   VerticalOptions="Center"
+                   Margin="20">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Editar Producto" 
+                               FontSize="20" 
+                               FontAttributes="Bold"/>
+
+                        <Entry x:Name="NameEntry"
+                               Placeholder="Nombre del producto"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="DescriptionEntry"
+                               Placeholder="Descripción"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="CategoryEntry"
+                               Placeholder="Categoría"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="PriceEntry"
+                               Placeholder="Precio"
+                               Keyboard="Numeric"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="ImageUrlEntry"
+                               Placeholder="URL de imagen"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="Guardar"
+                                    Clicked="OnSaveProductClicked"
+                                    BackgroundColor="{StaticResource PrimaryColor}"
+                                    TextColor="White"/>
+                            <Button Grid.Column="1"
+                                    Text="Cancelar"
+                                    Clicked="OnCancelEditClicked"
+                                    BackgroundColor="Gray"
+                                    TextColor="White"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </Frame>
+    </Grid>
+</ContentPage>

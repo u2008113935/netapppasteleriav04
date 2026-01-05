@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Admin.PromotionsPage"
+             Title="Gestión de Promociones"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Header with Add Button -->
+        <Grid Grid.Row="0" Padding="16">
+            <Button Text="+ Nueva Promoción"
+                    Clicked="OnAddPromotionClicked"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HorizontalOptions="End"/>
+        </Grid>
+
+        <!-- Promotions List -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="8">
+                
+                <CollectionView x:Name="PromotionsCollection"
+                                ItemsSource="{Binding Promotions}"
+                                EmptyView="No hay promociones">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4" 
+                                   Padding="12"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   CornerRadius="8">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                    
+                                    <!-- Promotion Name -->
+                                    <Label Grid.Row="0"
+                                           Text="{Binding DisplayName}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+
+                                    <!-- Description -->
+                                    <Label Grid.Row="1"
+                                           Text="{Binding Description}" 
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}"/>
+
+                                    <!-- Discount Info -->
+                                    <Label Grid.Row="2"
+                                           Text="{Binding DiscountValue, StringFormat='Descuento: {0}'}" 
+                                           FontSize="12"/>
+
+                                    <!-- Dates -->
+                                    <Label Grid.Row="3"
+                                           Text="{Binding StartDate, StringFormat='Vigencia: {0:dd/MM/yyyy}'}" 
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}"/>
+
+                                    <!-- Status Badge -->
+                                    <Frame Grid.Column="1" Grid.RowSpan="2"
+                                           Padding="8,4"
+                                           CornerRadius="12"
+                                           VerticalOptions="Start"
+                                           HasShadow="False">
+                                        <Frame.Triggers>
+                                            <DataTrigger TargetType="Frame" 
+                                                         Binding="{Binding IsActive}" 
+                                                         Value="True">
+                                                <Setter Property="BackgroundColor" Value="LightGreen"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Frame" 
+                                                         Binding="{Binding IsActive}" 
+                                                         Value="False">
+                                                <Setter Property="BackgroundColor" Value="LightGray"/>
+                                            </DataTrigger>
+                                        </Frame.Triggers>
+                                        <Label Text="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}" 
+                                               FontSize="10"
+                                               FontAttributes="Bold"/>
+                                    </Frame>
+
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Column="1" Grid.Row="2" Grid.RowSpan="2"
+                                                           VerticalOptions="End"
+                                                           Spacing="4">
+                                        <Button Text="✏️"
+                                                Clicked="OnEditPromotionClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource PrimaryColor}"
+                                                TextColor="White"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                CornerRadius="20"/>
+                                        <Button Text="🗑️"
+                                                Clicked="OnDeletePromotionClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Red"
+                                                TextColor="White"
+                                                WidthRequest="40"
+                                                HeightRequest="40"
+                                                CornerRadius="20"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator x:Name="LoadingIndicator" 
+                                   IsRunning="False" 
+                                   IsVisible="False"
+                                   Color="{StaticResource PrimaryColor}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Edit Modal -->
+        <Frame x:Name="EditModal"
+               Grid.Row="0" Grid.RowSpan="2"
+               IsVisible="False"
+               BackgroundColor="#CC000000"
+               Padding="0">
+            <Frame BackgroundColor="{StaticResource PageBackgroundColor}"
+                   Padding="16"
+                   CornerRadius="12"
+                   VerticalOptions="Center"
+                   Margin="20">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Editar Promoción" 
+                               FontSize="20" 
+                               FontAttributes="Bold"/>
+
+                        <Entry x:Name="NameEntry"
+                               Placeholder="Nombre de la promoción"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="DescriptionEntry"
+                               Placeholder="Descripción"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Entry x:Name="CodeEntry"
+                               Placeholder="Código promocional"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Picker x:Name="DiscountTypePicker"
+                                Title="Tipo de descuento"
+                                BackgroundColor="{StaticResource EntryBackgroundColor}">
+                            <Picker.Items>
+                                <x:String>percentage</x:String>
+                                <x:String>fixed</x:String>
+                            </Picker.Items>
+                        </Picker>
+
+                        <Entry x:Name="DiscountValueEntry"
+                               Placeholder="Valor del descuento"
+                               Keyboard="Numeric"
+                               BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <DatePicker x:Name="StartDatePicker"
+                                    BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <DatePicker x:Name="EndDatePicker"
+                                    BackgroundColor="{StaticResource EntryBackgroundColor}"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="Guardar"
+                                    Clicked="OnSavePromotionClicked"
+                                    BackgroundColor="{StaticResource PrimaryColor}"
+                                    TextColor="White"/>
+                            <Button Grid.Column="1"
+                                    Text="Cancelar"
+                                    Clicked="OnCancelEditClicked"
+                                    BackgroundColor="Gray"
+                                    TextColor="White"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Frame>
+        </Frame>
+    </Grid>
+</ContentPage>

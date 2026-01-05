@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Admin.AdminOrdersPage"
+             Title="Gestión de Pedidos"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Filters -->
+        <Grid Grid.Row="0" Padding="16" RowDefinitions="Auto,Auto" RowSpacing="8">
+            <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="8">
+                <Picker x:Name="StatusPicker"
+                        Title="Estado"
+                        SelectedIndexChanged="OnStatusFilterChanged"
+                        BackgroundColor="{StaticResource EntryBackgroundColor}">
+                    <Picker.Items>
+                        <x:String>Todos</x:String>
+                        <x:String>pending</x:String>
+                        <x:String>processing</x:String>
+                        <x:String>completed</x:String>
+                        <x:String>cancelled</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <Button Grid.Column="1"
+                        Text="Exportar"
+                        Clicked="OnExportClicked"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        CornerRadius="8"/>
+            </Grid>
+
+            <Label Grid.Row="1" 
+                   x:Name="OrderCountLabel"
+                   Text="Mostrando 0 pedidos"
+                   FontSize="12"
+                   TextColor="{StaticResource SecondaryTextColor}"/>
+        </Grid>
+
+        <!-- Orders List -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="8">
+                
+                <CollectionView x:Name="OrdersCollection"
+                                ItemsSource="{Binding Orders}"
+                                EmptyView="No hay pedidos">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4" 
+                                   Padding="12"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   CornerRadius="8">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    
+                                    <!-- Order ID -->
+                                    <Label Grid.Row="0"
+                                           Text="{Binding Id, StringFormat='Pedido #{0}'}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+
+                                    <!-- Date -->
+                                    <Label Grid.Row="1"
+                                           Text="{Binding CreatedAt, StringFormat='Fecha: {0:dd/MM/yyyy HH:mm}'}" 
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}"/>
+
+                                    <!-- Status -->
+                                    <Label Grid.Row="2"
+                                           Text="{Binding Status, StringFormat='Estado: {0}'}" 
+                                           FontSize="12"/>
+
+                                    <!-- Total -->
+                                    <VerticalStackLayout Grid.Column="1" Grid.RowSpan="3"
+                                                         VerticalOptions="Center"
+                                                         Spacing="8">
+                                        <Label Text="{Binding Total, StringFormat='${0:F2}'}" 
+                                               FontSize="18" 
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               HorizontalOptions="End"/>
+                                        
+                                        <Button Text="Ver Detalles"
+                                                Clicked="OnViewDetailsClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource PrimaryColor}"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                Padding="8,4"
+                                                CornerRadius="6"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator x:Name="LoadingIndicator" 
+                                   IsRunning="False" 
+                                   IsVisible="False"
+                                   Color="{StaticResource PrimaryColor}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
