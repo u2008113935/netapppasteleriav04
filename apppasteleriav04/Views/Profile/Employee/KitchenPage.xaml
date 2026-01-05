@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Employee.KitchenPage"
+             Title="Cocina">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               Padding="20" 
+               BackgroundColor="#FF9800"
+               CornerRadius="0">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="🍰 Cola de Preparación" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+                <Label x:Name="LblOrdersCount" 
+                       Text="0 pedidos pendientes"
+                       FontSize="14"
+                       TextColor="White"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Orders Queue -->
+        <RefreshView Grid.Row="1" 
+                     x:Name="RefreshOrders"
+                     Refreshing="OnRefreshing">
+            
+            <CollectionView x:Name="OrdersCollectionView"
+                            SelectionMode="Single"
+                            SelectionChanged="OnOrderSelected">
+                
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20" 
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Center">
+                        <Label Text="👨‍🍳" 
+                               FontSize="64"
+                               HorizontalOptions="Center"/>
+                        <Label Text="No hay pedidos para preparar" 
+                               FontSize="18"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"
+                               Margin="0,10,0,0"/>
+                        <Label Text="Los pedidos aparecerán aquí cuando lleguen" 
+                               FontSize="14"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10,5" 
+                               Padding="15" 
+                               CornerRadius="10"
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+                                
+                                <!-- Order Header -->
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Id, StringFormat='Pedido #{0:N}'}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"
+                                           LineBreakMode="TailTruncation"/>
+                                    
+                                    <Frame Grid.Column="1"
+                                           Padding="8,4"
+                                           CornerRadius="10"
+                                           BackgroundColor="#FF9800">
+                                        <Label Text="{Binding Status}" 
+                                               FontSize="12"
+                                               TextColor="White"
+                                               FontAttributes="Bold"/>
+                                    </Frame>
+                                </Grid>
+
+                                <!-- Order Time -->
+                                <Label Grid.Row="1"
+                                       Text="{Binding CreatedAt, StringFormat='Recibido: {0:HH:mm}'}" 
+                                       FontSize="14"
+                                       TextColor="Gray"/>
+
+                                <!-- Items Count -->
+                                <Label Grid.Row="2"
+                                       Text="{Binding Items.Count, StringFormat='Items: {0}'}" 
+                                       FontSize="14"
+                                       TextColor="Gray"/>
+
+                                <!-- Timer (placeholder) -->
+                                <HorizontalStackLayout Grid.Row="3" Spacing="5">
+                                    <Label Text="⏱️" FontSize="16"/>
+                                    <Label Text="Tiempo transcurrido: --" 
+                                           FontSize="14"
+                                           TextColor="#FF5722"/>
+                                </HorizontalStackLayout>
+
+                                <!-- Action Button -->
+                                <Button Grid.Row="4"
+                                        Text="Comenzar Preparación"
+                                        BackgroundColor="#4CAF50"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        Padding="15,10"
+                                        Clicked="OnStartPreparingClicked"/>
+
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </RefreshView>
+
+        <!-- Current Order Being Prepared -->
+        <Frame Grid.Row="2" 
+               x:Name="CurrentOrderFrame"
+               Padding="20" 
+               BackgroundColor="#4CAF50"
+               CornerRadius="0"
+               IsVisible="False">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="⏱️ Preparando Pedido" 
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+                <Label x:Name="LblCurrentOrderId" 
+                       Text="Pedido #12345"
+                       FontSize="16"
+                       TextColor="White"/>
+                <Label x:Name="LblPreparationTime" 
+                       Text="Tiempo: 00:00"
+                       FontSize="16"
+                       TextColor="White"/>
+                
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,10,0,0">
+                    <Button Grid.Column="0"
+                            Text="Ver Detalles"
+                            BackgroundColor="White"
+                            TextColor="#4CAF50"
+                            CornerRadius="8"
+                            Clicked="OnViewCurrentOrderClicked"/>
+                    <Button Grid.Column="1"
+                            Text="Marcar Listo"
+                            BackgroundColor="#FF6B9D"
+                            TextColor="White"
+                            CornerRadius="8"
+                            Clicked="OnMarkReadyClicked"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+
+</ContentPage>

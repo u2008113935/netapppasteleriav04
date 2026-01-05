@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace apppasteleriav04.Models.Domain
@@ -9,28 +8,28 @@ namespace apppasteleriav04.Models.Domain
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("pedido_id")]
+        [JsonPropertyName("order_id")]
         public Guid OrderId { get; set; }
 
         [JsonPropertyName("payment_id")]
         public Guid? PaymentId { get; set; }
 
-        [JsonPropertyName("tipo")]
-        public string Type { get; set; } = string.Empty; // boleta, factura
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = "boleta"; // boleta, factura
 
-        [JsonPropertyName("serie")]
-        public string SerialNumber { get; set; } = string.Empty; // B001, F001
+        [JsonPropertyName("serial_number")]
+        public string SerialNumber { get; set; } = string.Empty;
 
-        [JsonPropertyName("correlativo")]
-        public int CorrelativeNumber { get; set; } // 00001, 00002
+        [JsonPropertyName("correlative_number")]
+        public string CorrelativeNumber { get; set; } = string.Empty;
 
-        [JsonPropertyName("cliente_ruc")]
+        [JsonPropertyName("customer_ruc")]
         public string? CustomerRuc { get; set; }
 
-        [JsonPropertyName("cliente_nombre")]
+        [JsonPropertyName("customer_name")]
         public string CustomerName { get; set; } = string.Empty;
 
-        [JsonPropertyName("cliente_direccion")]
+        [JsonPropertyName("customer_address")]
         public string? CustomerAddress { get; set; }
 
         [JsonPropertyName("subtotal")]
@@ -49,35 +48,15 @@ namespace apppasteleriav04.Models.Domain
         public string? XmlUrl { get; set; }
 
         [JsonPropertyName("sunat_status")]
-        public string SunatStatus { get; set; } = "pendiente"; // pendiente, enviado, aceptado, rechazado
+        public string? SunatStatus { get; set; }
 
         [JsonPropertyName("sunat_ticket")]
         public string? SunatTicket { get; set; }
-
-        [JsonPropertyName("sunat_cdr")]
-        public string? SunatCdr { get; set; }
 
         [JsonPropertyName("created_at")]
         public DateTime CreatedAt { get; set; }
 
         [JsonPropertyName("sent_at")]
         public DateTime? SentAt { get; set; }
-
-        [JsonIgnore]
-        public List<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
-    }
-
-    public enum InvoiceType
-    {
-        Boleta,
-        Factura
-    }
-
-    public enum SunatStatus
-    {
-        Pending,
-        Sent,
-        Accepted,
-        Rejected
     }
 }

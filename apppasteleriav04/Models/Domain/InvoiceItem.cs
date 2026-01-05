@@ -12,7 +12,7 @@ namespace apppasteleriav04.Models.Domain
         public Guid InvoiceId { get; set; }
 
         [JsonPropertyName("product_id")]
-        public Guid? ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
         [JsonPropertyName("description")]
         public string Description { get; set; } = string.Empty;
@@ -33,6 +33,6 @@ namespace apppasteleriav04.Models.Domain
         public decimal Total { get; set; }
 
         [JsonPropertyName("product_code")]
-        public string? ProductCode { get; set; } // código SUNAT
+        public string? ProductCode { get; set; }
     }
 }
