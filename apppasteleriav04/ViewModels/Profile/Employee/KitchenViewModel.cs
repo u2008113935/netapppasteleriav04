@@ -72,7 +72,7 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             MarkReadyCommand = new Command(async () => await MarkOrderReadyAsync());
         }
 
-        private async Task LoadOrdersAsync()
+        public async Task LoadOrdersAsync()
         {
             IsLoading = true;
             try

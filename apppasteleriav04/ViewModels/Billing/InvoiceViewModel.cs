@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using apppasteleriav04.Helpers;
 using apppasteleriav04.Models.Domain;
 using apppasteleriav04.Services.Billing;
 using apppasteleriav04.ViewModels.Base;
