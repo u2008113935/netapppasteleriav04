@@ -64,14 +64,6 @@ namespace apppasteleriav04.ViewModels.Catalog
             SearchCommand = new RelayCommand(FilterProducts);
         }
 
-        public CatalogViewModel()
-        {
-            Title = "Catálogo";
-            LoadProductsCommand = new AsyncRelayCommand(LoadProductsAsync);
-            AddToCartCommand = new RelayCommand<Product>(AddToCart);
-            RefreshCommand = new AsyncRelayCommand(LoadProductsAsync);
-        }
-
         /// <summary>
         /// Load products from the service
         /// </summary>

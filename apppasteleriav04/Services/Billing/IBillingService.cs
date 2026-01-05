@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Models.Enums;
 
 namespace apppasteleriav04.Services.Billing
 {

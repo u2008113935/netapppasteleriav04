@@ -4,7 +4,7 @@ using System.Text;
 
 namespace apppasteleriav04.Models.DTOs.Sunat
 {
-    internal class DetalleComprobanteDto
+    public class DetalleComprobanteDto
     {
     }
 }
