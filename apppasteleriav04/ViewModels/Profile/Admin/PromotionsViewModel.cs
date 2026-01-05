@@ -19,38 +19,9 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
 
         public ObservableCollection<Promotion> Promotions { get; set; } = new ObservableCollection<Promotion>();
 
-        private Promotion? _selectedPromotion;
-        public Promotion? SelectedPromotion
-        {
-            get => _selectedPromotion;
-            set
-            {
-                _selectedPromotion = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isEditing;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                _isEditing = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public Promotion? SelectedPromotion { get; set; }
+        public bool IsEditing { get; set; }
+        public bool IsLoading { get; set; }
 
         // Commands
         public ICommand LoadPromotionsCommand { get; }
@@ -168,9 +139,5 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             }
         }
 
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
-        }
     }
 }

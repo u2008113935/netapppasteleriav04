@@ -19,39 +19,9 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
 
         public ObservableCollection<UserProfile> Users { get; set; } = new ObservableCollection<UserProfile>();
 
-        private UserProfile? _selectedUser;
-        public UserProfile? SelectedUser
-        {
-            get => _selectedUser;
-            set
-            {
-                _selectedUser = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _filterRole = "Todos";
-        public string FilterRole
-        {
-            get => _filterRole;
-            set
-            {
-                _filterRole = value;
-                OnPropertyChanged();
-                _ = LoadUsersAsync();
-            }
-        }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public UserProfile? SelectedUser { get; set; }
+        public string FilterRole { get; set; } = "Todos";
+        public bool IsLoading { get; set; }
 
         // Commands
         public ICommand LoadUsersCommand { get; }
@@ -137,9 +107,5 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             }
         }
 
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
-        }
     }
 }

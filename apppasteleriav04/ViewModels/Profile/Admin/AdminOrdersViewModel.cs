@@ -19,61 +19,11 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
 
         public ObservableCollection<Order> Orders { get; set; } = new ObservableCollection<Order>();
 
-        private Order? _selectedOrder;
-        public Order? SelectedOrder
-        {
-            get => _selectedOrder;
-            set
-            {
-                _selectedOrder = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _filterStatus = "Todos";
-        public string FilterStatus
-        {
-            get => _filterStatus;
-            set
-            {
-                _filterStatus = value;
-                OnPropertyChanged();
-                _ = LoadOrdersAsync();
-            }
-        }
-
-        private DateTime _startDate = DateTime.Today.AddDays(-30);
-        public DateTime StartDate
-        {
-            get => _startDate;
-            set
-            {
-                _startDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime _endDate = DateTime.Today;
-        public DateTime EndDate
-        {
-            get => _endDate;
-            set
-            {
-                _endDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public Order? SelectedOrder { get; set; }
+        public string FilterStatus { get; set; } = "Todos";
+        public DateTime StartDate { get; set; } = DateTime.Today.AddDays(-30);
+        public DateTime EndDate { get; set; } = DateTime.Today;
+        public bool IsLoading { get; set; }
 
         // Commands
         public ICommand LoadOrdersCommand { get; }
@@ -171,9 +121,5 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             }
         }
 
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
-        }
     }
 }

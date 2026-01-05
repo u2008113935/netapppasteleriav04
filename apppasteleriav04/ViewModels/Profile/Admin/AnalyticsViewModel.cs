@@ -16,83 +16,13 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
     {
         private readonly AdminService _adminService;
 
-        private Analytics? _analytics;
-        public Analytics? Analytics
-        {
-            get => _analytics;
-            set
-            {
-                _analytics = value;
-                OnPropertyChanged();
-                UpdateKPIs();
-            }
-        }
-
-        private DateTime _startDate = DateTime.Today.AddDays(-30);
-        public DateTime StartDate
-        {
-            get => _startDate;
-            set
-            {
-                _startDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime _endDate = DateTime.Today;
-        public DateTime EndDate
-        {
-            get => _endDate;
-            set
-            {
-                _endDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private decimal _totalRevenue;
-        public decimal TotalRevenue
-        {
-            get => _totalRevenue;
-            set
-            {
-                _totalRevenue = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _totalOrders;
-        public int TotalOrders
-        {
-            get => _totalOrders;
-            set
-            {
-                _totalOrders = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private decimal _averageOrderValue;
-        public decimal AverageOrderValue
-        {
-            get => _averageOrderValue;
-            set
-            {
-                _averageOrderValue = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public Analytics? Analytics { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Today.AddDays(-30);
+        public DateTime EndDate { get; set; } = DateTime.Today;
+        public decimal TotalRevenue { get; set; }
+        public int TotalOrders { get; set; }
+        public decimal AverageOrderValue { get; set; }
+        public bool IsLoading { get; set; }
 
         // Chart data
         public List<KeyValuePair<string, decimal>> ChartData { get; set; } = new List<KeyValuePair<string, decimal>>();
@@ -119,6 +49,7 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             try
             {
                 Analytics = await _adminService.GetAnalyticsAsync(StartDate, EndDate);
+                UpdateKPIs();
                 CalculateKPIs();
             }
             catch (Exception ex)
@@ -150,8 +81,6 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             {
                 ChartData.Add(new KeyValuePair<string, decimal>(item.Key, item.Value));
             }
-
-            OnPropertyChanged(nameof(ChartData));
         }
 
         private void OnChangeDateRange(string? range)
@@ -200,9 +129,5 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             }
         }
 
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
-        }
     }
 }

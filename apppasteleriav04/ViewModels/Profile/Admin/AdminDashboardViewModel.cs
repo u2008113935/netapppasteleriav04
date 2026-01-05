@@ -17,52 +17,14 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
         private readonly AdminService _adminService;
 
         // Properties
-        private decimal _todaySales;
-        public decimal TodaySales
-        {
-            get => _todaySales;
-            set
-            {
-                _todaySales = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _todayOrders;
-        public int TodayOrders
-        {
-            get => _todayOrders;
-            set
-            {
-                _todayOrders = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int _pendingOrders;
-        public int PendingOrders
-        {
-            get => _pendingOrders;
-            set
-            {
-                _pendingOrders = value;
-                OnPropertyChanged();
-            }
-        }
+        public decimal TodaySales { get; set; }
+        public int TodayOrders { get; set; }
+        public int PendingOrders { get; set; }
 
         public ObservableCollection<Order> RecentOrders { get; set; } = new ObservableCollection<Order>();
         public ObservableCollection<TopProduct> TopProducts { get; set; } = new ObservableCollection<TopProduct>();
 
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool IsLoading { get; set; }
 
         // Commands
         public ICommand RefreshCommand { get; }
@@ -123,11 +85,6 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
         {
             // Navigate to AnalyticsPage
             Shell.Current.GoToAsync("//admin/analytics");
-        }
-
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
         }
     }
 }

@@ -22,62 +22,11 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
         
         private ObservableCollection<Product> _allProducts = new ObservableCollection<Product>();
 
-        private Product? _selectedProduct;
-        public Product? SelectedProduct
-        {
-            get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isEditing;
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                _isEditing = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _searchText = string.Empty;
-        public string SearchText
-        {
-            get => _searchText;
-            set
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterProducts();
-            }
-        }
-
-        private string _filterCategory = "Todas";
-        public string FilterCategory
-        {
-            get => _filterCategory;
-            set
-            {
-                _filterCategory = value;
-                OnPropertyChanged();
-                FilterProducts();
-            }
-        }
-
-        private bool _isLoading;
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
+        public Product? SelectedProduct { get; set; }
+        public bool IsEditing { get; set; }
+        public string SearchText { get; set; } = string.Empty;
+        public string FilterCategory { get; set; } = "Todas";
+        public bool IsLoading { get; set; }
 
         // Commands
         public ICommand LoadProductsCommand { get; }
@@ -234,9 +183,5 @@ namespace apppasteleriav04.ViewModels.Profile.Admin
             }
         }
 
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-        {
-            // Implement INotifyPropertyChanged if BaseViewModel doesn't have it
-        }
     }
 }

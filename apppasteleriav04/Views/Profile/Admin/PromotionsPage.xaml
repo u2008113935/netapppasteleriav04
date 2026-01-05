@@ -73,9 +73,21 @@
                                                 <Setter Property="BackgroundColor" Value="LightGray"/>
                                             </DataTrigger>
                                         </Frame.Triggers>
-                                        <Label Text="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}" 
-                                               FontSize="10"
-                                               FontAttributes="Bold"/>
+                                        <Label FontSize="10"
+                                               FontAttributes="Bold">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" 
+                                                             Binding="{Binding IsActive}" 
+                                                             Value="True">
+                                                    <Setter Property="Text" Value="Activa"/>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" 
+                                                             Binding="{Binding IsActive}" 
+                                                             Value="False">
+                                                    <Setter Property="Text" Value="Inactiva"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
                                     </Frame>
 
                                     <!-- Action Buttons -->
