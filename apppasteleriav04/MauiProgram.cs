@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using apppasteleriav04.Services.Payment;
+using apppasteleriav04.Services.Billing;
 
 namespace apppasteleriav04
 {
@@ -20,7 +22,11 @@ namespace apppasteleriav04
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // TODO: Cuando agregues servicios, configurarlos aquí
+            // Register Services
+            builder.Services.AddSingleton<IPaymentService, PaymentService>();
+            builder.Services.AddSingleton<IBillingService, BillingService>();
+
+            // TODO: Cuando agregues más servicios, configurarlos aquí
             // builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
 
 #if DEBUG

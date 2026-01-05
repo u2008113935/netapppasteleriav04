@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Cart.PaymentFailedPage"
+             Title="Pago Fallido"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="30" VerticalOptions="Center">
+
+            <!-- Error Icon -->
+            <Label Text="✗" 
+                   FontSize="80" 
+                   TextColor="#F44336"
+                   HorizontalOptions="Center" />
+
+            <!-- Error Message -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Pago No Procesado" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <Label x:Name="ErrorMessageLabel"
+                       Text="No se pudo procesar tu pago" 
+                       FontSize="16" 
+                       TextColor="#666"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Error Details -->
+            <Frame BackgroundColor="#FFEBEE" BorderColor="#F44336" CornerRadius="10" Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Detalles del Error" FontSize="18" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" BackgroundColor="#F44336" />
+                    
+                    <Label x:Name="ErrorDetailsLabel" 
+                           Text="La tarjeta fue rechazada. Por favor, verifica los datos o intenta con otro método de pago."
+                           TextColor="#666"
+                           LineBreakMode="WordWrap" />
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Código de Error:" FontAttributes="Bold" />
+                        <Label x:Name="ErrorCodeLabel" Text="card_declined" TextColor="#F44336" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Suggestions -->
+            <Frame BackgroundColor="#FFF3E0" BorderColor="#FF9800" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="💡 Sugerencias:" FontSize="16" FontAttributes="Bold" />
+                    <Label Text="• Verifica que los datos de tu tarjeta sean correctos" FontSize="14" />
+                    <Label Text="• Asegúrate de tener fondos suficientes" FontSize="14" />
+                    <Label Text="• Intenta con otro método de pago" FontSize="14" />
+                    <Label Text="• Contacta a tu banco si el problema persiste" FontSize="14" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
+            <Button Text="Reintentar" 
+                    x:Name="RetryButton"
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Clicked="OnRetryClicked" />
+
+            <Button Text="Cambiar Método de Pago" 
+                    x:Name="ChangeMethodButton"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnChangeMethodClicked" />
+
+            <Button Text="Contactar Soporte" 
+                    x:Name="ContactSupportButton"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#666"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnContactSupportClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

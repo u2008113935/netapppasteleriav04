@@ -2,11 +2,131 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Cart.PaymentPage"
-             Title="PaymentPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:vm="clr-namespace:apppasteleriav04.ViewModels.Cart"
+             Title="Pagar Pedido">
+
+    <ContentPage.BindingContext>
+        <vm:PaymentViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Order Summary -->
+            <Frame BackgroundColor="#F5F5F5" BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Resumen del Pedido" FontSize="18" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                        <Label Text="Total a pagar:" FontSize="16" />
+                        <Label Text="{Binding Amount, StringFormat='S/ {0:F2}'}" 
+                               FontSize="20" FontAttributes="Bold" TextColor="#FF6B9D" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Payment Method Selection -->
+            <Label Text="Método de Pago" FontSize="18" FontAttributes="Bold" />
+
+            <CollectionView ItemsSource="{Binding AvailablePaymentMethods}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedPaymentMethod}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaymentViewModel}}, Path=SelectPaymentMethodCommand}"
+                                                      CommandParameter="{Binding Id}" />
+                            </Frame.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="15">
+                                <Label Text="{Binding Icon}" FontSize="30" />
+                                <Label Text="{Binding Name}" FontSize="16" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Card Details (shown only when card payment is selected) -->
+            <VerticalStackLayout Spacing="15" IsVisible="{Binding SelectedPaymentMethod, Converter={StaticResource StringEqualConverter}, ConverterParameter='tarjeta'}">
+                <Label Text="Datos de la Tarjeta" FontSize="16" FontAttributes="Bold" />
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Número de Tarjeta" />
+                    <Entry Text="{Binding CardNumber}" 
+                           Placeholder="1234 5678 9012 3456"
+                           Keyboard="Numeric"
+                           MaxLength="19" />
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Spacing="10">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="FillAndExpand">
+                        <Label Text="Fecha de Expiración" />
+                        <Entry Text="{Binding CardExpiry}" 
+                               Placeholder="MM/YY"
+                               Keyboard="Numeric"
+                               MaxLength="5" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="FillAndExpand">
+                        <Label Text="CVV" />
+                        <Entry Text="{Binding CardCvv}" 
+                               Placeholder="123"
+                               Keyboard="Numeric"
+                               MaxLength="4"
+                               IsPassword="True" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nombre del Titular" />
+                    <Entry Text="{Binding CardHolder}" 
+                           Placeholder="JUAN PEREZ"
+                           Keyboard="Text" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Status Messages -->
+            <Label Text="{Binding PaymentStatus}" 
+                   FontSize="14" 
+                   TextColor="#666"
+                   IsVisible="{Binding PaymentStatus, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" />
+
+            <Label Text="{Binding ErrorMessage}" 
+                   FontSize="14" 
+                   TextColor="Red"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" />
+
+            <!-- Action Buttons -->
+            <Button Text="Procesar Pago" 
+                    Command="{Binding ProcessPaymentCommand}"
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}" />
+
+            <Button Text="Cancelar" 
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#666"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}" />
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsProcessing}" 
+                               IsVisible="{Binding IsProcessing}"
+                               Color="#FF6B9D"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
