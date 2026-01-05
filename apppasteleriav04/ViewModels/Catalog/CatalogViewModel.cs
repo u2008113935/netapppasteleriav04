@@ -126,16 +126,7 @@ namespace apppasteleriav04.ViewModels.Catalog
         {
             if (product != null)
             {
-                var cartItem = new CartItem
-                {
-                    ProductId = product.Id,
-                    Nombre = product.Nombre,
-                    ImagenPath = product.ImagenPath,
-                    Price = product.Precio ?? 0,
-                    Quantity = 1
-                };
-
-                CartService.Instance.Add(cartItem);
+                CartService.Instance.Add(product, 1);
                 ProductAddedToCart?.Invoke(this, product);
             }
         }
