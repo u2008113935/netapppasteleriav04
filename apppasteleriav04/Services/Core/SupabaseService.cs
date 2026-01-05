@@ -729,5 +729,187 @@ namespace apppasteleriav04.Services.Core
         }
 
         #endregion
+
+        #region Offline Support Methods
+
+        /// <summary>
+        /// Gets products with offline support - tries server first, falls back to local cache
+        /// </summary>
+        public async Task<List<Product>> GetProductsWithOfflineSupportAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                // Check connectivity
+                var connectivity = Microsoft.Maui.Networking.Connectivity.Current;
+                bool isConnected = connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.Internet;
+
+                if (isConnected)
+                {
+                    // Try to get from server
+                    var serverProducts = await GetProductsAsync(cancellationToken: cancellationToken);
+
+                    if (serverProducts != null && serverProducts.Count > 0)
+                    {
+                        // Cache products locally
+                        _ = Task.Run(async () => await CacheProductsLocallyAsync(serverProducts));
+                        return serverProducts;
+                    }
+                }
+
+                // Fall back to local cache
+                Debug.WriteLine("[SupabaseService] Using local product cache");
+                return await GetProductsFromCacheAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] Error in GetProductsWithOfflineSupportAsync: {ex}");
+
+                // Fall back to local cache on error
+                return await GetProductsFromCacheAsync();
+            }
+        }
+
+        /// <summary>
+        /// Creates an order with offline support - queues for sync if offline
+        /// </summary>
+        public async Task<Order?> CreateOrderWithOfflineSupportAsync(Guid userId, List<OrderItem> items, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                // Check connectivity
+                var connectivity = Microsoft.Maui.Networking.Connectivity.Current;
+                bool isConnected = connectivity.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.Internet;
+
+                if (isConnected)
+                {
+                    // Try to create on server
+                    try
+                    {
+                        var order = await CreateOrderAsync(userId, items, cancellationToken);
+                        Debug.WriteLine($"[SupabaseService] Order created online: {order.Id}");
+                        return order;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[SupabaseService] Failed to create order online, saving offline: {ex.Message}");
+                    }
+                }
+
+                // Save offline
+                Debug.WriteLine("[SupabaseService] Saving order offline");
+                return await SaveOrderOfflineAsync(userId, items);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] Error in CreateOrderWithOfflineSupportAsync: {ex}");
+                return null;
+            }
+        }
+
+        private async Task CacheProductsLocallyAsync(List<Product> products)
+        {
+            try
+            {
+                var productRepo = new Data.Local.Repositories.LocalProductRepository();
+
+                foreach (var product in products)
+                {
+                    var localProduct = new Models.Local.LocalProduct
+                    {
+                        Id = product.Id.ToString(),
+                        Nombre = product.Nombre ?? "",
+                        Descripcion = product.Descripcion,
+                        Categoria = product.Categoria,
+                        ImagenUrl = product.ImagenPath,
+                        Precio = product.Precio ?? 0,
+                        LastSynced = DateTime.UtcNow,
+                        IsActive = true
+                    };
+
+                    await productRepo.InsertOrReplaceAsync(localProduct);
+                }
+
+                Debug.WriteLine($"[SupabaseService] Cached {products.Count} products locally");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] Error caching products: {ex}");
+            }
+        }
+
+        private async Task<List<Product>> GetProductsFromCacheAsync()
+        {
+            try
+            {
+                var productRepo = new Data.Local.Repositories.LocalProductRepository();
+                var localProducts = await productRepo.GetAllAsync();
+
+                return localProducts.Select(lp => new Product
+                {
+                    Id = Guid.Parse(lp.Id),
+                    Nombre = lp.Nombre,
+                    Descripcion = lp.Descripcion,
+                    Categoria = lp.Categoria,
+                    ImagenPath = lp.ImagenUrl,
+                    Precio = lp.Precio
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] Error getting products from cache: {ex}");
+                return new List<Product>();
+            }
+        }
+
+        private async Task<Order?> SaveOrderOfflineAsync(Guid userId, List<OrderItem> items)
+        {
+            try
+            {
+                var orderRepo = new Data.Local.Repositories.LocalOrderRepository();
+
+                var localOrder = new Models.Local.LocalOrder
+                {
+                    UserId = userId.ToString(),
+                    Total = items.Sum(i => i.Price * i.Quantity),
+                    Status = "pendiente",
+                    CreatedAt = DateTime.UtcNow,
+                    Synced = false
+                };
+
+                localOrder.Items = items.Select(item => new Models.Local.LocalOrderItem
+                {
+                    ProductId = item.ProductId.ToString(),
+                    ProductName = "", // Will be populated from product cache
+                    Quantity = item.Quantity,
+                    Price = item.Price,
+                    Synced = false
+                }).ToList();
+
+                await orderRepo.InsertAsync(localOrder);
+
+                // Add to sync queue
+                var syncService = new Sync.SyncService();
+                await syncService.EnqueueOrderAsync(localOrder.Id);
+
+                Debug.WriteLine($"[SupabaseService] Order saved offline with ID: {localOrder.Id}");
+
+                // Return a simulated Order object
+                return new Order
+                {
+                    Id = Guid.Empty, // Temporary ID
+                    UserId = userId,
+                    Total = localOrder.Total,
+                    Status = localOrder.Status,
+                    CreatedAt = localOrder.CreatedAt
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] Error saving order offline: {ex}");
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
