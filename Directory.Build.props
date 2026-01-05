@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Only build Android on Linux -->
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('Linux'))">net10.0-android</TargetFrameworks>
+  </PropertyGroup>
+</Project>
