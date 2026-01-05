@@ -30,8 +30,8 @@ namespace apppasteleriav04.Services.Sync
             _connectivityService = connectivityService;
             _connectivityService.ConnectivityChanged += OnConnectivityChanged;
             
-            // Initial count
-            _ = UpdatePendingCountAsync();
+            // Initial count - using Task.Run to avoid fire-and-forget in constructor
+            Task.Run(async () => await UpdatePendingCountAsync());
         }
 
         private async void OnConnectivityChanged(object? sender, bool isConnected)
@@ -41,6 +41,19 @@ namespace apppasteleriav04.Services.Sync
             {
                 // Auto-sync when connection is restored
                 await SyncPendingAsync();
+            }
+        }
+
+        private async Task UpdatePendingCountAsync()
+        {
+            try
+            {
+                _pendingSyncCount = await Database.Table<SyncQueueItem>().CountAsync();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SyncService] UpdatePendingCountAsync error: {ex}");
+                _pendingSyncCount = 0;
             }
         }
 

@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace apppasteleriav04.Data.Local.Database
 {
     public static class DatabaseConstants

@@ -736,9 +736,10 @@ namespace apppasteleriav04.Services.Core
         {
             try
             {
-                var connectivityService = new apppasteleriav04.Services.Connectivity.ConnectivityService();
+                // Check connectivity using MAUI API directly
+                var isConnected = Microsoft.Maui.Networking.Connectivity.Current.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.Internet;
                 
-                if (connectivityService.IsConnected)
+                if (isConnected)
                 {
                     // Online: Fetch from server and cache locally
                     Debug.WriteLine("[SupabaseService] Online - Fetching products from server");
@@ -813,13 +814,14 @@ namespace apppasteleriav04.Services.Core
             }
         }
 
-        public async Task<Order?> CreateOrderWithOfflineSupportAsync(Guid userId, List<CartItem> items)
+        public async Task<Order?> CreateOrderWithOfflineSupportAsync(Guid userId, List<CartItem> items, ISyncService? syncService = null)
         {
             try
             {
-                var connectivityService = new apppasteleriav04.Services.Connectivity.ConnectivityService();
+                // Check connectivity using MAUI API directly
+                var isConnected = Microsoft.Maui.Networking.Connectivity.Current.NetworkAccess == Microsoft.Maui.Networking.NetworkAccess.Internet;
                 
-                if (connectivityService.IsConnected)
+                if (isConnected)
                 {
                     // Online: Create directly on server
                     Debug.WriteLine("[SupabaseService] Online - Creating order on server");
@@ -864,25 +866,30 @@ namespace apppasteleriav04.Services.Core
                     var orderRepo = new apppasteleriav04.Data.Local.Repositories.LocalOrderRepository();
                     await orderRepo.SaveWithItemsAsync(localOrder, localOrderItems);
                     
-                    // Enqueue for sync
-                    var syncService = new SyncService(connectivityService);
-                    var orderPayload = new
+                    // Enqueue for sync if syncService is provided
+                    if (syncService != null)
                     {
-                        UserId = userId,
-                        Total = total,
-                        Items = localOrderItems.Select(i => new
+                        var orderPayload = new
                         {
-                            ProductId = i.ProductId,
-                            ProductName = i.ProductName,
-                            Quantity = i.Quantity,
-                            UnitPrice = i.UnitPrice,
-                            Subtotal = i.Subtotal
-                        }).ToList()
-                    };
-                    
-                    await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload));
-                    
-                    Debug.WriteLine($"[SupabaseService] Order {orderId} saved locally and enqueued for sync");
+                            UserId = userId,
+                            Total = total,
+                            Items = localOrderItems.Select(i => new
+                            {
+                                ProductId = i.ProductId,
+                                ProductName = i.ProductName,
+                                Quantity = i.Quantity,
+                                UnitPrice = i.UnitPrice,
+                                Subtotal = i.Subtotal
+                            }).ToList()
+                        };
+                        
+                        await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload));
+                        Debug.WriteLine($"[SupabaseService] Order {orderId} enqueued for sync");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[SupabaseService] Order {orderId} saved locally (sync service not available)");
+                    }
                     
                     // Return a placeholder Order object
                     return new Order
