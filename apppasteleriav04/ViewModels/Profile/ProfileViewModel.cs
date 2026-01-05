@@ -85,7 +85,7 @@ namespace apppasteleriav04.ViewModels.Profile
 
         private void Logout()
         {
-            AuthService.Instance.SignOut();
+            AuthService.Instance.Logout();
             UserProfile = null;
             Email = string.Empty;
             OnPropertyChanged(nameof(IsAuthenticated));

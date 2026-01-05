@@ -5,6 +5,9 @@ namespace apppasteleriav04.Models.Domain
 {
     public class Analytics
     {
+        public DateTime PeriodStart { get; set; }
+        public DateTime PeriodEnd { get; set; }
+        
         public decimal TotalSales { get; set; }
         
         public int TotalOrders { get; set; }

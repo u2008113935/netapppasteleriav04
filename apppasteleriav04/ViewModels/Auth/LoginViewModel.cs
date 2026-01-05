@@ -71,7 +71,7 @@ namespace apppasteleriav04.ViewModels.Auth
                     {
                         Success = true,
                         Message = "Sesión iniciada correctamente",
-                        UserId = AuthService.Instance.CurrentUserId?.ToString(),
+                        UserId = AuthService.Instance.UserId?.ToString(),
                         Email = Email
                     });
                 }

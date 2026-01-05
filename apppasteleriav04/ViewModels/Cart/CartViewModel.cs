@@ -67,7 +67,7 @@ namespace apppasteleriav04.ViewModels.Cart
         {
             if (item != null)
             {
-                _cartService.Remove(item);
+                _cartService.Remove(item.ProductId);
             }
         }
 

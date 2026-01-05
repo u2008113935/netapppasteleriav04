@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using apppasteleriav04.Helpers;
 using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Models.Enums;
 using apppasteleriav04.Services.Billing;
 using apppasteleriav04.ViewModels.Base;
 
@@ -100,7 +100,7 @@ namespace apppasteleriav04.ViewModels.Billing
                 var type = InvoiceType == "boleta" ? InvoiceType.Boleta : InvoiceType.Factura;
                 Invoice = await _billingService.GenerateInvoiceAsync(Order.Id, type, customerData);
 
-                Title = $"Comprobante generado: {Invoice.SerialNumber}-{Invoice.CorrelativeNumber:D5}";
+                Title = $"Comprobante generado: {Invoice.SerialNumber}-{Invoice.CorrelativeNumber}";
             }
             catch (Exception ex)
             {

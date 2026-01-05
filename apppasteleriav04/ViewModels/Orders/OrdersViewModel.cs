@@ -93,5 +93,12 @@ namespace apppasteleriav04.ViewModels.Orders
                 OrderSelected?.Invoke(this, order);
             }
         }
+
+        public void CancelOperations()
+        {
+            // Cancel any pending operations
+            IsBusy = false;
+            IsLoading = false;
+        }
     }
 }
