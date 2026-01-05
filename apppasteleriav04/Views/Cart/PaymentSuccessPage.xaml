@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Cart.PaymentSuccessPage"
+             Title="Pago Exitoso"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="30" VerticalOptions="Center">
+
+            <!-- Success Icon -->
+            <Label Text="✓" 
+                   FontSize="80" 
+                   TextColor="#4CAF50"
+                   HorizontalOptions="Center" />
+
+            <!-- Success Message -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="¡Pago Exitoso!" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <Label Text="Tu pago ha sido procesado correctamente" 
+                       FontSize="16" 
+                       TextColor="#666"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Order Details -->
+            <Frame BackgroundColor="#F5F5F5" BorderColor="#E0E0E0" CornerRadius="10" Padding="20">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Detalles del Pedido" FontSize="18" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Número de Pedido:" FontAttributes="Bold" />
+                        <Label x:Name="OrderNumberLabel" Text="#12345678" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Fecha:" FontAttributes="Bold" />
+                        <Label x:Name="OrderDateLabel" Text="05/01/2026 09:23" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Total Pagado:" FontAttributes="Bold" />
+                        <Label x:Name="TotalAmountLabel" Text="S/ 100.00" TextColor="#FF6B9D" FontAttributes="Bold" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Método de Pago:" FontAttributes="Bold" />
+                        <Label x:Name="PaymentMethodLabel" Text="Tarjeta de Crédito" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
+            <Button Text="Ver Comprobante" 
+                    x:Name="ViewInvoiceButton"
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    Clicked="OnViewInvoiceClicked" />
+
+            <Button Text="Volver al Inicio" 
+                    x:Name="BackToHomeButton"
+                    BackgroundColor="#E0E0E0"
+                    TextColor="#666"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    Clicked="OnBackToHomeClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

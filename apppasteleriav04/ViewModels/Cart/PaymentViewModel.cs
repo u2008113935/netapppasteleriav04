@@ -1,191 +1,253 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using apppasteleriav04.Helpers;
 using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Models.DTOs.Payment;
+using apppasteleriav04.Services.Payment;
 using apppasteleriav04.ViewModels.Base;
 
 namespace apppasteleriav04.ViewModels.Cart
 {
     public class PaymentViewModel : BaseViewModel
     {
+        private readonly IPaymentService _paymentService;
+
         private Order? _order;
+        private decimal _amount;
+        private string _selectedPaymentMethod = "efectivo";
+        private string _cardNumber = string.Empty;
+        private string _cardExpiry = string.Empty;
+        private string _cardCvv = string.Empty;
+        private string _cardHolder = string.Empty;
+        private bool _isProcessing;
+        private string _paymentStatus = string.Empty;
+        private string _errorMessage = string.Empty;
+
+        public PaymentViewModel()
+        {
+            _paymentService = new PaymentService();
+            
+            AvailablePaymentMethods = new ObservableCollection<PaymentMethodOption>
+            {
+                new PaymentMethodOption { Id = "efectivo", Name = "Efectivo", Icon = "💵" },
+                new PaymentMethodOption { Id = "tarjeta", Name = "Tarjeta de Crédito/Débito", Icon = "💳" },
+                new PaymentMethodOption { Id = "yape", Name = "Yape", Icon = "📱" },
+                new PaymentMethodOption { Id = "plin", Name = "Plin", Icon = "📲" }
+            };
+
+            ProcessPaymentCommand = new AsyncRelayCommand(ProcessPaymentAsync, CanProcessPayment);
+            CancelCommand = new RelayCommand(Cancel);
+            RetryCommand = new AsyncRelayCommand(ProcessPaymentAsync, CanRetry);
+        }
+
         public Order? Order
         {
             get => _order;
             set => SetProperty(ref _order, value);
         }
 
-        private decimal _amount;
         public decimal Amount
         {
             get => _amount;
             set => SetProperty(ref _amount, value);
         }
 
-        private string _selectedPaymentMethod = "efectivo";
         public string SelectedPaymentMethod
         {
             get => _selectedPaymentMethod;
             set
             {
                 SetProperty(ref _selectedPaymentMethod, value);
-                OnPropertyChanged(nameof(ShowCardFields));
+                ((AsyncRelayCommand)ProcessPaymentCommand).RaiseCanExecuteChanged();
             }
         }
 
-        public bool ShowCardFields => SelectedPaymentMethod == "tarjeta";
-
-        private string _cardNumber = string.Empty;
         public string CardNumber
         {
             get => _cardNumber;
-            set => SetProperty(ref _cardNumber, value);
+            set
+            {
+                var formatted = CardValidator.FormatCardNumber(value);
+                SetProperty(ref _cardNumber, formatted);
+            }
         }
 
-        private string _cardExpiry = string.Empty;
         public string CardExpiry
         {
             get => _cardExpiry;
             set => SetProperty(ref _cardExpiry, value);
         }
 
-        private string _cardCvv = string.Empty;
         public string CardCvv
         {
             get => _cardCvv;
             set => SetProperty(ref _cardCvv, value);
         }
 
-        private string _cardHolder = string.Empty;
         public string CardHolder
         {
             get => _cardHolder;
             set => SetProperty(ref _cardHolder, value);
         }
 
-        private bool _isProcessing;
         public bool IsProcessing
         {
             get => _isProcessing;
-            set => SetProperty(ref _isProcessing, value);
+            set
+            {
+                SetProperty(ref _isProcessing, value);
+                ((AsyncRelayCommand)ProcessPaymentCommand).RaiseCanExecuteChanged();
+            }
         }
 
-        private string _paymentStatus = string.Empty;
         public string PaymentStatus
         {
             get => _paymentStatus;
             set => SetProperty(ref _paymentStatus, value);
         }
 
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
+
+        public ObservableCollection<PaymentMethodOption> AvailablePaymentMethods { get; }
+
         public ICommand ProcessPaymentCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand RetryCommand { get; }
 
-        public event EventHandler<Payment>? PaymentCompleted;
-        public event EventHandler<string>? PaymentFailed;
-        public event EventHandler? PaymentCancelled;
+        public event EventHandler? PaymentCompleted;
+        public event EventHandler? PaymentFailed;
 
-        public PaymentViewModel()
+        public async Task ProcessPaymentAsync()
         {
-            Title = "Procesar Pago";
-            ProcessPaymentCommand = new AsyncRelayCommand(ProcessPaymentAsync, () => !IsProcessing);
-            CancelCommand = new RelayCommand(() => PaymentCancelled?.Invoke(this, EventArgs.Empty));
-            RetryCommand = new AsyncRelayCommand(ProcessPaymentAsync, () => !IsProcessing);
+            try
+            {
+                IsProcessing = true;
+                ErrorMessage = string.Empty;
+                PaymentStatus = "Procesando pago...";
+
+                // Validate card if payment method is card
+                if (SelectedPaymentMethod == "tarjeta")
+                {
+                    if (!ValidateCard())
+                    {
+                        ErrorMessage = "Por favor, verifica los datos de tu tarjeta";
+                        PaymentStatus = "Error de validación";
+                        PaymentFailed?.Invoke(this, EventArgs.Empty);
+                        return;
+                    }
+                }
+
+                // Create payment request
+                var request = new PaymentRequestDto
+                {
+                    OrderId = Order?.Id ?? Guid.NewGuid(),
+                    Amount = Amount,
+                    Currency = "PEN",
+                    PaymentMethod = SelectedPaymentMethod,
+                    CustomerName = CardHolder,
+                    Description = $"Pedido #{Order?.Id.ToString().Substring(0, 8)}"
+                };
+
+                // Process payment
+                var result = await _paymentService.ProcessPaymentAsync(request);
+
+                if (result.Success)
+                {
+                    PaymentStatus = "¡Pago completado exitosamente!";
+                    await Task.Delay(1000);
+                    PaymentCompleted?.Invoke(this, EventArgs.Empty);
+                }
+                else
+                {
+                    ErrorMessage = result.Message;
+                    PaymentStatus = "Pago fallido";
+                    PaymentFailed?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error al procesar el pago: {ex.Message}";
+                PaymentStatus = "Error";
+                PaymentFailed?.Invoke(this, EventArgs.Empty);
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
+        }
+
+        public bool ValidateCard()
+        {
+            if (SelectedPaymentMethod != "tarjeta")
+                return true;
+
+            // Validate card number
+            if (!CardValidator.ValidateLuhn(CardNumber))
+            {
+                ErrorMessage = "Número de tarjeta inválido";
+                return false;
+            }
+
+            // Validate expiry
+            if (!CardValidator.ValidateExpiry(CardExpiry))
+            {
+                ErrorMessage = "Fecha de expiración inválida o vencida";
+                return false;
+            }
+
+            // Validate CVV
+            var cardBrand = CardValidator.GetCardBrand(CardNumber);
+            if (!CardValidator.ValidateCvv(CardCvv, cardBrand))
+            {
+                ErrorMessage = "CVV inválido";
+                return false;
+            }
+
+            // Validate card holder
+            if (string.IsNullOrWhiteSpace(CardHolder))
+            {
+                ErrorMessage = "Ingrese el nombre del titular";
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool CanProcessPayment()
+        {
+            return !IsProcessing && Amount > 0 && !string.IsNullOrEmpty(SelectedPaymentMethod);
+        }
+
+        private bool CanRetry()
+        {
+            return !IsProcessing && !string.IsNullOrEmpty(ErrorMessage);
+        }
+
+        private void Cancel()
+        {
+            // Navigate back or close
         }
 
         public void Initialize(Order order, decimal amount)
         {
             Order = order;
             Amount = amount;
-        }
-
-        private async Task ProcessPaymentAsync()
-        {
             ErrorMessage = string.Empty;
             PaymentStatus = string.Empty;
-
-            if (Order == null)
-            {
-                ErrorMessage = "Orden no válida";
-                return;
-            }
-
-            if (SelectedPaymentMethod == "tarjeta")
-            {
-                if (!ValidateCardData())
-                {
-                    return;
-                }
-            }
-
-            IsProcessing = true;
-            IsBusy = true;
-            PaymentStatus = "Procesando pago...";
-
-            try
-            {
-                await Task.Delay(2000); // Simulate payment processing
-
-                var payment = new Payment
-                {
-                    Id = Guid.NewGuid(),
-                    OrderId = Order.Id,
-                    Amount = Amount,
-                    PaymentMethod = SelectedPaymentMethod,
-                    Status = "completado",
-                    CreatedAt = DateTime.UtcNow,
-                    ProcessedAt = DateTime.UtcNow
-                };
-
-                if (SelectedPaymentMethod == "tarjeta")
-                {
-                    payment.LastFourDigits = CardNumber.Length >= 4 ? CardNumber.Substring(CardNumber.Length - 4) : "****";
-                    payment.Gateway = "culqi";
-                }
-
-                PaymentStatus = "Pago completado exitosamente";
-                PaymentCompleted?.Invoke(this, payment);
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Error al procesar el pago: {ex.Message}";
-                PaymentStatus = "Pago fallido";
-                PaymentFailed?.Invoke(this, ex.Message);
-            }
-            finally
-            {
-                IsProcessing = false;
-                IsBusy = false;
-            }
         }
+    }
 
-        private bool ValidateCardData()
-        {
-            if (string.IsNullOrWhiteSpace(CardNumber) || CardNumber.Length < 13)
-            {
-                ErrorMessage = "Número de tarjeta inválido";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(CardExpiry))
-            {
-                ErrorMessage = "Fecha de vencimiento requerida";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(CardCvv) || CardCvv.Length < 3)
-            {
-                ErrorMessage = "CVV inválido";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(CardHolder))
-            {
-                ErrorMessage = "Nombre del titular requerido";
-                return false;
-            }
-
-            return true;
-        }
+    public class PaymentMethodOption
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 }

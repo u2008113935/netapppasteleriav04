@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Billing.InvoicePage"
+             xmlns:vm="clr-namespace:apppasteleriav04.ViewModels.Billing"
+             Title="Generar Comprobante">
+
+    <ContentPage.BindingContext>
+        <vm:InvoiceViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Invoice Type Selection -->
+            <Label Text="Tipo de Comprobante" FontSize="18" FontAttributes="Bold" />
+
+            <HorizontalStackLayout Spacing="10">
+                <RadioButton Content="Boleta" 
+                             x:Name="BoletaRadio"
+                             IsChecked="True"
+                             GroupName="InvoiceType"
+                             CheckedChanged="OnInvoiceTypeChanged" />
+                <RadioButton Content="Factura" 
+                             x:Name="FacturaRadio"
+                             GroupName="InvoiceType"
+                             CheckedChanged="OnInvoiceTypeChanged" />
+            </HorizontalStackLayout>
+
+            <!-- Customer Information -->
+            <Label Text="Datos del Cliente" FontSize="18" FontAttributes="Bold" />
+
+            <VerticalStackLayout Spacing="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Nombre / Razón Social" />
+                    <Entry Text="{Binding CustomerName}" Placeholder="Ingrese nombre o razón social" />
+                </VerticalStackLayout>
+
+                <!-- RUC field (visible only for factura) -->
+                <VerticalStackLayout x:Name="RucSection" Spacing="5" IsVisible="False">
+                    <Label Text="RUC" />
+                    <Entry Text="{Binding CustomerRuc}" 
+                           Placeholder="20123456789"
+                           Keyboard="Numeric"
+                           MaxLength="11" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Dirección (Opcional)" />
+                    <Entry Text="{Binding CustomerAddress}" Placeholder="Ingrese dirección" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Invoice Preview (if generated) -->
+            <Frame x:Name="InvoicePreview" 
+                   IsVisible="False"
+                   BackgroundColor="#F5F5F5" BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Vista Previa del Comprobante" FontSize="16" FontAttributes="Bold" />
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Tipo:" FontAttributes="Bold" />
+                        <Label x:Name="PreviewType" Text="" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Número:" FontAttributes="Bold" />
+                        <Label x:Name="PreviewNumber" Text="" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Cliente:" FontAttributes="Bold" />
+                        <Label x:Name="PreviewCustomer" Text="" />
+                    </HorizontalStackLayout>
+
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Subtotal:" FontAttributes="Bold" />
+                        <Label x:Name="PreviewSubtotal" Text="" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="IGV (18%):" FontAttributes="Bold" />
+                        <Label x:Name="PreviewIgv" Text="" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Total:" FontAttributes="Bold" />
+                        <Label x:Name="PreviewTotal" Text="" 
+                               FontSize="18" TextColor="#FF6B9D" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
+            <Button Text="Generar Comprobante" 
+                    Command="{Binding GenerateInvoiceCommand}"
+                    BackgroundColor="#FF6B9D"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    FontSize="16"
+                    FontAttributes="Bold" />
+
+            <HorizontalStackLayout x:Name="InvoiceActions" Spacing="10" IsVisible="False">
+                <Button Text="Descargar PDF" 
+                        Command="{Binding DownloadPdfCommand}"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        HeightRequest="45"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand" />
+
+                <Button Text="Enviar por Email" 
+                        Clicked="OnSendEmailClicked"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        HeightRequest="45"
+                        CornerRadius="10"
+                        HorizontalOptions="FillAndExpand" />
+            </HorizontalStackLayout>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                               IsVisible="{Binding IsLoading}"
+                               Color="#FF6B9D"
+                               HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
