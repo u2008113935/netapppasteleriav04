@@ -11,6 +11,9 @@ public partial class InvoiceListPage : ContentPage
         InitializeComponent();
         _viewModel = new InvoiceListViewModel();
         BindingContext = _viewModel;
+        
+        // Set default picker selection
+        TypePicker.SelectedIndex = 0;
     }
 
     protected override async void OnAppearing()
@@ -18,4 +21,14 @@ public partial class InvoiceListPage : ContentPage
         base.OnAppearing();
         await _viewModel.InitializeAsync();
     }
+
+    private void OnFilterChanged(object sender, EventArgs e)
+    {
+        if (TypePicker.SelectedIndex >= 0)
+        {
+            var selectedType = TypePicker.Items[TypePicker.SelectedIndex];
+            _viewModel.FilterType = selectedType;
+        }
+    }
 }
+

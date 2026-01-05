@@ -28,30 +28,50 @@
             <!-- Payment Method Selection -->
             <Label Text="Método de Pago" FontSize="18" FontAttributes="Bold" />
 
-            <CollectionView ItemsSource="{Binding AvailablePaymentMethods}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedPaymentMethod}">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaymentViewModel}}, Path=SelectPaymentMethodCommand}"
-                                                      CommandParameter="{Binding Id}" />
-                            </Frame.GestureRecognizers>
-                            <HorizontalStackLayout Spacing="15">
-                                <Label Text="{Binding Icon}" FontSize="30" />
-                                <Label Text="{Binding Name}" FontSize="16" VerticalOptions="Center" />
-                            </HorizontalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <VerticalStackLayout Spacing="10">
+                <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                    <HorizontalStackLayout Spacing="15">
+                        <Label Text="💵" FontSize="30" />
+                        <Label Text="Efectivo" FontSize="16" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCashSelected" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                    <HorizontalStackLayout Spacing="15">
+                        <Label Text="💳" FontSize="30" />
+                        <Label Text="Tarjeta de Crédito/Débito" FontSize="16" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCardSelected" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                    <HorizontalStackLayout Spacing="15">
+                        <Label Text="📱" FontSize="30" />
+                        <Label Text="Yape" FontSize="16" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnYapeSelected" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
+                    <HorizontalStackLayout Spacing="15">
+                        <Label Text="📲" FontSize="30" />
+                        <Label Text="Plin" FontSize="16" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPlinSelected" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+            </VerticalStackLayout>
 
             <!-- Card Details (shown only when card payment is selected) -->
-            <VerticalStackLayout Spacing="15" IsVisible="{Binding SelectedPaymentMethod, Converter={StaticResource StringEqualConverter}, ConverterParameter='tarjeta'}">
+            <VerticalStackLayout x:Name="CardDetailsSection" Spacing="15" IsVisible="False">
                 <Label Text="Datos de la Tarjeta" FontSize="16" FontAttributes="Bold" />
 
                 <VerticalStackLayout Spacing="5">
@@ -90,16 +110,18 @@
             </VerticalStackLayout>
 
             <!-- Status Messages -->
-            <Label Text="{Binding PaymentStatus}" 
+            <Label x:Name="StatusLabel"
+                   Text="{Binding PaymentStatus}" 
                    FontSize="14" 
                    TextColor="#666"
-                   IsVisible="{Binding PaymentStatus, Converter={StaticResource StringNotEmptyConverter}}"
+                   IsVisible="False"
                    HorizontalOptions="Center" />
 
-            <Label Text="{Binding ErrorMessage}" 
+            <Label x:Name="ErrorLabel"
+                   Text="{Binding ErrorMessage}" 
                    FontSize="14" 
                    TextColor="Red"
-                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   IsVisible="False"
                    HorizontalOptions="Center" />
 
             <!-- Action Buttons -->
@@ -110,16 +132,14 @@
                     HeightRequest="50"
                     CornerRadius="10"
                     FontSize="16"
-                    FontAttributes="Bold"
-                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}" />
+                    FontAttributes="Bold" />
 
             <Button Text="Cancelar" 
                     Command="{Binding CancelCommand}"
                     BackgroundColor="#E0E0E0"
                     TextColor="#666"
                     HeightRequest="50"
-                    CornerRadius="10"
-                    IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}" />
+                    CornerRadius="10" />
 
             <!-- Loading Indicator -->
             <ActivityIndicator IsRunning="{Binding IsProcessing}" 

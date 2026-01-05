@@ -18,13 +18,14 @@
                 <Label Text="Filtros" FontSize="16" FontAttributes="Bold" />
                 
                 <HorizontalStackLayout Spacing="10">
-                    <Picker Title="Tipo" 
-                            SelectedItem="{Binding FilterType}"
+                    <Picker x:Name="TypePicker" 
+                            Title="Tipo" 
+                            SelectedIndexChanged="OnFilterChanged"
                             HorizontalOptions="FillAndExpand">
                         <Picker.Items>
-                            <x:String>Todos</x:String>
-                            <x:String>Boleta</x:String>
-                            <x:String>Factura</x:String>
+                            <x:String>all</x:String>
+                            <x:String>boleta</x:String>
+                            <x:String>factura</x:String>
                         </Picker.Items>
                     </Picker>
 
@@ -74,7 +75,7 @@
                                 <!-- Type Badge -->
                                 <Frame Grid.Row="0" Grid.Column="1" 
                                        Padding="8,4" CornerRadius="5"
-                                       BackgroundColor="{Binding Type, Converter={StaticResource InvoiceTypeToColorConverter}}"
+                                       BackgroundColor="#2196F3"
                                        HasShadow="False">
                                     <Label Text="{Binding Type}" 
                                            TextColor="White" 
@@ -102,7 +103,7 @@
                                     <Label Text="SUNAT:" FontSize="12" TextColor="#666" />
                                     <Label Text="{Binding SunatStatus}" 
                                            FontSize="12"
-                                           TextColor="{Binding SunatStatus, Converter={StaticResource SunatStatusToColorConverter}}" />
+                                           TextColor="#4CAF50" />
                                 </HorizontalStackLayout>
 
                                 <!-- Download Button -->

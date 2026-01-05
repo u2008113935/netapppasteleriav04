@@ -17,13 +17,14 @@
 
             <HorizontalStackLayout Spacing="10">
                 <RadioButton Content="Boleta" 
-                             IsChecked="{Binding InvoiceType, Converter={StaticResource StringEqualConverter}, ConverterParameter='boleta'}"
+                             x:Name="BoletaRadio"
+                             IsChecked="True"
                              GroupName="InvoiceType"
-                             x:Name="BoletaRadio" />
+                             CheckedChanged="OnInvoiceTypeChanged" />
                 <RadioButton Content="Factura" 
-                             IsChecked="{Binding InvoiceType, Converter={StaticResource StringEqualConverter}, ConverterParameter='factura'}"
+                             x:Name="FacturaRadio"
                              GroupName="InvoiceType"
-                             x:Name="FacturaRadio" />
+                             CheckedChanged="OnInvoiceTypeChanged" />
             </HorizontalStackLayout>
 
             <!-- Customer Information -->
@@ -36,7 +37,7 @@
                 </VerticalStackLayout>
 
                 <!-- RUC field (visible only for factura) -->
-                <VerticalStackLayout Spacing="5" IsVisible="{Binding InvoiceType, Converter={StaticResource StringEqualConverter}, ConverterParameter='factura'}">
+                <VerticalStackLayout x:Name="RucSection" Spacing="5" IsVisible="False">
                     <Label Text="RUC" />
                     <Entry Text="{Binding CustomerRuc}" 
                            Placeholder="20123456789"
@@ -51,7 +52,8 @@
             </VerticalStackLayout>
 
             <!-- Invoice Preview (if generated) -->
-            <Frame IsVisible="{Binding Invoice, Converter={StaticResource NotNullConverter}}"
+            <Frame x:Name="InvoicePreview" 
+                   IsVisible="False"
                    BackgroundColor="#F5F5F5" BorderColor="#E0E0E0" CornerRadius="10" Padding="15">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Vista Previa del Comprobante" FontSize="16" FontAttributes="Bold" />
@@ -59,42 +61,34 @@
                     
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Tipo:" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.Type}" />
+                        <Label x:Name="PreviewType" Text="" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Número:" FontAttributes="Bold" />
-                        <Label>
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding Invoice.SerialNumber}" />
-                                    <Span Text="-" />
-                                    <Span Text="{Binding Invoice.CorrelativeNumber, StringFormat='{0:D5}'}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                        <Label x:Name="PreviewNumber" Text="" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Cliente:" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.CustomerName}" />
+                        <Label x:Name="PreviewCustomer" Text="" />
                     </HorizontalStackLayout>
 
                     <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" />
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Subtotal:" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.Subtotal, StringFormat='S/ {0:F2}'}" />
+                        <Label x:Name="PreviewSubtotal" Text="" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="IGV (18%):" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.Igv, StringFormat='S/ {0:F2}'}" />
+                        <Label x:Name="PreviewIgv" Text="" />
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Total:" FontAttributes="Bold" />
-                        <Label Text="{Binding Invoice.Total, StringFormat='S/ {0:F2}'}" 
+                        <Label x:Name="PreviewTotal" Text="" 
                                FontSize="18" TextColor="#FF6B9D" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
@@ -108,28 +102,24 @@
                     HeightRequest="50"
                     CornerRadius="10"
                     FontSize="16"
-                    FontAttributes="Bold"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                    FontAttributes="Bold" />
 
-            <HorizontalStackLayout Spacing="10" 
-                                   IsVisible="{Binding Invoice, Converter={StaticResource NotNullConverter}}">
+            <HorizontalStackLayout x:Name="InvoiceActions" Spacing="10" IsVisible="False">
                 <Button Text="Descargar PDF" 
                         Command="{Binding DownloadPdfCommand}"
                         BackgroundColor="#2196F3"
                         TextColor="White"
                         HeightRequest="45"
                         CornerRadius="10"
-                        HorizontalOptions="FillAndExpand"
-                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                        HorizontalOptions="FillAndExpand" />
 
                 <Button Text="Enviar por Email" 
-                        Command="{Binding SendEmailCommand}"
+                        Clicked="OnSendEmailClicked"
                         BackgroundColor="#4CAF50"
                         TextColor="White"
                         HeightRequest="45"
                         CornerRadius="10"
-                        HorizontalOptions="FillAndExpand"
-                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}" />
+                        HorizontalOptions="FillAndExpand" />
             </HorizontalStackLayout>
 
             <!-- Loading Indicator -->
