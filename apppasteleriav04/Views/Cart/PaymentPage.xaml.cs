@@ -4,7 +4,7 @@ namespace apppasteleriav04.Views.Cart;
 
 public partial class PaymentPage : ContentPage
 {
-    private readonly PaymentViewModel _viewModel;
+    private PaymentViewModel _viewModel;
 
     public PaymentPage()
     {
@@ -12,6 +12,17 @@ public partial class PaymentPage : ContentPage
         _viewModel = new PaymentViewModel();
         BindingContext = _viewModel;
 
+        SetupEventHandlers();
+    }
+
+    public PaymentPage(PaymentViewModel viewModel) : this()
+    {
+        _viewModel = viewModel;
+        BindingContext = viewModel;
+    }
+
+    private void SetupEventHandlers()
+    {
         // Handle property changes to show/hide card details
         _viewModel.PropertyChanged += (s, e) =>
         {
@@ -39,12 +50,6 @@ public partial class PaymentPage : ContentPage
         {
             await Shell.Current.GoToAsync("//cart/payment-failed");
         };
-    }
-
-    public PaymentPage(PaymentViewModel viewModel) : this()
-    {
-        _viewModel = viewModel;
-        BindingContext = viewModel;
     }
 
     private void OnCashSelected(object sender, EventArgs e)

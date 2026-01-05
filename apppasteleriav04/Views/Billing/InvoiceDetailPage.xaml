@@ -136,14 +136,18 @@
                     CornerRadius="10"
                     Clicked="OnSendEmailClicked" />
 
-            <Button Text="Anular Comprobante" 
-                    x:Name="CancelButton"
-                    BackgroundColor="#F44336"
-                    TextColor="White"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    Clicked="OnCancelClicked"
-                    IsVisible="False" />
+                <!-- Cancel Button (Disabled - Future Implementation) -->
+                <!--
+                <Button Text="Anular Comprobante" 
+                        x:Name="CancelButton"
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        HeightRequest="50"
+                        CornerRadius="10"
+                        Clicked="OnCancelClicked"
+                        IsVisible="False" />
+                -->
+                <!-- TODO: Implement invoice cancellation functionality -->
 
         </VerticalStackLayout>
     </ScrollView>

@@ -4,7 +4,7 @@ namespace apppasteleriav04.Views.Billing;
 
 public partial class InvoicePage : ContentPage
 {
-    private readonly InvoiceViewModel _viewModel;
+    private InvoiceViewModel _viewModel;
 
     public InvoicePage()
     {
@@ -12,6 +12,17 @@ public partial class InvoicePage : ContentPage
         _viewModel = new InvoiceViewModel();
         BindingContext = _viewModel;
 
+        SetupEventHandlers();
+    }
+
+    public InvoicePage(InvoiceViewModel viewModel) : this()
+    {
+        _viewModel = viewModel;
+        BindingContext = viewModel;
+    }
+
+    private void SetupEventHandlers()
+    {
         // Handle property changes
         _viewModel.PropertyChanged += (s, e) =>
         {
@@ -20,12 +31,6 @@ public partial class InvoicePage : ContentPage
                 UpdateInvoicePreview();
             }
         };
-    }
-
-    public InvoicePage(InvoiceViewModel viewModel) : this()
-    {
-        _viewModel = viewModel;
-        BindingContext = viewModel;
     }
 
     private void OnInvoiceTypeChanged(object sender, CheckedChangedEventArgs e)

@@ -25,15 +25,5 @@ public partial class InvoiceDetailPage : ContentPage
         }
     }
 
-    private async void OnCancelClicked(object sender, EventArgs e)
-    {
-        bool confirm = await DisplayAlert("Anular Comprobante", 
-            "¿Está seguro de anular este comprobante?", "Sí", "No");
-        
-        if (confirm)
-        {
-            // TODO: Cancel invoice
-            await DisplayAlert("Anulado", "Comprobante anulado exitosamente", "OK");
-        }
-    }
+    // Removed OnCancelClicked since the button is commented out
 }
