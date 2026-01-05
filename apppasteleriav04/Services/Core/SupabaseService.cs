@@ -37,6 +37,12 @@ namespace apppasteleriav04.Services.Core
         readonly string _url;
         readonly string _anon;
         readonly JsonSerializerOptions _jsonOpts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        
+        private static readonly JsonSerializerOptions _syncJsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = false
+        };
 
         public SupabaseService()
         {
@@ -883,13 +889,7 @@ namespace apppasteleriav04.Services.Core
                             }).ToList()
                         };
                         
-                        var jsonOptions = new JsonSerializerOptions
-                        {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                            WriteIndented = false
-                        };
-                        
-                        await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload, jsonOptions));
+                        await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload, _syncJsonOptions));
                         Debug.WriteLine($"[SupabaseService] Order {orderId} enqueued for sync");
                     }
                     else
