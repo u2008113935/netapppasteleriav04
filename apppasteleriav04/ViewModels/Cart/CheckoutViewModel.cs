@@ -63,6 +63,11 @@ namespace apppasteleriav04.ViewModels.Cart
             GoBackCommand = new RelayCommand(() => GoBackRequested?.Invoke(this, EventArgs.Empty));
         }
 
+        public bool CheckAuthentication()
+        {
+            return AuthService.Instance.IsAuthenticated;
+        }
+
         private async Task PlaceOrderAsync()
         {
             ErrorMessage = string.Empty;

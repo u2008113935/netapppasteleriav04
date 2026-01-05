@@ -35,7 +35,7 @@ namespace apppasteleriav04.Views.Cart
             }
         }
 
-        private async void OnOrderCompleted(object? sender, EventArgs e)
+        private async void OnOrderCompleted(object? sender, Guid orderId)
         {
             var msg = $"Pedido creado correctamente.\nTotal: {_viewModel.Total:N2}";
             await DisplayAlert("Pedido confirmado", msg, "OK");
