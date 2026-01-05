@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Admin.AnalyticsPage"
+             Title="Analíticas y KPIs"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+            
+            <!-- Header -->
+            <Label Text="Analíticas y KPIs" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource HeaderTitleTextColor}"/>
+
+            <!-- Date Range Selector -->
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="4">
+                <Button Grid.Column="0"
+                        Text="7 días"
+                        Clicked="OnDateRangeClicked"
+                        CommandParameter="7days"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        FontSize="12"
+                        Padding="4"
+                        CornerRadius="6"/>
+                <Button Grid.Column="1"
+                        Text="30 días"
+                        Clicked="OnDateRangeClicked"
+                        CommandParameter="30days"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        FontSize="12"
+                        Padding="4"
+                        CornerRadius="6"/>
+                <Button Grid.Column="2"
+                        Text="90 días"
+                        Clicked="OnDateRangeClicked"
+                        CommandParameter="90days"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        FontSize="12"
+                        Padding="4"
+                        CornerRadius="6"/>
+                <Button Grid.Column="3"
+                        Text="1 año"
+                        Clicked="OnDateRangeClicked"
+                        CommandParameter="year"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        FontSize="12"
+                        Padding="4"
+                        CornerRadius="6"/>
+            </Grid>
+
+            <!-- KPIs Cards -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                
+                <!-- Total Revenue -->
+                <Frame Grid.Column="0" 
+                       BackgroundColor="{StaticResource CardBackgroundColor}"
+                       CornerRadius="10"
+                       Padding="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Ingresos Totales" 
+                               FontSize="12" 
+                               TextColor="{StaticResource SecondaryTextColor}"/>
+                        <Label x:Name="TotalRevenueLabel" 
+                               Text="$0.00" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Total Orders -->
+                <Frame Grid.Column="1" 
+                       BackgroundColor="{StaticResource CardBackgroundColor}"
+                       CornerRadius="10"
+                       Padding="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Total Pedidos" 
+                               FontSize="12" 
+                               TextColor="{StaticResource SecondaryTextColor}"/>
+                        <Label x:Name="TotalOrdersLabel" 
+                               Text="0" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Average Order Value -->
+                <Frame Grid.Column="2" 
+                       BackgroundColor="{StaticResource CardBackgroundColor}"
+                       CornerRadius="10"
+                       Padding="12">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Ticket Promedio" 
+                               FontSize="12" 
+                               TextColor="{StaticResource SecondaryTextColor}"/>
+                        <Label x:Name="AvgOrderValueLabel" 
+                               Text="$0.00" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryColor}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Chart Placeholder -->
+            <Frame BackgroundColor="{StaticResource CardBackgroundColor}"
+                   CornerRadius="10"
+                   Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Ventas por Día" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+                    
+                    <!-- Simple chart representation -->
+                    <Frame BackgroundColor="LightGray" 
+                           HeightRequest="200"
+                           Padding="0">
+                        <Label Text="📊 Gráfico de ventas" 
+                               FontSize="14"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               TextColor="Gray"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Orders by Status -->
+            <Frame BackgroundColor="{StaticResource CardBackgroundColor}"
+                   CornerRadius="10"
+                   Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Pedidos por Estado" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+                    
+                    <CollectionView x:Name="OrdersByStatusCollection"
+                                    HeightRequest="150">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto" Padding="4">
+                                    <Label Text="{Binding Key}" 
+                                           FontSize="14"/>
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Value}" 
+                                           FontSize="14" 
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="End"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Export Button -->
+            <Button Text="Exportar Reporte"
+                    Clicked="OnExportClicked"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="White"
+                    CornerRadius="8"/>
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator x:Name="LoadingIndicator" 
+                               IsRunning="False" 
+                               IsVisible="False"
+                               Color="{StaticResource PrimaryColor}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

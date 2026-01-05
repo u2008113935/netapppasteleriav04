@@ -16,6 +16,9 @@ namespace apppasteleriav04.Models.Domain
         [JsonPropertyName("avatar_url")]
         public string AvatarUrl { get; set; } = string.Empty;
 
+        [JsonPropertyName("role")]
+        public string Role { get; set; } = string.Empty;
+
         [JsonIgnore]
 
         // Propiedad adicional para el correo electrónico

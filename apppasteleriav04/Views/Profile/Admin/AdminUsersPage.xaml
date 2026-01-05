@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Admin.AdminUsersPage"
+             Title="Gestión de Usuarios"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Filter -->
+        <Grid Grid.Row="0" Padding="16">
+            <Picker x:Name="RolePicker"
+                    Title="Filtrar por rol"
+                    SelectedIndexChanged="OnRoleFilterChanged"
+                    BackgroundColor="{StaticResource EntryBackgroundColor}">
+                <Picker.Items>
+                    <x:String>Todos</x:String>
+                    <x:String>cliente</x:String>
+                    <x:String>vendedor</x:String>
+                    <x:String>empleado</x:String>
+                    <x:String>gerente</x:String>
+                </Picker.Items>
+            </Picker>
+        </Grid>
+
+        <!-- Users List -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="8">
+                
+                <CollectionView x:Name="UsersCollection"
+                                ItemsSource="{Binding Users}"
+                                EmptyView="No hay usuarios">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4" 
+                                   Padding="12"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   CornerRadius="8">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    
+                                    <!-- User Email/Name -->
+                                    <Label Grid.Row="0"
+                                           Text="{Binding Email}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"/>
+
+                                    <!-- Full Name -->
+                                    <Label Grid.Row="1"
+                                           Text="{Binding FullName}" 
+                                           FontSize="14"
+                                           TextColor="{StaticResource SecondaryTextColor}"/>
+
+                                    <!-- Role -->
+                                    <Label Grid.Row="2"
+                                           Text="{Binding Role, StringFormat='Rol: {0}'}" 
+                                           FontSize="12"/>
+
+                                    <!-- Action Buttons -->
+                                    <VerticalStackLayout Grid.Column="1" Grid.RowSpan="3"
+                                                         VerticalOptions="Center"
+                                                         Spacing="4">
+                                        <Button Text="Cambiar Rol"
+                                                Clicked="OnChangeRoleClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="{StaticResource PrimaryColor}"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                Padding="8,4"
+                                                CornerRadius="6"/>
+                                        
+                                        <Button Text="Ver Historial"
+                                                Clicked="OnViewHistoryClicked"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="Gray"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                Padding="8,4"
+                                                CornerRadius="6"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <ActivityIndicator x:Name="LoadingIndicator" 
+                                   IsRunning="False" 
+                                   IsVisible="False"
+                                   Color="{StaticResource PrimaryColor}"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
