@@ -2,137 +2,152 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Profile.Manager.ManagerPage"
-             Title="Dashboard Admin">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            
-            <!-- Título -->
-            <Label Text="Dashboard Administrador" 
-                   FontSize="24" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
-
-            <!-- Métricas del día -->
-            <Label Text="Métricas del Día" FontSize="18" FontAttributes="Bold" />
-            
-            <Grid RowDefinitions="Auto,Auto" 
-                  ColumnDefinitions="*,*"
-                  RowSpacing="10"
-                  ColumnSpacing="10">
+             Title="Dashboard Gerente">
+    
+    <RefreshView IsRefreshing="{Binding IsBusy}" 
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="16">
                 
-                <!-- Ventas del día -->
-                <Frame Grid.Row="0" Grid.Column="0" 
-                       BorderColor="#E0E0E0" 
+                <!-- Header -->
+                <Label Text="Dashboard Gerente" 
+                       FontSize="24" 
+                       FontAttributes="Bold"/>
+                
+                <!-- KPI Cards Row -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    
+                    <!-- Today Sales -->
+                    <Frame Grid.Column="0" 
+                           BackgroundColor="#E8F5E9" 
+                           CornerRadius="10" 
+                           Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Ventas Hoy" FontSize="12" TextColor="#666"/>
+                            <Label x:Name="TodaySalesLabel" 
+                                   Text="{Binding TodaySales, StringFormat='S/. {0:F2}'}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#2E7D32"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- Today Orders -->
+                    <Frame Grid.Column="1" 
+                           BackgroundColor="#E3F2FD" 
+                           CornerRadius="10" 
+                           Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Pedidos Hoy" FontSize="12" TextColor="#666"/>
+                            <Label x:Name="TodayOrdersLabel" 
+                                   Text="{Binding TodayOrders}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#1565C0"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- Pending Orders -->
+                    <Frame Grid.Column="2" 
+                           BackgroundColor="#FFF3E0" 
+                           CornerRadius="10" 
+                           Padding="12">
+                        <VerticalStackLayout>
+                            <Label Text="Pendientes" FontSize="12" TextColor="#666"/>
+                            <Label x:Name="PendingOrdersLabel" 
+                                   Text="{Binding PendingOrders}" 
+                                   FontSize="20" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#EF6C00"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+                
+                <!-- Urgent Orders Alert -->
+                <Frame BackgroundColor="#FFEBEE" 
                        CornerRadius="10" 
-                       Padding="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="💰" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="Ventas Hoy" 
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center" />
-                        <Label Text="S/. 0.00" 
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#FF6B9D"
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
+                       Padding="12"
+                       IsVisible="{Binding HasUrgentOrders}">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="⚠️" FontSize="20"/>
+                        <Label Text="{Binding UrgentOrdersText}" 
+                               FontSize="14" 
+                               TextColor="#C62828"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
                 </Frame>
-
-                <!-- Pedidos del día -->
-                <Frame Grid.Row="0" Grid.Column="1" 
-                       BorderColor="#E0E0E0" 
-                       CornerRadius="10" 
-                       Padding="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="📦" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="Pedidos Hoy" 
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center" />
-                        <Label Text="0" 
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#4CAF50"
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Clientes nuevos -->
-                <Frame Grid.Row="1" Grid.Column="0" 
-                       BorderColor="#E0E0E0" 
-                       CornerRadius="10" 
-                       Padding="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="👥" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="Clientes Nuevos" 
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center" />
-                        <Label Text="0" 
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#2196F3"
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Pendientes -->
-                <Frame Grid.Row="1" Grid.Column="1" 
-                       BorderColor="#E0E0E0" 
-                       CornerRadius="10" 
-                       Padding="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="⏰" FontSize="24" HorizontalOptions="Center" />
-                        <Label Text="Pendientes" 
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center" />
-                        <Label Text="0" 
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               TextColor="#FF9800"
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-            </Grid>
-
-            <!-- Accesos rápidos a gestión -->
-            <Label Text="Gestión" FontSize="18" FontAttributes="Bold" />
-            
-            <VerticalStackLayout Spacing="10">
-                <Button Text="📊 Reportes y Análisis" 
-                        BackgroundColor="#FF6B9D"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
                 
-                <Button Text="👥 Gestión de Usuarios" 
-                        BackgroundColor="#4CAF50"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
+                <!-- Quick Actions -->
+                <Label Text="Acciones Rápidas" FontSize="18" FontAttributes="Bold"/>
                 
-                <Button Text="🍰 Gestión de Productos" 
-                        BackgroundColor="#2196F3"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="8" ColumnSpacing="8">
+                    <Button Grid.Row="0" Grid.Column="0"
+                            Text="📋 Ver Pedidos"
+                            Clicked="OnViewAllOrdersClicked"
+                            BackgroundColor="#FF6B9D"
+                            TextColor="White"
+                            CornerRadius="8"/>
+                    
+                    <Button Grid.Row="0" Grid.Column="1"
+                            Text="📊 Analíticas"
+                            Clicked="OnViewAnalyticsClicked"
+                            BackgroundColor="#6C5CE7"
+                            TextColor="White"
+                            CornerRadius="8"/>
+                    
+                    <Button Grid.Row="1" Grid.Column="0"
+                            Text="📄 Reporte Diario"
+                            Clicked="OnExportDailyClicked"
+                            BackgroundColor="#00B894"
+                            TextColor="White"
+                            CornerRadius="8"/>
+                    
+                    <Button Grid.Row="1" Grid.Column="1"
+                            Text="📅 Reporte Semanal"
+                            Clicked="OnExportWeeklyClicked"
+                            BackgroundColor="#0984E3"
+                            TextColor="White"
+                            CornerRadius="8"/>
+                </Grid>
                 
-                <Button Text="📦 Gestión de Pedidos" 
-                        BackgroundColor="#FF9800"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
+                <!-- Recent Orders -->
+                <Label Text="Pedidos Recientes" FontSize="18" FontAttributes="Bold"/>
                 
-                <Button Text="🔄 Sincronización" 
-                        BackgroundColor="#9C27B0"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
+                <CollectionView ItemsSource="{Binding RecentOrders}"
+                                HeightRequest="200">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4" Padding="12" CornerRadius="8">
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding Id, StringFormat='#{0:N}'}" 
+                                               FontSize="14" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding CreatedAt, StringFormat='{0:dd/MM HH:mm}'}" 
+                                               FontSize="12" 
+                                               TextColor="#666"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" 
+                                           Text="{Binding Total, StringFormat='S/. {0:F2}'}" 
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                    <Label Grid.Column="2" 
+                                           Text="{Binding Status}" 
+                                           FontSize="12"
+                                           VerticalOptions="Center"
+                                           Margin="8,0,0,0"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
                 
-                <Button Text="⚙️ Configuración" 
-                        BackgroundColor="#607D8B"
-                        TextColor="White"
-                        CornerRadius="25"
-                        HeightRequest="50" />
+                <!-- Loading Indicator -->
+                <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                                   IsVisible="{Binding IsBusy}"
+                                   Color="#FF6B9D"/>
+                
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>
