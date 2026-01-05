@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:conv="clr-namespace:apppasteleriav04.Converters"
     x:Class="apppasteleriav04.Views.Orders.OrderPage"
-    Title="Mis pedidos">
+    Title="{Binding Title}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -14,25 +14,27 @@
 
     <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="12">
 
-        <!-- Encabezado / resumen -->
+        <!-- Header / summary -->
         <StackLayout Orientation="Horizontal" Spacing="12" VerticalOptions="Center" Grid.Row="0">
             <Label Text="Pedidos" FontSize="22" FontAttributes="Bold" VerticalOptions="Center" />
-            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="False" IsVisible="False" VerticalOptions="Center" />
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" VerticalOptions="Center" />
         </StackLayout>
 
-        <!-- Filtro / búsqueda simple (opcional) -->
+        <!-- Filter / simple search (optional) -->
         <StackLayout Orientation="Horizontal" Grid.Row="1" Padding="0,8,0,8">
             <Label Text="Estado:" VerticalOptions="Center" />
             <Picker x:Name="StatusPicker" Title="Todos" WidthRequest="160" HorizontalOptions="Start" />
-            <Button Text="Actualizar" Clicked="OnRefreshClicked" HorizontalOptions="EndAndExpand" />
+            <Button Text="Actualizar" Command="{Binding LoadOrdersCommand}" HorizontalOptions="EndAndExpand" />
         </StackLayout>
 
-        <!-- Lista de pedidos con Pull-to-Refresh -->
-        <RefreshView x:Name="RefreshViewControl" IsRefreshing="False" Refreshing="RefreshView_Refreshing" Grid.Row="2">
-            <CollectionView x:Name="OrdersCollection"
+        <!-- Orders list with Pull-to-Refresh -->
+        <RefreshView x:Name="RefreshViewControl" 
+                     IsRefreshing="{Binding IsLoading}" 
+                     Command="{Binding LoadOrdersCommand}"
+                     Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Orders}"
                             SelectionMode="Single"
                             EmptyView="No se encontraron pedidos."
-                            ItemsSource="{Binding}"
                             SelectionChanged="OrdersCollection_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -56,9 +58,13 @@
             </CollectionView>
         </RefreshView>
 
-        <!-- Pie: cantidad -->
-        <StackLayout Orientation="Horizontal" Grid.Row="3" HorizontalOptions="Start" Padding="0,8,0,0">
-            <Label x:Name="LblCount" Text="Pedidos: 0" />
+        <!-- Footer: count and error message -->
+        <StackLayout Orientation="Vertical" Grid.Row="3" Padding="0,8,0,0">
+            <Label Text="{Binding OrderCount, StringFormat='Pedidos: {0}'}" />
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red" 
+                   IsVisible="{Binding HasError}"
+                   FontSize="12" />
         </StackLayout>
     </Grid>
 </ContentPage>

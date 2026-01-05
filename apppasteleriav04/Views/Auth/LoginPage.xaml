@@ -2,17 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Auth.LoginPage"
-             Title="Iniciar sesión">
+             Title="{Binding Title}">
 
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout Padding="24" Spacing="16">
                 <Label Text="Iniciar sesión" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
-                <Entry x:Name="EmailEntry" Placeholder="Correo electrónico" Keyboard="Email" />
-                <Entry x:Name="PasswordEntry" Placeholder="Contraseña" IsPassword="True" />
-                <Button Text="Ingresar" Clicked="OnLoginClicked" BackgroundColor="#6C5CE7" TextColor="White" />
-                <!-- Agregar después del botón Ingresar -->
-                <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
+                <Entry Text="{Binding Email}" Placeholder="Correo electrónico" Keyboard="Email" />
+                <Entry Text="{Binding Password}" Placeholder="Contraseña" IsPassword="True" />
+                
+                <!-- Error message display -->
+                <Label Text="{Binding ErrorMessage}" 
+                       TextColor="Red" 
+                       IsVisible="{Binding HasError}"
+                       FontSize="12"
+                       HorizontalOptions="Center" />
+                
+                <Button Text="Ingresar" 
+                        Command="{Binding LoginCommand}" 
+                        BackgroundColor="#6C5CE7" 
+                        TextColor="White" />
+                
+                <!-- Loading indicator -->
+                <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                                   IsRunning="{Binding IsLoading}" />
+                
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
                     <Label Text="¿No tienes cuenta?" VerticalOptions="Center" />
                     <Button Text="Crear cuenta" Clicked="OnRegisterClicked" />

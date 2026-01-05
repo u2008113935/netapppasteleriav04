@@ -4,28 +4,28 @@ using System.Text.Json.Serialization;
 
 namespace apppasteleriav04.Models.Domain
 {
-    /// <summary>
-    /// Representa una promoción o descuento aplicable a productos
-    /// </summary>
     public class Promotion
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
         [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }
 
+        [JsonPropertyName("code")]
+        public string Code { get; set; } = string.Empty;
+
         [JsonPropertyName("discount_type")]
-        public string? DiscountType { get; set; } // percentage, fixed
+        public string DiscountType { get; set; } = "percentage"; // percentage, fixed
 
         [JsonPropertyName("discount_value")]
         public decimal DiscountValue { get; set; }
 
         [JsonPropertyName("min_order_amount")]
-        public decimal? MinOrderAmount { get; set; }
+        public decimal MinOrderAmount { get; set; }
 
         [JsonPropertyName("start_date")]
         public DateTime StartDate { get; set; }
@@ -34,19 +34,15 @@ namespace apppasteleriav04.Models.Domain
         public DateTime EndDate { get; set; }
 
         [JsonPropertyName("is_active")]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        [JsonPropertyName("applicable_products")]
-        public List<Guid> ApplicableProducts { get; set; } = new List<Guid>();
+        [JsonPropertyName("applicable_product_ids")]
+        public List<Guid> ApplicableProductIds { get; set; } = new List<Guid>();
 
-        [JsonPropertyName("code")]
-        public string? Code { get; set; }
+        [JsonPropertyName("created_at")]
+        public DateTime CreatedAt { get; set; }
 
-        // Display properties
-        public string DisplayName => string.IsNullOrWhiteSpace(Name) ? "Promoción" : Name;
-        
-        public bool IsCurrentlyActive => IsActive && 
-                                          DateTime.Now >= StartDate && 
-                                          DateTime.Now <= EndDate;
+        [JsonPropertyName("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }

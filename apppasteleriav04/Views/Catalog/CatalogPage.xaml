@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:conv="clr-namespace:apppasteleriav04.Converters"
              x:Class="apppasteleriav04.Views.Catalog.CatalogPage"
-             Title="Catálogo - Pastelería Delicia"
+             Title="{Binding Title}"
              BackgroundColor="{StaticResource PageBackgroundColor}">
 
     <ContentPage.Resources>
@@ -31,24 +31,20 @@
                         CornerRadius="10"/>
             </Grid>
 
-            <!-- Search: fila 1 (ahora en su propia fila, sin margin hack) -->
-            <!-- Search + indicador de carga -->
+            <!-- Search: fila 1 -->
             <VerticalStackLayout Grid.Row="1" Spacing="6">
-                <Entry x:Name="SearchEntry"
+                <Entry Text="{Binding SearchText}"
                         Placeholder="Buscar producto..."
-                        TextChanged="OnSearchTextChanged"
                         BackgroundColor="{StaticResource EntryBackgroundColor}"
                         TextColor="{StaticResource EntryTextColor}"
                         PlaceholderColor="{StaticResource EntryPlaceholderColor}"/>
-                <ActivityIndicator x:Name="LoadingIndicator"
-                       IsRunning="False"
-                       IsVisible="False"
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                       IsVisible="{Binding IsBusy}"
                        HeightRequest="36" />
             </VerticalStackLayout>
 
-            <!-- CollectionView: fila 2 (ocupa el espacio restante y es scrollable) -->
-            <CollectionView x:Name="ProductsCollection"
-                            ItemsSource="{Binding Products}"
+            <!-- CollectionView: fila 2 -->
+            <CollectionView ItemsSource="{Binding FilteredProducts}"
                             Grid.Row="2"
                             SelectionMode="Single"
                             ItemsLayout="VerticalList"
@@ -75,7 +71,7 @@
 
                                 <Button Grid.Column="2"
                                         Text="Agregar"
-                                        Clicked="OnAddToCartClicked"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddToCartCommand}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="{StaticResource PrimaryColor}"
                                         TextColor="White"

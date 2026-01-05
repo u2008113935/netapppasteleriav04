@@ -1,54 +1,27 @@
-﻿using apppasteleriav04.Models.Domain;
-using apppasteleriav04.Services.Core;
+﻿using apppasteleriav04.ViewModels.Catalog;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Essentials;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using apppasteleriav04.ViewModels.Catalog;
 
 namespace apppasteleriav04.Views.Catalog
 {
     public partial class CatalogPage : ContentPage
     {
-        CatalogViewModel vm;
+        private readonly CatalogViewModel _viewModel;
 
         public CatalogPage()
         {
             InitializeComponent();
-            vm = new CatalogViewModel();
-            this.BindingContext = vm;
-            _ = vm.LoadProductsAsync();
+            _viewModel = new CatalogViewModel();
+            BindingContext = _viewModel;
         }
 
-        void OnAddToCartClicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            if (sender is Button button && button.CommandParameter is Product product)
+            base.OnAppearing();
+            
+            if (_viewModel.Products.Count == 0)
             {
-                CartService.Instance.Add(product, 1);
+                await _viewModel.LoadProductsAsync();
             }
-        }
-
-        void OnSearchTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var text = e.NewTextValue?.Trim();
-
-            if (string.IsNullOrEmpty(text))
-            {
-                ProductsCollection.ItemsSource = vm.Products;
-                return;
-            }
-
-            // Puedes agregar un filtro dinámico aquí sobre vm.Products...
-            var filtered = vm.Products
-                .Where(p =>
-                    (!string.IsNullOrEmpty(p.Nombre) && p.Nombre.Contains(text, StringComparison.OrdinalIgnoreCase)) ||
-                    (!string.IsNullOrEmpty(p.Descripcion) && p.Descripcion.Contains(text, StringComparison.OrdinalIgnoreCase)))
-                .ToList();
-
-            ProductsCollection.ItemsSource = filtered; // permite filtrado en tiempo real
         }
     }
 }

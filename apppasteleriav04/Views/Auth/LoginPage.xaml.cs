@@ -1,82 +1,54 @@
 using System;
 using Microsoft.Maui.Controls;
-using apppasteleriav04.Services.Core;
+using apppasteleriav04.ViewModels.Auth;
 
 namespace apppasteleriav04.Views.Auth
 {
     [QueryProperty(nameof(ReturnTo), "returnTo")]
     public partial class LoginPage : ContentPage
     {
-        public string ReturnTo { get; set; }
+        private readonly LoginViewModel _viewModel;
+        public string ReturnTo { get; set; } = string.Empty;
 
         public LoginPage()
         {
             InitializeComponent();
+            _viewModel = new LoginViewModel();
+            BindingContext = _viewModel;
+
+            // Subscribe to login completion event
+            _viewModel.LoginCompleted += OnLoginCompleted;
         }
 
-        async void OnLoginClicked(object sender, EventArgs e)
+        private async void OnLoginCompleted(object? sender, LoginCompletedEventArgs e)
         {
-            var email = EmailEntry.Text?.Trim();
-            var password = PasswordEntry.Text;
-
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (e.Success)
             {
-                await DisplayAlert("Error", "Ingrese correo y contrasena", "OK");
-                return;
-            }
+                await DisplayAlert("Éxito", "Sesión iniciada correctamente", "OK");
 
-            LoadingIndicator.IsVisible = true;
-
-            try
-            {
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] Intentando login con:  {email}");
-
-                bool success = await AuthService.Instance.SignInAsync(email, password);
-
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] Resultado del login: {success}");
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] UserEmail: {AuthService.Instance.UserEmail}");
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] UserId: {AuthService.Instance.UserId}");
-
-                if (success && AuthService.Instance.IsAuthenticated)
+                // Navigate based on returnTo parameter
+                if (ReturnTo == "cart")
                 {
-                    await DisplayAlert("Exito", "Sesion iniciada correctamente", "OK");
-
-                    // Navegar segun returnTo usando Shell
-                    if (ReturnTo == "cart")
-                    {
-                        // Volver al carrito (el usuario puede confirmar y luego ir a checkout)
-                        await Shell.Current.GoToAsync("//cart");
-                    }
-                    else if (ReturnTo == "checkout")
-                    {
-                        // Ir directo a checkout
-                        await Shell.Current.GoToAsync("//cart");
-                        await Shell.Current.GoToAsync("checkout");
-                    }
-                    else if (ReturnTo == "profile")
-                    {
-                        await Shell.Current.GoToAsync("//profile");
-                    }
-                    else
-                    {
-                        // Comportamiento por defecto:  ir al catalogo
-                        await Shell.Current.GoToAsync("//catalog");
-                    }
+                    await Shell.Current.GoToAsync("//cart");
+                }
+                else if (ReturnTo == "checkout")
+                {
+                    await Shell.Current.GoToAsync("//cart");
+                    await Shell.Current.GoToAsync("checkout");
+                }
+                else if (ReturnTo == "profile")
+                {
+                    await Shell.Current.GoToAsync("//profile");
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Credenciales incorrectas", "OK");
+                    // Default: go to catalog
+                    await Shell.Current.GoToAsync("//catalog");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine($"[LoginPage] Error en login: {ex}");
-                await DisplayAlert("Error", $"Error de conexion: {ex.Message}", "OK");
-            }
-            finally
-            {
-                LoadingIndicator.IsVisible = false;
+                await DisplayAlert("Error", e.Message, "OK");
             }
         }
 
