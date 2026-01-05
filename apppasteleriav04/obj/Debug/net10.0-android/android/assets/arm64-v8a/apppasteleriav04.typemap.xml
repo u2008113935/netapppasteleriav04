@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="apppasteleriav04" mvid="4c992d7691a14c818597351aaf0f1729">
+<api type="debug" assembly-name="apppasteleriav04" mvid="522cbac20f5e438eb0e397e11f340aca">
   <java-to-managed>
     <entry java-name="crc64133ded79689fceef/MainActivity" managed-name="apppasteleriav04.MainActivity, apppasteleriav04" managed-type-token-id="33554448" />
     <entry java-name="crc64133ded79689fceef/MainApplication" managed-name="apppasteleriav04.MainApplication, apppasteleriav04" managed-type-token-id="33554449" />

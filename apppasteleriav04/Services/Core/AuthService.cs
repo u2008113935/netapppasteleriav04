@@ -61,6 +61,9 @@ namespace apppasteleriav04.Services.Core
                     if (!string.IsNullOrEmpty(UserId))
                         await SecureStorage.Default.SetAsync(UserIdKey, UserId);
 
+                    if (!string.IsNullOrEmpty(UserEmail))
+                        await SecureStorage.Default.SetAsync("auth_user_email", UserEmail);
+
                     if (!string.IsNullOrWhiteSpace(res.RefreshToken))
                         await SecureStorage.Default.SetAsync(RefreshKey, res.RefreshToken);
 
@@ -86,6 +89,7 @@ namespace apppasteleriav04.Services.Core
             {
                 AccessToken = await SecureStorage.Default.GetAsync(TokenKey);
                 UserId = await SecureStorage.Default.GetAsync(UserIdKey);
+                UserEmail = await SecureStorage.Default.GetAsync("auth_user_email");
 
                 if (!string.IsNullOrWhiteSpace(AccessToken))
                     SupabaseService.Instance.SetUserToken(AccessToken);

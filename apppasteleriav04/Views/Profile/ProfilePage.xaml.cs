@@ -14,7 +14,7 @@ namespace apppasteleriav04.Views.Profile
     public partial class ProfilePage : ContentPage
     {
         private UserProfile _profile;   // Usa SIEMPRE apppasteleriav04.Models.Profile como modelo
-        private readonly SupabaseService _supabase = new SupabaseService();
+        private readonly SupabaseService _supabase = SupabaseService.Instance;
 
         public ProfilePage()
         {
@@ -22,6 +22,11 @@ namespace apppasteleriav04.Views.Profile
             _ = LoadProfileAsync();
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await LoadProfileAsync();
+        }
         async Task LoadProfileAsync()
         {
             try
@@ -110,6 +115,12 @@ namespace apppasteleriav04.Views.Profile
                 return;
             }
 
+            if (!AuthService.Instance.IsAuthenticated || string.IsNullOrEmpty(AuthService.Instance.UserId))
+            {
+                await DisplayAlert("Error", "Sesión no válida. Inicia sesión nuevamente.", "OK");
+                return;
+            }
+
             if (!Guid.TryParse(UserIdEntry.Text, out var userId))
             {
                 await DisplayAlert("Error", "UserId inválido.", "OK");
@@ -129,7 +140,17 @@ namespace apppasteleriav04.Views.Profile
 
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("apikey", SupabaseConfig.SUPABASE_ANON_KEY);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SupabaseConfig.SUPABASE_ANON_KEY);
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SupabaseConfig.SUPABASE_ANON_KEY);
+
+                if (!string.IsNullOrEmpty(AuthService.Instance.AccessToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.Instance.AccessToken);
+                }
+                else
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SupabaseConfig.SUPABASE_ANON_KEY);
+                }
+
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var json = JsonSerializer.Serialize(payload);

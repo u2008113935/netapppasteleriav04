@@ -11,6 +11,8 @@
                 <Entry x:Name="EmailEntry" Placeholder="Correo electrónico" Keyboard="Email" />
                 <Entry x:Name="PasswordEntry" Placeholder="Contraseña" IsPassword="True" />
                 <Button Text="Ingresar" Clicked="OnLoginClicked" BackgroundColor="#6C5CE7" TextColor="White" />
+                <!-- Agregar después del botón Ingresar -->
+                <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="{Binding IsVisible, Source={x:Reference LoadingIndicator}}" />
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
                     <Label Text="¿No tienes cuenta?" VerticalOptions="Center" />
                     <Button Text="Crear cuenta" Clicked="OnRegisterClicked" />
