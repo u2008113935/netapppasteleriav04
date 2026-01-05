@@ -729,5 +729,179 @@ namespace apppasteleriav04.Services.Core
         }
 
         #endregion
+
+        #region Offline Support
+
+        public async Task<List<Product>> GetProductsWithOfflineSupportAsync()
+        {
+            try
+            {
+                var connectivityService = new apppasteleriav04.Services.Connectivity.ConnectivityService();
+                
+                if (connectivityService.IsConnected)
+                {
+                    // Online: Fetch from server and cache locally
+                    Debug.WriteLine("[SupabaseService] Online - Fetching products from server");
+                    var products = await GetProductsAsync();
+                    
+                    // Cache in SQLite
+                    var productRepo = new apppasteleriav04.Data.Local.Repositories.LocalProductRepository();
+                    foreach (var product in products)
+                    {
+                        var localProduct = new apppasteleriav04.Models.Local.LocalProduct
+                        {
+                            Id = product.Id,
+                            Name = product.Nombre ?? string.Empty,
+                            Description = product.Descripcion ?? string.Empty,
+                            Price = product.Precio ?? 0m,
+                            ImageUrl = product.ImagenPath ?? string.Empty,
+                            Category = product.Categoria ?? string.Empty,
+                            IsAvailable = true,
+                            LastSyncedAt = DateTime.UtcNow,
+                            IsSynced = true
+                        };
+                        await productRepo.SaveAsync(localProduct);
+                    }
+                    
+                    Debug.WriteLine($"[SupabaseService] Cached {products.Count} products locally");
+                    return products;
+                }
+                else
+                {
+                    // Offline: Return from SQLite cache
+                    Debug.WriteLine("[SupabaseService] Offline - Loading products from cache");
+                    var productRepo = new apppasteleriav04.Data.Local.Repositories.LocalProductRepository();
+                    var localProducts = await productRepo.GetAllAsync();
+                    
+                    var products = localProducts.Select(lp => new Product
+                    {
+                        Id = lp.Id,
+                        Nombre = lp.Name,
+                        Descripcion = lp.Description,
+                        Precio = lp.Price,
+                        ImagenPath = lp.ImageUrl,
+                        Categoria = lp.Category
+                    }).ToList();
+                    
+                    Debug.WriteLine($"[SupabaseService] Loaded {products.Count} products from cache");
+                    return products;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] GetProductsWithOfflineSupportAsync error: {ex}");
+                
+                // Fallback to cache on error
+                try
+                {
+                    var productRepo = new apppasteleriav04.Data.Local.Repositories.LocalProductRepository();
+                    var localProducts = await productRepo.GetAllAsync();
+                    return localProducts.Select(lp => new Product
+                    {
+                        Id = lp.Id,
+                        Nombre = lp.Name,
+                        Descripcion = lp.Description,
+                        Precio = lp.Price,
+                        ImagenPath = lp.ImageUrl,
+                        Categoria = lp.Category
+                    }).ToList();
+                }
+                catch
+                {
+                    return new List<Product>();
+                }
+            }
+        }
+
+        public async Task<Order?> CreateOrderWithOfflineSupportAsync(Guid userId, List<CartItem> items)
+        {
+            try
+            {
+                var connectivityService = new apppasteleriav04.Services.Connectivity.ConnectivityService();
+                
+                if (connectivityService.IsConnected)
+                {
+                    // Online: Create directly on server
+                    Debug.WriteLine("[SupabaseService] Online - Creating order on server");
+                    var orderItems = items.Select(item => new OrderItem
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Price
+                    }).ToList();
+                    
+                    return await CreateOrderAsync(userId, orderItems);
+                }
+                else
+                {
+                    // Offline: Save locally and enqueue for sync
+                    Debug.WriteLine("[SupabaseService] Offline - Saving order locally");
+                    
+                    var orderId = Guid.NewGuid();
+                    var total = items.Sum(i => i.Subtotal);
+                    
+                    var localOrder = new apppasteleriav04.Models.Local.LocalOrder
+                    {
+                        Id = orderId,
+                        UserId = userId,
+                        Total = total,
+                        Status = "pendiente",
+                        CreatedAt = DateTime.UtcNow,
+                        IsSynced = false
+                    };
+                    
+                    var localOrderItems = items.Select(item => new apppasteleriav04.Models.Local.LocalOrderItem
+                    {
+                        OrderId = orderId,
+                        ProductId = item.ProductId,
+                        ProductName = item.ProductName ?? string.Empty,
+                        UnitPrice = item.Price,
+                        Quantity = item.Quantity,
+                        Subtotal = item.Subtotal
+                    }).ToList();
+                    
+                    // Save to local database
+                    var orderRepo = new apppasteleriav04.Data.Local.Repositories.LocalOrderRepository();
+                    await orderRepo.SaveWithItemsAsync(localOrder, localOrderItems);
+                    
+                    // Enqueue for sync
+                    var syncService = new SyncService(connectivityService);
+                    var orderPayload = new
+                    {
+                        UserId = userId,
+                        Total = total,
+                        Items = localOrderItems.Select(i => new
+                        {
+                            ProductId = i.ProductId,
+                            ProductName = i.ProductName,
+                            Quantity = i.Quantity,
+                            UnitPrice = i.UnitPrice,
+                            Subtotal = i.Subtotal
+                        }).ToList()
+                    };
+                    
+                    await syncService.EnqueueAsync("order", orderId, "create", JsonSerializer.Serialize(orderPayload));
+                    
+                    Debug.WriteLine($"[SupabaseService] Order {orderId} saved locally and enqueued for sync");
+                    
+                    // Return a placeholder Order object
+                    return new Order
+                    {
+                        Id = orderId,
+                        UserId = userId,
+                        Total = total,
+                        Status = "pendiente",
+                        CreatedAt = DateTime.UtcNow
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[SupabaseService] CreateOrderWithOfflineSupportAsync error: {ex}");
+                return null;
+            }
+        }
+
+        #endregion
     }
 }
