@@ -1794,3 +1794,11 @@ D:/NetApp/apppasteleriav04/apppasteleriav04/apppasteleriav04/obj/Debug/net10.0-a
 /home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/_AndroidResolvedResources.hash
 /home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/apppasteleriav04.dll
 /home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/apppasteleriav04.pdb
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/designtime/stamp/_BuildLibraryImportsCache.stamp
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/case_map.txt
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/res.flag
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/__Microsoft.Android.Resource.Designer.cs
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/_Microsoft.Android.Resource.Designer.dll
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/apppasteleriav04.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/apppasteleriav04.AssemblyInfoInputs.cache
+/home/runner/work/netapppasteleriav04/netapppasteleriav04/apppasteleriav04/obj/Debug/net10.0-android/apppasteleriav04.AssemblyInfo.cs
