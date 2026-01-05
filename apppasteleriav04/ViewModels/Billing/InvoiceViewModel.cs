@@ -24,8 +24,8 @@ namespace apppasteleriav04.ViewModels.Billing
         {
             _billingService = new BillingService();
 
-            GenerateInvoiceCommand = new AsyncRelayCommand(GenerateInvoiceAsync, CanGenerateInvoice);
-            DownloadPdfCommand = new AsyncRelayCommand(DownloadPdfAsync, CanDownloadPdf);
+            GenerateInvoiceCommand = new AsyncRelayCommand(GenerateInvoiceAsync, () => CanGenerateInvoice());
+            DownloadPdfCommand = new AsyncRelayCommand(DownloadPdfAsync, () => CanDownloadPdf());
             SendEmailCommand = new AsyncRelayCommand<string>(SendEmailAsync, CanSendEmail);
         }
 
@@ -97,7 +97,7 @@ namespace apppasteleriav04.ViewModels.Billing
                     Address = CustomerAddress
                 };
 
-                var type = InvoiceType == "boleta" ? InvoiceType.Boleta : InvoiceType.Factura;
+                var type = InvoiceType == "boleta" ? Models.Enums.InvoiceType.Boleta : Models.Enums.InvoiceType.Factura;
                 Invoice = await _billingService.GenerateInvoiceAsync(Order.Id, type, customerData);
 
                 Title = $"Comprobante generado: {Invoice.SerialNumber}-{Invoice.CorrelativeNumber}";
@@ -177,7 +177,7 @@ namespace apppasteleriav04.ViewModels.Billing
             return Order != null;
         }
 
-        private bool CanDownloadPdf(object? parameter)
+        private bool CanDownloadPdf()
         {
             return Invoice != null && !IsLoading;
         }
