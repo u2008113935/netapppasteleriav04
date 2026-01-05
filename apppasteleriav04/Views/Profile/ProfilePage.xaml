@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Profile.ProfilePage"
-             Title="Mi perfil">
+             Title="{Binding Title}">
 
     <ContentPage.Content>
         <ScrollView>
@@ -10,25 +10,46 @@
 
                 <!-- Avatar -->
                 <Frame Padding="8" CornerRadius="80" HeightRequest="160" WidthRequest="160" HorizontalOptions="Center">
-                    <Image x:Name="AvatarImage" Aspect="AspectFill" HeightRequest="144" WidthRequest="144" />
+                    <Image Aspect="AspectFill" HeightRequest="144" WidthRequest="144" Source="avatar_placeholder.png" />
                 </Frame>
 
+                <Label Text="Email" FontAttributes="Bold" />
+                <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" />
+
                 <Label Text="Avatar (path en storage)" FontAttributes="Bold" />
-                <Entry x:Name="AvatarPathEntry" Placeholder="avatars/usuario1.jpg" IsEnabled="False" />
+                <Entry Text="{Binding AvatarUrl}" 
+                       Placeholder="avatars/usuario1.jpg" 
+                       IsEnabled="{Binding IsEditing}" />
 
                 <Label Text="Nombre completo" FontAttributes="Bold" />
-                <Entry x:Name="FullNameEntry" Placeholder="Nombre y apellidos" IsEnabled="False" />
+                <Entry Text="{Binding FullName}" 
+                       Placeholder="Nombre y apellidos" 
+                       IsEnabled="{Binding IsEditing}" />
 
-                <Label Text="User ID (UUID)" FontAttributes="Bold" />
-                <Entry x:Name="UserIdEntry" IsEnabled="False" />
+                <!-- Error message -->
+                <Label Text="{Binding ErrorMessage}" 
+                       TextColor="Red" 
+                       IsVisible="{Binding HasError}"
+                       FontSize="12"
+                       HorizontalOptions="Center" />
 
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Button x:Name="EditButton" Text="Editar" Clicked="OnEditClicked" />
-                    <Button x:Name="SaveButton" Text="Guardar" Clicked="OnSaveClicked" IsEnabled="False" />
-                    <Button x:Name="CancelButton" Text="Cancelar" Clicked="OnCancelClicked" IsEnabled="False" />
+                    <Button Text="Editar" 
+                            Command="{Binding EditProfileCommand}" 
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}" />
+                    <Button Text="Guardar" 
+                            Command="{Binding SaveProfileCommand}" 
+                            IsVisible="{Binding IsEditing}" />
+                    <Button Text="Cancelar" 
+                            Command="{Binding CancelEditCommand}" 
+                            IsVisible="{Binding IsEditing}" />
+                    <Button Text="Cerrar sesión" 
+                            Command="{Binding LogoutCommand}" 
+                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}" />
                 </HorizontalStackLayout>
 
-                <Label x:Name="InfoLabel" TextColor="Gray" FontSize="12" HorizontalOptions="Center" />
+                <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                                   IsRunning="{Binding IsBusy}" />
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

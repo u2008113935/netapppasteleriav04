@@ -2,11 +2,175 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="apppasteleriav04.Views.Profile.Employee.EmployeeDashboardPage"
-             Title="EmployeeDashboardPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Panel de Empleado">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Header -->
+            <Frame BackgroundColor="#FF6B9D" CornerRadius="10" Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Bienvenido, Empleado" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label x:Name="RoleLabel" 
+                           Text="Rol: Cocina" 
+                           FontSize="16"
+                           TextColor="White"/>
+                    <HorizontalStackLayout Spacing="5">
+                        <Label Text="●" 
+                               FontSize="20"
+                               TextColor="LightGreen"/>
+                        <Label Text="Conectado" 
+                               FontSize="14"
+                               TextColor="White"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Order Summary -->
+            <Frame CornerRadius="10" Padding="15" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Resumen de Pedidos" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="0" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   TextColor="#FF9800"/>
+                            <Label Text="Pendientes" 
+                                   FontSize="12"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="0" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   TextColor="#2196F3"/>
+                            <Label Text="En Proceso" 
+                                   FontSize="12"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout Grid.Column="2" Spacing="5">
+                            <Label Text="0" 
+                                   FontSize="28" 
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   TextColor="#4CAF50"/>
+                            <Label Text="Completados" 
+                                   FontSize="12"
+                                   HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Quick Actions -->
+            <Label Text="Acciones Rápidas" 
+                   FontSize="18" 
+                   FontAttributes="Bold"/>
+            
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                <!-- Ver Pedidos -->
+                <Frame Grid.Column="0" Grid.Row="0" 
+                       CornerRadius="10" 
+                       Padding="15"
+                       BackgroundColor="#2196F3">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnViewOrdersTapped"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="📋" 
+                               FontSize="36"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Ver Pedidos" 
+                               FontSize="14"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Cocina -->
+                <Frame Grid.Column="1" Grid.Row="0" 
+                       CornerRadius="10" 
+                       Padding="15"
+                       BackgroundColor="#FF9800">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnKitchenTapped"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="👨‍🍳" 
+                               FontSize="36"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Cocina" 
+                               FontSize="14"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Reparto -->
+                <Frame Grid.Column="0" Grid.Row="1" 
+                       CornerRadius="10" 
+                       Padding="15"
+                       BackgroundColor="#4CAF50">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDeliveryTapped"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="🚚" 
+                               FontSize="36"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Reparto" 
+                               FontSize="14"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Sincronizar -->
+                <Frame Grid.Column="1" Grid.Row="1" 
+                       CornerRadius="10" 
+                       Padding="15"
+                       BackgroundColor="#9C27B0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSyncTapped"/>
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="🔄" 
+                               FontSize="36"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Sincronizar" 
+                               FontSize="14"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Recent Activity -->
+            <Label Text="Actividad Reciente" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0"/>
+            
+            <Frame CornerRadius="10" Padding="15" BorderColor="#E0E0E0">
+                <Label Text="No hay actividad reciente" 
+                       FontSize="14"
+                       TextColor="Gray"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
 </ContentPage>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Employee.OrderDetailsPage"
+             Title="Detalles del Pedido">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Order Header -->
+            <Frame CornerRadius="10" Padding="20" BackgroundColor="#FF6B9D">
+                <VerticalStackLayout Spacing="10">
+                    <Label x:Name="LblOrderId" 
+                           Text="Pedido #12345" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Estado:" 
+                               FontSize="16"
+                               TextColor="White"/>
+                        <Label x:Name="LblStatus" 
+                               Text="Pendiente" 
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"/>
+                    </HorizontalStackLayout>
+                    <Label x:Name="LblOrderDate" 
+                           Text="Fecha: 01/01/2024 10:30"
+                           FontSize="14"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Customer Information -->
+            <Frame CornerRadius="10" Padding="15" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Información del Cliente" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Cliente:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="LblCustomerName" Text="Juan Pérez" FontSize="14"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Email:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="LblCustomerEmail" Text="juan@example.com" FontSize="14"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Text="Teléfono:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="2" Grid.Column="1" x:Name="LblCustomerPhone" Text="+51 999 999 999" FontSize="14"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Order Items -->
+            <Frame CornerRadius="10" Padding="15" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Items del Pedido" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <CollectionView x:Name="ItemsCollectionView">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto,Auto" 
+                                      RowDefinitions="Auto,Auto" 
+                                      Padding="0,5"
+                                      ColumnSpacing="10"
+                                      RowSpacing="2">
+                                    
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding ProductId, StringFormat='Producto ID: {0}'}" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"/>
+                                    
+                                    <Label Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding Quantity, StringFormat='x{0}'}" 
+                                           FontSize="14"
+                                           TextColor="Gray"/>
+                                    
+                                    <Label Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding Price, StringFormat='S/ {0:F2}'}" 
+                                           FontSize="14"
+                                           FontAttributes="Bold"/>
+                                    
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                           Text="{Binding Price, StringFormat='Precio unitario: S/ {0:F2}'}" 
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+                                    
+                                    <BoxView Grid.Row="2" Grid.ColumnSpan="3"
+                                             HeightRequest="1"
+                                             BackgroundColor="#E0E0E0"
+                                             Margin="0,5,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <BoxView HeightRequest="2" BackgroundColor="#E0E0E0" Margin="0,10"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,5">
+                        <Label Grid.Column="0" 
+                               Text="Total:" 
+                               FontSize="20" 
+                               FontAttributes="Bold"/>
+                        <Label Grid.Column="1" 
+                               x:Name="LblTotal"
+                               Text="S/ 0.00" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="#FF6B9D"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Delivery Information (if applicable) -->
+            <Frame x:Name="DeliveryInfoFrame" 
+                   CornerRadius="10" 
+                   Padding="15" 
+                   BorderColor="#E0E0E0"
+                   IsVisible="False">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Información de Entrega" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Repartidor:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="LblDeliveryPerson" Text="No asignado" FontSize="14"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Estado:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="LblDeliveryStatus" Text="Pendiente" FontSize="14"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Text="Estimado:" FontSize="14" TextColor="Gray"/>
+                        <Label Grid.Row="2" Grid.Column="1" x:Name="LblEstimatedTime" Text="--" FontSize="14"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
+            <VerticalStackLayout Spacing="10">
+                <Button x:Name="BtnUpdateStatus"
+                        Text="Actualizar Estado"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Padding="15"
+                        Clicked="OnUpdateStatusClicked"/>
+                
+                <Button x:Name="BtnAssignDelivery"
+                        Text="Asignar Repartidor"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Padding="15"
+                        Clicked="OnAssignDeliveryClicked"
+                        IsVisible="False"/>
+                
+                <Button x:Name="BtnViewTracking"
+                        Text="Ver Seguimiento"
+                        BackgroundColor="#FF9800"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Padding="15"
+                        Clicked="OnViewTrackingClicked"
+                        IsVisible="False"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

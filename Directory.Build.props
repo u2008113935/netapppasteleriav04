@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- On Linux, only build Android targets for testing -->
+    <TargetFrameworks Condition="'$(OS)' == 'Unix' AND '$(MSBuildProjectName)' == 'apppasteleriav04'">net10.0-android</TargetFrameworks>
+  </PropertyGroup>
+</Project>
