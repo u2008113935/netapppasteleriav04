@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -18,6 +19,7 @@ namespace apppasteleriav04.ViewModels.Orders
         private Order? _selectedOrder;
         private bool _isLoading;
         private CancellationTokenSource? _cts;
+        private int _orderCount;
 
         /// <summary>
         /// Gets the collection of orders
@@ -25,7 +27,22 @@ namespace apppasteleriav04.ViewModels.Orders
         public ObservableCollection<Order> Orders
         {
             get => _orders;
-            set => SetProperty(ref _orders, value);
+            set
+            {
+                if (_orders != null)
+                {
+                    _orders.CollectionChanged -= Orders_CollectionChanged;
+                }
+                
+                if (SetProperty(ref _orders, value))
+                {
+                    if (_orders != null)
+                    {
+                        _orders.CollectionChanged += Orders_CollectionChanged;
+                    }
+                    UpdateOrderCount();
+                }
+            }
         }
 
         /// <summary>
@@ -47,6 +64,15 @@ namespace apppasteleriav04.ViewModels.Orders
         }
 
         /// <summary>
+        /// Gets the count of orders
+        /// </summary>
+        public int OrderCount
+        {
+            get => _orderCount;
+            private set => SetProperty(ref _orderCount, value);
+        }
+
+        /// <summary>
         /// Command to load orders
         /// </summary>
         public ICommand LoadOrdersCommand { get; }
@@ -61,6 +87,18 @@ namespace apppasteleriav04.ViewModels.Orders
             Title = "Mis Pedidos";
             LoadOrdersCommand = new AsyncRelayCommand(LoadOrdersAsync);
             ViewOrderDetailsCommand = new RelayCommand<Order>(ViewOrderDetails);
+            
+            _orders.CollectionChanged += Orders_CollectionChanged;
+        }
+
+        private void Orders_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateOrderCount();
+        }
+
+        private void UpdateOrderCount()
+        {
+            OrderCount = Orders?.Count ?? 0;
         }
 
         /// <summary>

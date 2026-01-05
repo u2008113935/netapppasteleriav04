@@ -60,7 +60,7 @@
 
         <!-- Footer: count and error message -->
         <StackLayout Orientation="Vertical" Grid.Row="3" Padding="0,8,0,0">
-            <Label Text="{Binding Orders.Count, StringFormat='Pedidos: {0}'}" />
+            <Label Text="{Binding OrderCount, StringFormat='Pedidos: {0}'}" />
             <Label Text="{Binding ErrorMessage}" 
                    TextColor="Red" 
                    IsVisible="{Binding HasError}"

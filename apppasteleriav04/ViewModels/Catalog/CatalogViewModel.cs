@@ -2,7 +2,6 @@
 using apppasteleriav04.Services.Core;
 using apppasteleriav04.ViewModels.Base;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -146,38 +145,6 @@ namespace apppasteleriav04.ViewModels.Catalog
                 CartService.Instance.Add(product, 1);
                 Debug.WriteLine($"[CatalogViewModel] Added {product.Nombre} to cart");
             }
-        }
-    }
-
-    /// <summary>
-    /// Generic relay command with parameter
-    /// </summary>
-    public class RelayCommand<T> : ICommand
-    {
-        private readonly Action<T?> _execute;
-        private readonly Func<T?, bool>? _canExecute;
-
-        public event EventHandler? CanExecuteChanged;
-
-        public RelayCommand(Action<T?> execute, Func<T?, bool>? canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object? parameter)
-        {
-            return _canExecute == null || _canExecute((T?)parameter);
-        }
-
-        public void Execute(object? parameter)
-        {
-            _execute((T?)parameter);
-        }
-
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

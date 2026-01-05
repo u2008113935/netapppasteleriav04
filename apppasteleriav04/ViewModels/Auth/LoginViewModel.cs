@@ -11,6 +11,7 @@ namespace apppasteleriav04.ViewModels.Auth
         private string _email = string.Empty;
         private string _password = string.Empty;
         private bool _isLoading;
+        private RelayCommand? _loginCommand;
 
         public event EventHandler<LoginCompletedEventArgs>? LoginCompleted;
 
@@ -24,7 +25,7 @@ namespace apppasteleriav04.ViewModels.Auth
             {
                 if (SetProperty(ref _email, value))
                 {
-                    ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
+                    _loginCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -39,7 +40,7 @@ namespace apppasteleriav04.ViewModels.Auth
             {
                 if (SetProperty(ref _password, value))
                 {
-                    ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
+                    _loginCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -56,7 +57,7 @@ namespace apppasteleriav04.ViewModels.Auth
         /// <summary>
         /// Command to perform login
         /// </summary>
-        public ICommand LoginCommand { get; }
+        public ICommand LoginCommand => _loginCommand ??= new RelayCommand(async () => await LoginAsync(), CanLogin);
 
         /// <summary>
         /// Command to navigate to registration
@@ -66,7 +67,6 @@ namespace apppasteleriav04.ViewModels.Auth
         public LoginViewModel()
         {
             Title = "Iniciar sesión";
-            LoginCommand = new RelayCommand(async () => await LoginAsync(), CanLogin);
             RegisterCommand = new RelayCommand(OnRegister);
         }
 

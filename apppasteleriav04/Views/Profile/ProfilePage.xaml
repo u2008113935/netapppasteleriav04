@@ -10,15 +10,7 @@
 
                 <!-- Avatar -->
                 <Frame Padding="8" CornerRadius="80" HeightRequest="160" WidthRequest="160" HorizontalOptions="Center">
-                    <Image Aspect="AspectFill" HeightRequest="144" WidthRequest="144">
-                        <Image.Source>
-                            <Binding Path="UserProfile.AvatarPublicUrl">
-                                <Binding.TargetNullValue>
-                                    <FileImageSource File="avatar_placeholder.png" />
-                                </Binding.TargetNullValue>
-                            </Binding>
-                        </Image.Source>
-                    </Image>
+                    <Image Aspect="AspectFill" HeightRequest="144" WidthRequest="144" Source="avatar_placeholder.png" />
                 </Frame>
 
                 <Label Text="Email" FontAttributes="Bold" />
