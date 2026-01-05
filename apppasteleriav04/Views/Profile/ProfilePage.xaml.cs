@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,29 +13,59 @@ namespace apppasteleriav04.Views.Profile
 {
     public partial class ProfilePage : ContentPage
     {
-        private UserProfile _profile;   // Usa SIEMPRE apppasteleriav04.Models.Profile como modelo
+        private UserProfile _profile;
         private readonly SupabaseService _supabase = SupabaseService.Instance;
 
         public ProfilePage()
         {
             InitializeComponent();
-            _ = LoadProfileAsync();
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            System.Diagnostics.Debug.WriteLine($"[ProfilePage] OnAppearing");
+            System.Diagnostics.Debug.WriteLine($"[ProfilePage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
+            System.Diagnostics.Debug.WriteLine($"[ProfilePage] UserId: {AuthService.Instance.UserId}");
+
+            // VERIFICAR AUTENTICACION
+            if (!AuthService.Instance.IsAuthenticated)
+            {
+                InfoLabel.Text = "No se encontro sesion.  Inicia sesion primero.";
+
+                bool goToLogin = await DisplayAlert(
+                    "Iniciar Sesion",
+                    "Debes iniciar sesion para ver tu perfil.",
+                    "Ir a Login",
+                    "Cancelar");
+
+                if (goToLogin)
+                {
+                    await Shell.Current.GoToAsync("login? returnTo=profile");
+                }
+                return;
+            }
+
             await LoadProfileAsync();
         }
+
         async Task LoadProfileAsync()
         {
             try
             {
                 InfoLabel.Text = "Cargando perfil...";
-                var userIdStr = await SecureStorage.Default.GetAsync("user_id");
+
+                var userIdStr = AuthService.Instance.UserId;
+
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    userIdStr = await SecureStorage.Default.GetAsync("auth_user_id");
+                }
+
                 if (string.IsNullOrEmpty(userIdStr) || !Guid.TryParse(userIdStr, out var userId))
                 {
-                    InfoLabel.Text = "No se encontró sesión. Inicia sesión primero.";
+                    InfoLabel.Text = "No se encontro sesion. Inicia sesion primero. ";
                     return;
                 }
 
@@ -44,7 +74,7 @@ namespace apppasteleriav04.Views.Profile
                 _profile = await _supabase.GetProfileAsync(userId);
                 if (_profile == null)
                 {
-                    InfoLabel.Text = "Perfil no encontrado. Puedes crear tus datos.";
+                    InfoLabel.Text = "Perfil no encontrado.  Puedes crear tus datos.";
                     FullNameEntry.Text = string.Empty;
                     AvatarPathEntry.Text = string.Empty;
                     SetAvatarImage(null);
@@ -55,11 +85,11 @@ namespace apppasteleriav04.Views.Profile
                 AvatarPathEntry.Text = _profile.AvatarUrl ?? string.Empty;
                 SetAvatarImage(_profile.AvatarPublicUrl);
 
-                InfoLabel.Text = "Perfil cargado";
+                InfoLabel.Text = $"Perfil cargado - {AuthService.Instance.UserEmail}";
             }
             catch (Exception ex)
             {
-                InfoLabel.Text = $"Error cargando perfil: {ex.Message}";
+                InfoLabel.Text = $"Error cargando perfil:  {ex.Message}";
             }
         }
 
@@ -73,12 +103,18 @@ namespace apppasteleriav04.Views.Profile
 
         void OnEditClicked(object sender, EventArgs e)
         {
+            if (!AuthService.Instance.IsAuthenticated)
+            {
+                InfoLabel.Text = "Debes iniciar sesion para editar. ";
+                return;
+            }
+
             FullNameEntry.IsEnabled = true;
             AvatarPathEntry.IsEnabled = true;
             SaveButton.IsEnabled = true;
             CancelButton.IsEnabled = true;
             EditButton.IsEnabled = false;
-            InfoLabel.Text = "Modo edición activo";
+            InfoLabel.Text = "Modo edicion activo";
         }
 
         void OnCancelClicked(object sender, EventArgs e)
@@ -101,7 +137,7 @@ namespace apppasteleriav04.Views.Profile
             SaveButton.IsEnabled = false;
             CancelButton.IsEnabled = false;
             EditButton.IsEnabled = true;
-            InfoLabel.Text = "Edición cancelada";
+            InfoLabel.Text = "Edicion cancelada";
         }
 
         async void OnSaveClicked(object sender, EventArgs e)
@@ -111,19 +147,20 @@ namespace apppasteleriav04.Views.Profile
 
             if (string.IsNullOrEmpty(newName))
             {
-                await DisplayAlert("Validación", "El nombre no puede estar vacío.", "OK");
+                await DisplayAlert("Validacion", "El nombre no puede estar vacio.", "OK");
                 return;
             }
 
             if (!AuthService.Instance.IsAuthenticated || string.IsNullOrEmpty(AuthService.Instance.UserId))
             {
-                await DisplayAlert("Error", "Sesión no válida. Inicia sesión nuevamente.", "OK");
+                await DisplayAlert("Error", "Sesion no valida.  Inicia sesion nuevamente.", "OK");
+                await Shell.Current.GoToAsync("login? returnTo=profile");
                 return;
             }
 
             if (!Guid.TryParse(UserIdEntry.Text, out var userId))
             {
-                await DisplayAlert("Error", "UserId inválido.", "OK");
+                await DisplayAlert("Error", "UserId invalido.", "OK");
                 return;
             }
 
@@ -136,20 +173,15 @@ namespace apppasteleriav04.Views.Profile
             try
             {
                 var baseUrl = SupabaseConfig.SUPABASE_URL.TrimEnd('/');
-                var url = $"{baseUrl}/rest/v1/profiles?id=eq.{Uri.EscapeDataString(userId.ToString())}";
+                var url = $"{baseUrl}/rest/v1/profiles? id=eq.{Uri.EscapeDataString(userId.ToString())}";
 
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Add("apikey", SupabaseConfig.SUPABASE_ANON_KEY);
-                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SupabaseConfig.SUPABASE_ANON_KEY);
 
                 if (!string.IsNullOrEmpty(AuthService.Instance.AccessToken))
-                {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.Instance.AccessToken);
-                }
                 else
-                {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SupabaseConfig.SUPABASE_ANON_KEY);
-                }
 
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -163,7 +195,7 @@ namespace apppasteleriav04.Views.Profile
 
                 if (!resp.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Error", $"No se pudo actualizar el perfil: {resp.StatusCode}\n{respText}", "OK");
+                    await DisplayAlert("Error", $"No se pudo actualizar el perfil:  {resp.StatusCode}\n{respText}", "OK");
                     InfoLabel.Text = "Error al guardar";
                 }
                 else
@@ -180,13 +212,13 @@ namespace apppasteleriav04.Views.Profile
                     }
                     else
                     {
-                        InfoLabel.Text = "Perfil actualizado (sin representación devuelta).";
+                        InfoLabel.Text = "Perfil actualizado. ";
                     }
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Exception: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Exception:  {ex.Message}", "OK");
                 InfoLabel.Text = $"Error: {ex.Message}";
             }
             finally

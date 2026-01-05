@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 
 namespace apppasteleriav04
 {
@@ -20,32 +21,36 @@ namespace apppasteleriav04
         {
             var splashPage = new Views.Shared.SplashPage();
             var window = new Window(splashPage);
-
-            // Pasar la referencia de window al SplashPage
             splashPage.SetWindow(window);
-
             return window;
         }
 
-        // Inicialización asíncrona de la aplicación (sin parámetro Window)
         public static async Task InitializeAppAsync()
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("[App] Cargando estado de autenticación...");
+                System.Diagnostics.Debug.WriteLine("[App] Cargando estado de autenticacion...");
+
+                // ========== TEMPORAL PARA TESTING:  LIMPIAR DATOS ==========
+                // Descomenta estas lineas para forzar un inicio limpio
+                // SecureStorage.Default. RemoveAll();
+                // System. Diagnostics.Debug. WriteLine("[App] SecureStorage limpiado para testing");
+                // ===========================================================
+
                 await AuthService.Instance.LoadFromStorageAsync();
+
+                // Log del estado actual
+                AuthService.Instance.LogCurrentState();
 
                 var token = await AuthService.Instance.GetAccessTokenAsync();
                 if (!string.IsNullOrWhiteSpace(token))
                 {
                     SupabaseService.Instance.SetUserToken(token);
                     System.Diagnostics.Debug.WriteLine("[App] Token cargado y configurado");
-                    System.Diagnostics.Debug.WriteLine($"[App] Usuario autenticado: {AuthService.Instance.UserEmail}");
-                    System.Diagnostics.Debug.WriteLine($"[App] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("[App] No se encontró token almacenado");
+                    System.Diagnostics.Debug.WriteLine("[App] No se encontro token almacenado");
                 }
             }
             catch (Exception ex)

@@ -1,6 +1,4 @@
-using apppasteleriav04.Services.Core;
-using apppasteleriav04.Views.Auth;
-using apppasteleriav04.Views.Cart;
+ï»¿using apppasteleriav04.Services.Core;
 using Microsoft.Maui.Controls;
 using System;
 using System.Linq;
@@ -14,25 +12,16 @@ namespace apppasteleriav04.Views.Cart
         public CartPage()
         {
             InitializeComponent();
-
-            // Configuro el BindingContext al singleton para que los Bindings en XAML funcionen:
             BindingContext = _cart;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            // Ya no es necesario forzar ItemsSource aquí si usamos BindingContext
-            System.Diagnostics.Debug.WriteLine($"CartPage.OnAppearing -> Items.Count={_cart.Items.Count}");
-            System.Diagnostics.Debug.WriteLine($"CartCollection.ItemsSource -> {CartCollection?.ItemsSource?.GetType().FullName ?? "(null)"}");
-
-            int i = 0;
-            foreach (var it in _cart.Items)
-            {
-                System.Diagnostics.Debug.WriteLine($"CartItem[{i}] Nombre: {it.Nombre} ImagenPath: {it.ImagenPath} Price:{it.Price} Qty:{it.Quantity}");
-                i++;
-            }
+            System.Diagnostics.Debug.WriteLine($"[CartPage] OnAppearing -> Items. Count={_cart.Items.Count}");
+            System.Diagnostics.Debug.WriteLine($"[CartPage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
+            System.Diagnostics.Debug.WriteLine($"[CartPage] UserId: {AuthService.Instance.UserId}");
+            System.Diagnostics.Debug.WriteLine($"[CartPage] UserEmail: {AuthService.Instance.UserEmail}");
         }
 
         void OnIncreaseClicked(object sender, EventArgs e)
@@ -59,22 +48,15 @@ namespace apppasteleriav04.Views.Cart
                 _cart.Remove(productId);
         }
 
-        // Handler añadido para Confirmar Compra (implementación de ejemplo)
         async void OnConfirmPurchaseClicked(object sender, EventArgs e)
         {
             if (_cart.Items.Count == 0)
             {
-                await DisplayAlert("Carrito vacío", "No hay productos en el carrito.", "OK");
+                await DisplayAlert("Carrito vacio", "No hay productos en el carrito.", "OK");
                 return;
             }
 
-            // Aquí iría la lógica real de confirmar compra (navegar a pantalla de pago, crear Order, etc.)
-            await DisplayAlert("Confirmar Compra", $"Total a pagar: S/ {_cart.Total:N2}", "OK");
-
-            // Ejemplo: limpiar carrito después de confirmar compra
-            //_cart.Clear();
-
-            // Guardar carrito local antes de redirigir (para persistencia previa a login)
+            // Guardar carrito local
             try
             {
                 await _cart.SaveLocalAsync();
@@ -84,18 +66,32 @@ namespace apppasteleriav04.Views.Cart
                 System.Diagnostics.Debug.WriteLine($"Error guardando carrito local: {ex.Message}");
             }
 
-            // Comprobar autenticación
+            // VERIFICAR AUTENTICACION
+            System.Diagnostics.Debug.WriteLine($"[CartPage] Verificando autenticacion...");
+            System.Diagnostics.Debug.WriteLine($"[CartPage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
+            System.Diagnostics.Debug.WriteLine($"[CartPage] AccessToken is null?:  {string.IsNullOrEmpty(AuthService.Instance.AccessToken)}");
+
             if (!AuthService.Instance.IsAuthenticated)
             {
-                // Navegar a LoginPage; le pasamos returnTo="cart" para que, al autenticarse,
-                // pueda volver al carrito (LoginPage debe PopAsync() al finalizar).
-                await Navigation.PushAsync(new LoginPage(returnTo: "cart"));
+                System.Diagnostics.Debug.WriteLine("[CartPage] Usuario NO autenticado, mostrando dialogo.. .");
+
+                bool goToLogin = await DisplayAlert(
+                    "Iniciar Sesion Requerido",
+                    "Debes iniciar sesion para realizar tu pedido.",
+                    "Ir a Login",
+                    "Cancelar");
+
+                if (goToLogin)
+                {
+                    // Navegar a login con parametro returnTo=cart
+                    await Shell.Current.GoToAsync("login? returnTo=cart");
+                }
                 return;
             }
 
-            // Si ya está autenticado, ir a Checkout (suponiendo que existe CheckoutPage)
-            await Navigation.PushAsync(new CheckoutPage());
-
+            // Si esta autenticado, ir a Checkout
+            System.Diagnostics.Debug.WriteLine("[CartPage] Usuario autenticado, navegando a checkout...");
+            await Shell.Current.GoToAsync("checkout");
         }
     }
 }

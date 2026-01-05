@@ -3,24 +3,36 @@
   "WorkspaceRootPath": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\views\\shared\\splashpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\views\\shared\\splashpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\services\\core\\supabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\services\\core\\supabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\services\\core\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\services\\core\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\views\\auth\\loginpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\views\\auth\\loginpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\views\\profile\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\views\\profile\\profilepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\services\\core\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\services\\core\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\appshell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\appshell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|d:\\netapp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\views\\shared\\splashpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E2E5A8A-39C9-9111-0F3D-4B00B2220D75}|apppasteleriav04\\apppasteleriav04.csproj|solutionrelative:apppasteleriav04\\views\\shared\\splashpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,6 +47,97 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "SupabaseService.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\SupabaseService.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\Services\\Core\\SupabaseService.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\SupabaseService.cs",
+              "RelativeToolTip": "apppasteleriav04\\Services\\Core\\SupabaseService.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAAAHQAAABfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T07:38:21.397Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppShell.xaml",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\AppShell.xaml",
+              "RelativeDocumentMoniker": "apppasteleriav04\\AppShell.xaml",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\AppShell.xaml",
+              "RelativeToolTip": "apppasteleriav04\\AppShell.xaml",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAswCcAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-05T07:27:55.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AppShell.xaml.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\AppShell.xaml.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\AppShell.xaml.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\AppShell.xaml.cs",
+              "RelativeToolTip": "apppasteleriav04\\AppShell.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T07:27:44.453Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.xaml",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml",
+              "RelativeDocumentMoniker": "apppasteleriav04\\App.xaml",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml",
+              "RelativeToolTip": "apppasteleriav04\\App.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-05T07:27:25.772Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\App.xaml.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
+              "RelativeToolTip": "apppasteleriav04\\App.xaml.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAswCoAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T06:33:42.78Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ProfilePage.xaml.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
+              "RelativeToolTip": "apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
+              "ViewState": "AgIAAMwAAAAAAAAAAAAQwOkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T06:31:41.159Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\AuthService.cs",
+              "RelativeDocumentMoniker": "apppasteleriav04\\Services\\Core\\AuthService.cs",
+              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\AuthService.cs",
+              "RelativeToolTip": "apppasteleriav04\\Services\\Core\\AuthService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T06:28:19.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "SplashPage.xaml.cs",
               "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Shared\\SplashPage.xaml.cs",
               "RelativeDocumentMoniker": "apppasteleriav04\\Views\\Shared\\SplashPage.xaml.cs",
@@ -43,58 +146,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-05T07:11:26.141Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
-              "RelativeDocumentMoniker": "apppasteleriav04\\App.xaml.cs",
-              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\App.xaml.cs",
-              "RelativeToolTip": "apppasteleriav04\\App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T06:33:42.78Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ProfilePage.xaml.cs",
-              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
-              "RelativeDocumentMoniker": "apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
-              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
-              "RelativeToolTip": "apppasteleriav04\\Views\\Profile\\ProfilePage.xaml.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwBwAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T06:31:41.159Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\AuthService.cs",
-              "RelativeDocumentMoniker": "apppasteleriav04\\Services\\Core\\AuthService.cs",
-              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Services\\Core\\AuthService.cs",
-              "RelativeToolTip": "apppasteleriav04\\Services\\Core\\AuthService.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAAAGAAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T06:28:19.769Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "LoginPage.xaml.cs",
-              "DocumentMoniker": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Auth\\LoginPage.xaml.cs",
-              "RelativeDocumentMoniker": "apppasteleriav04\\Views\\Auth\\LoginPage.xaml.cs",
-              "ToolTip": "D:\\NetApp\\apppasteleriav04\\apppasteleriav04\\apppasteleriav04\\Views\\Auth\\LoginPage.xaml.cs",
-              "RelativeToolTip": "apppasteleriav04\\Views\\Auth\\LoginPage.xaml.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAkwBkAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T06:26:11.276Z",
               "EditorCaption": ""
             }
           ]
