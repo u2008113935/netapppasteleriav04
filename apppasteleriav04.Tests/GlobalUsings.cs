@@ -1,0 +1,10 @@
+global using Xunit;
+global using Moq;
+global using FluentAssertions;
+global using apppasteleriav04.Models.Domain;
+global using apppasteleriav04.Services.Core;
+global using apppasteleriav04.ViewModels;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
