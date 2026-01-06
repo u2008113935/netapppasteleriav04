@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using apppasteleriav04.Helpers;
+using RelayCommand = apppasteleriav04.ViewModels.Base.RelayCommand;
 using apppasteleriav04.Models.Domain;
 using apppasteleriav04.Models.DTOs.Payment;
 using apppasteleriav04.Services.Payment;
