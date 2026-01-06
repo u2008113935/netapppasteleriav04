@@ -9,6 +9,7 @@ using apppasteleriav04.Models.Domain;
 using apppasteleriav04.Models.DTOs.Payment;
 using apppasteleriav04.Services.Payment;
 using apppasteleriav04.ViewModels.Base;
+using RelayCommand = apppasteleriav04.ViewModels.Base.RelayCommand;
 
 namespace apppasteleriav04.ViewModels.Cart
 {
