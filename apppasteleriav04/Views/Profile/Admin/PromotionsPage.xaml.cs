@@ -82,8 +82,8 @@ namespace apppasteleriav04.Views.Profile.Admin
                 _viewModel.SelectedPromotion.DiscountValue = discountValue;
             }
             
-            _viewModel.SelectedPromotion.StartDate = StartDatePicker.Date.ToDateTime(TimeOnly.MinValue);
-            _viewModel.SelectedPromotion.EndDate = EndDatePicker.Date.ToDateTime(TimeOnly.MinValue);
+            _viewModel.SelectedPromotion.StartDate = StartDatePicker.Date;
+            _viewModel.SelectedPromotion.EndDate = EndDatePicker.Date;
 
             await _viewModel.SavePromotionAsync();
             HideEditModal();
@@ -111,8 +111,8 @@ namespace apppasteleriav04.Views.Profile.Admin
             CodeEntry.Text = promotion.Code ?? string.Empty;
             DiscountTypePicker.SelectedItem = promotion.DiscountType ?? "percentage";
             DiscountValueEntry.Text = promotion.DiscountValue.ToString();
-            StartDatePicker.Date = DateOnly.FromDateTime(promotion.StartDate);
-            EndDatePicker.Date = DateOnly.FromDateTime(promotion.EndDate);
+            StartDatePicker.Date = promotion.StartDate;
+            EndDatePicker.Date = promotion.EndDate;
         }
 
         private void ClearEditForm()
