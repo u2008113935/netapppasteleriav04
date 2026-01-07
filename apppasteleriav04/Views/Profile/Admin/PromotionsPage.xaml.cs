@@ -111,8 +111,9 @@ namespace apppasteleriav04.Views.Profile.Admin
             CodeEntry.Text = promotion.Code ?? string.Empty;
             DiscountTypePicker.SelectedItem = promotion.DiscountType ?? "percentage";
             DiscountValueEntry.Text = promotion.DiscountValue.ToString();
-            StartDatePicker.Date = promotion.StartDate;
-            EndDatePicker.Date = promotion.EndDate;
+
+            StartDatePicker.Date = promotion.StartDate ?? DateTime.Today; //promotion.StartDate;
+            EndDatePicker.Date = promotion.EndDate ?? DateTime.Today.AddDays(30); //promotion.EndDate;
         }
 
         private void ClearEditForm()

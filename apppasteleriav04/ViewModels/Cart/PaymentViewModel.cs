@@ -31,7 +31,7 @@ namespace apppasteleriav04.ViewModels.Cart
         public PaymentViewModel()
         {
             _paymentService = new PaymentService();
-            
+
             AvailablePaymentMethods = new ObservableCollection<PaymentMethodOption>
             {
                 new PaymentMethodOption { Id = "efectivo", Name = "Efectivo", Icon = "💵" },

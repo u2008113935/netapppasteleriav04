@@ -1,41 +1,25 @@
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Ww][Ii][Nn]32/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
-
-# Test Results
-TestResults/
-*.trx
-*.coverage
-*.coveragexml
-
-# User-specific files
-*.rsuser
-*.suo
+﻿. vs/
+bin/
+obj/
 *.user
-*.userosscache
-*.sln.docstates
-
-# Visual Studio cache/options directory
-.vs/
-
-# NuGet Packages
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.apk
+*. aab
+*.ap_
+*.dex
+local. properties
+*.ipa
+*.dSYM.zip
+*.dSYM
+packages/
 *.nupkg
-*.snupkg
-**/packages/*
-
-# Coverage reports
-coverage/
-*.coverage
-*.coveragexml
+**/obj/
+**/bin/
+**/.vs/
+*.tmp
+*.log
+*.bak

@@ -28,10 +28,10 @@ namespace apppasteleriav04.Models.Domain
         public decimal MinOrderAmount { get; set; }
 
         [JsonPropertyName("start_date")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [JsonPropertyName("end_date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [JsonPropertyName("is_active")]
         public bool IsActive { get; set; } = true;
