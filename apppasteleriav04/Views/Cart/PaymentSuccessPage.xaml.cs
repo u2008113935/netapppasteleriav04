@@ -9,8 +9,8 @@ public partial class PaymentSuccessPage : ContentPage
 
     private async void OnViewInvoiceClicked(object sender, EventArgs e)
     {
-        // TODO: Navigate to invoice page
-        await Shell.Current.DisplayAlert("Comprobante", "Generando comprobante...", "OK");
+        // Navigate to invoice generation page
+        await Shell.Current.GoToAsync("invoice");
     }
 
     private async void OnBackToHomeClicked(object sender, EventArgs e)

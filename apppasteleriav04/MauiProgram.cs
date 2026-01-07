@@ -30,9 +30,9 @@ namespace apppasteleriav04
             builder.Services.AddSingleton<IBillingService, BillingService>();
             builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
             builder.Services.AddSingleton<ISyncService, SyncService>();
-
-            // TODO: Cuando agregues más servicios, configurarlos aquí
-            // builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
+            
+            // Core services are already singletons, no need to register them here
+            // AuthService.Instance, SupabaseService.Instance, etc. are accessed directly
 
 #if DEBUG
             builder.Logging.AddDebug();

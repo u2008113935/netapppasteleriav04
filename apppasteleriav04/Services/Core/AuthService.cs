@@ -134,9 +134,62 @@ namespace apppasteleriav04.Services.Core
 
         public async Task<bool> SignUpAsync(string email, string password, string name, string? phone = null)
         {
-            // TODO: Implementar registro real
-            await Task.Delay(300);
-            return true;
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(name))
+            {
+                Debug.WriteLine("[AuthService] SignUpAsync: Datos incompletos");
+                return false;
+            }
+
+            try
+            {
+                Debug.WriteLine($"[AuthService] SignUpAsync: intentando registro con {email}");
+                
+                var supabaseUrl = Constants.SupabaseConstants.Url;
+                var supabaseKey = Constants.SupabaseConstants.AnonKey;
+                
+                if (string.IsNullOrEmpty(supabaseUrl) || string.IsNullOrEmpty(supabaseKey))
+                {
+                    Debug.WriteLine("[AuthService] SignUpAsync: URL o ANON_KEY no configurados");
+                    return false;
+                }
+
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("apikey", supabaseKey);
+
+                var signUpUrl = $"{supabaseUrl}/auth/v1/signup";
+                var payload = new
+                {
+                    email,
+                    password,
+                    data = new
+                    {
+                        full_name = name,
+                        phone = phone ?? ""
+                    }
+                };
+
+                var jsonPayload = JsonSerializer.Serialize(payload);
+                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync(signUpUrl, content);
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine($"[AuthService] SignUpAsync: status={response.StatusCode}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"[AuthService] SignUpAsync error: {responseBody}");
+                    return false;
+                }
+
+                Debug.WriteLine("[AuthService] SignUpAsync exitoso");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[AuthService] SignUpAsync exception: {ex.Message}");
+                return false;
+            }
         }
 
         public void Logout()

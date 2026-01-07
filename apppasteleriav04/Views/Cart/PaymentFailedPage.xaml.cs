@@ -21,9 +21,22 @@ public partial class PaymentFailedPage : ContentPage
 
     private async void OnContactSupportClicked(object sender, EventArgs e)
     {
-        // TODO: Navigate to support/contact page or show contact info
-        await Shell.Current.DisplayAlert("Soporte", 
-            "Email: soporte@pasteleriadelicia.com\nTeléfono: (01) 555-1234", 
-            "OK");
+        // Show contact information
+        var result = await Shell.Current.DisplayAlert("Soporte", 
+            "¿Cómo desea contactarnos?\n\nEmail: soporte@pasteleriadelicia.com\nTeléfono: (01) 555-1234", 
+            "Llamar", "Cerrar");
+        
+        if (result)
+        {
+            // Open phone dialer
+            try
+            {
+                PhoneDialer.Open("015551234");
+            }
+            catch
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo abrir el marcador", "OK");
+            }
+        }
     }
 }

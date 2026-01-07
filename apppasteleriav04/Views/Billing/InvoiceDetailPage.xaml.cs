@@ -9,19 +9,63 @@ public partial class InvoiceDetailPage : ContentPage
 
     private async void OnDownloadClicked(object sender, EventArgs e)
     {
-        // TODO: Download PDF
-        await DisplayAlert("Descargar", "Descargando PDF...", "OK");
+        try
+        {
+            // Get the invoice ID from binding context
+            var invoice = BindingContext as Models.Domain.Invoice;
+            if (invoice == null)
+            {
+                await DisplayAlert("Error", "No se pudo obtener el comprobante", "OK");
+                return;
+            }
+
+            // Generate PDF
+            var billingService = new Services.Billing.BillingService();
+            var pdfBytes = await billingService.GeneratePdfAsync(invoice.Id);
+            
+            // Save to device (simplified approach)
+            var fileName = $"comprobante_{invoice.SerialNumber}_{invoice.CorrelativeNumber}.txt";
+            var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+            await File.WriteAllBytesAsync(filePath, pdfBytes);
+            
+            await DisplayAlert("Descarga", $"Comprobante guardado en {fileName}", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Error al descargar: {ex.Message}", "OK");
+        }
     }
 
     private async void OnSendEmailClicked(object sender, EventArgs e)
     {
-        // TODO: Send email
-        string email = await DisplayPromptAsync("Enviar Email", "Ingrese su correo electrónico:", 
-            placeholder: "ejemplo@email.com", keyboard: Keyboard.Email);
-        
-        if (!string.IsNullOrWhiteSpace(email))
+        try
         {
-            await DisplayAlert("Email", $"Comprobante enviado a {email}", "OK");
+            string email = await DisplayPromptAsync("Enviar Email", "Ingrese su correo electrónico:", 
+                placeholder: "ejemplo@email.com", keyboard: Keyboard.Email);
+            
+            if (string.IsNullOrWhiteSpace(email))
+                return;
+
+            // Get the invoice ID from binding context
+            var invoice = BindingContext as Models.Domain.Invoice;
+            if (invoice == null)
+            {
+                await DisplayAlert("Error", "No se pudo obtener el comprobante", "OK");
+                return;
+            }
+
+            // Send email through billing service
+            var billingService = new Services.Billing.BillingService();
+            var success = await billingService.SendEmailAsync(invoice.Id, email);
+            
+            if (success)
+                await DisplayAlert("Email", $"Comprobante enviado a {email}", "OK");
+            else
+                await DisplayAlert("Error", "No se pudo enviar el email", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Error al enviar: {ex.Message}", "OK");
         }
     }
 
