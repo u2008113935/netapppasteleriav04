@@ -1,3 +1,5 @@
+using Microsoft.Maui.ApplicationModel.Communication;
+
 namespace apppasteleriav04.Views.Cart;
 
 public partial class PaymentFailedPage : ContentPage

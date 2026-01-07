@@ -120,8 +120,8 @@ namespace apppasteleriav04.Services.Core
 
             try
             {
-                var supabaseUrl = Constants.SupabaseConstants.Url;
-                var supabaseKey = Constants.SupabaseConstants.AnonKey;
+                var supabaseUrl = SupabaseConfig.SUPABASE_URL;
+                var supabaseKey = SupabaseConfig.SUPABASE_ANON_KEY;
                 
                 if (string.IsNullOrEmpty(supabaseUrl) || string.IsNullOrEmpty(supabaseKey))
                 {
