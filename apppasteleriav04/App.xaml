@@ -4,7 +4,8 @@
              xmlns:conv="clr-namespace:apppasteleriav04.Converters"
              x:Class="apppasteleriav04.App">
     <Application.Resources>
-        <ResourceDictionary>
+        <ResourceDictionary>                      
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
@@ -12,6 +13,7 @@
             
             <!-- Global Converters -->
             <conv:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <conv:StringToBoolConverter x:Key="StringToBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

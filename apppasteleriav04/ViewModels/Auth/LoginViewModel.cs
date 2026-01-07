@@ -8,6 +8,11 @@ namespace apppasteleriav04.ViewModels.Auth
 {
     public class LoginViewModel : BaseViewModel
     {
+        
+        //Inyección de dependencias (mejor práctica MVVM)
+        private readonly AuthService _authService;
+        private readonly CartService _cartService;
+
         private string _email = string.Empty;
         public string Email
         {
@@ -29,6 +34,15 @@ namespace apppasteleriav04.ViewModels.Auth
             set => SetProperty(ref _isLoading, value);
         }
 
+        //Propiedad para mostrar mensaje de carrito restaurado
+        private string _cartRestoredMessage = string.Empty;
+        public string CartRestoredMessage
+        {
+            get => _cartRestoredMessage;
+            set => SetProperty(ref _cartRestoredMessage, value);
+        }
+
+        // Events
         public event EventHandler<LoginCompletedEventArgs>? LoginCompleted;
         public event EventHandler? RegisterRequested;
 
@@ -38,6 +52,11 @@ namespace apppasteleriav04.ViewModels.Auth
         public LoginViewModel()
         {
             Title = "Iniciar Sesión";
+
+            // Usar Singleton (patrón actual del proyecto)
+            _authService = AuthService.Instance;
+            _cartService = CartService.Instance;
+
             LoginCommand = new AsyncRelayCommand(LoginAsync, () => !IsLoading);
             RegisterCommand = new RelayCommand(() => RegisterRequested?.Invoke(this, EventArgs.Empty));
         }
@@ -45,6 +64,7 @@ namespace apppasteleriav04.ViewModels.Auth
         private async Task LoginAsync()
         {
             ErrorMessage = string.Empty;
+            CartRestoredMessage = string.Empty;
 
             if (string.IsNullOrWhiteSpace(Email))
             {
@@ -63,10 +83,15 @@ namespace apppasteleriav04.ViewModels.Auth
 
             try
             {
+                // PASO 1: Autenticar usuario
                 var success = await AuthService.Instance.SignInAsync(Email, Password);
 
                 if (success)
                 {
+                    // PASO 2: Cargar carrito guardado (RESPONSABILIDAD DEL VIEWMODEL)
+                    await LoadCartAfterLoginAsync();
+
+                    // PASO 3: Notificar éxito a la View
                     LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
                     {
                         Success = true,
@@ -95,5 +120,35 @@ namespace apppasteleriav04.ViewModels.Auth
                 IsBusy = false;
             }
         }
+
+        // NUEVO: Método para cargar carrito tras login (LÓGICA EN VIEWMODEL)
+        private async Task LoadCartAfterLoginAsync()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("[LoginViewModel] Cargando carrito guardado...");
+
+                // Cargar carrito desde Preferences
+                await _cartService.LoadLocalAsync();
+
+                var itemCount = _cartService.Count;
+                var totalAmount = _cartService.Total;
+
+                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Carrito cargado: {itemCount} items, Total: S/ {totalAmount: F2}");
+
+                // ✅ Actualizar propiedad para mostrar en UI (opcional)
+                if (itemCount > 0)
+                {
+                    CartRestoredMessage = $"Se restauraron {itemCount} productos (S/ {totalAmount:F2})";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Error cargando carrito: {ex.Message}");
+                // No lanzar excepción - la carga del carrito no debe impedir el login
+            }
+        }
+
+
     }
 }

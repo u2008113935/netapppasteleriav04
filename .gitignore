@@ -1,4 +1,4 @@
-﻿. vs/
+﻿.vs/
 bin/
 obj/
 *.user
@@ -8,15 +8,15 @@ obj/
 *.exe
 *.pdb
 *.apk
-*. aab
-*.ap_
+*.aab
+*. ap_
 *.dex
-local. properties
-*.ipa
+local.properties
+*. ipa
 *.dSYM.zip
 *.dSYM
 packages/
-*.nupkg
+*. nupkg
 **/obj/
 **/bin/
 **/.vs/

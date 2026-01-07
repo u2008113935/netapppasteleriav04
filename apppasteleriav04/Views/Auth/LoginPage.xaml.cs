@@ -8,8 +8,11 @@ namespace apppasteleriav04.Views.Auth
     public partial class LoginPage : ContentPage
     {
         private readonly LoginViewModel _viewModel;
+
+        //MVVM: Propiedad para navegación (responsabilidad de la View)
         public string ReturnTo { get; set; } = string.Empty;
 
+        
         public LoginPage()
         {
             InitializeComponent();
@@ -24,27 +27,19 @@ namespace apppasteleriav04.Views.Auth
         {
             if (e.Success)
             {
-                await DisplayAlert("Éxito", "Sesión iniciada correctamente", "OK");
+                // Mostrar mensaje de éxito
+                var message = "Sesión iniciada correctamente";
 
-                // Navigate based on returnTo parameter
-                if (ReturnTo == "cart")
+                // Agregar mensaje de carrito restaurado si existe
+                if (!string.IsNullOrEmpty(_viewModel.CartRestoredMessage))
                 {
-                    await Shell.Current.GoToAsync("//cart");
+                    message += $"\n\n{_viewModel.CartRestoredMessage}";
                 }
-                else if (ReturnTo == "checkout")
-                {
-                    await Shell.Current.GoToAsync("//cart");
-                    await Shell.Current.GoToAsync("checkout");
-                }
-                else if (ReturnTo == "profile")
-                {
-                    await Shell.Current.GoToAsync("//profile");
-                }
-                else
-                {
-                    // Default: go to catalog
-                    await Shell.Current.GoToAsync("//catalog");
-                }
+
+                await DisplayAlert("Éxito", message, "OK");
+
+                // MVVM: Navegación (responsabilidad de la View)
+                await NavigateAfterLoginAsync();
             }
             else
             {
@@ -52,9 +47,35 @@ namespace apppasteleriav04.Views.Auth
             }
         }
 
+        // Método separado para navegación (clean code)
+        private async Task NavigateAfterLoginAsync()
+        {
+            switch (ReturnTo?.ToLower())
+            {
+                case "cart":
+                    await Shell.Current.GoToAsync("//cart");
+                    break;
+
+                case "checkout":
+                    await Shell.Current.GoToAsync("//cart");
+                    await Shell.Current.GoToAsync("checkout");
+                    break;
+
+                case "profile":
+                    await Shell.Current.GoToAsync("//profile");
+                    break;
+
+                default:
+                    // Default: ir al catálogo
+                    await Shell.Current.GoToAsync("//catalog");
+                    break;
+            }
+        }
+        
         async void OnRegisterClicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Crear cuenta", "Funcionalidad de registro pendiente.", "OK");
+            await Shell.Current.GoToAsync("register");
+            //await DisplayAlert("Crear cuenta", "Funcionalidad de registro pendiente.", "OK");
         }
     }
 }

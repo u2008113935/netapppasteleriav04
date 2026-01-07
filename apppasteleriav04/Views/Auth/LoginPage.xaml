@@ -17,7 +17,24 @@
                        IsVisible="{Binding HasError}"
                        FontSize="12"
                        HorizontalOptions="Center" />
-                
+
+
+                <!-- NUEVO: Mensaje de carrito restaurado -->
+                <Frame IsVisible="{Binding CartRestoredMessage, Converter={StaticResource StringToBoolConverter}}"
+                       BackgroundColor="#E8F5E9"
+                       BorderColor="#4CAF50"
+                       CornerRadius="8"
+                       Padding="12">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🛒" FontSize="16" />
+                        <Label Text="{Binding CartRestoredMessage}" 
+                               TextColor="#2E7D32"
+                               FontSize="12"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <!-- Login Button -->
                 <Button Text="Ingresar" 
                         Command="{Binding LoginCommand}" 
                         BackgroundColor="#6C5CE7" 
@@ -26,11 +43,13 @@
                 <!-- Loading indicator -->
                 <ActivityIndicator IsVisible="{Binding IsLoading}" 
                                    IsRunning="{Binding IsLoading}" />
-                
+
+                <!-- Register Link -->
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
                     <Label Text="¿No tienes cuenta?" VerticalOptions="Center" />
                     <Button Text="Crear cuenta" Clicked="OnRegisterClicked" />
                 </HorizontalStackLayout>
+                
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
