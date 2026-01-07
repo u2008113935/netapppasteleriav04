@@ -51,7 +51,10 @@ namespace apppasteleriav04.Services.Billing
                 foreach (var item in invoice.Items)
                 {
                     var itemName = item.ProductName ?? "Producto";
-                    // Truncate or pad to exactly 20 characters
+                    // Ensure we have a non-empty string, then truncate or pad to exactly 20 characters
+                    if (string.IsNullOrEmpty(itemName))
+                        itemName = "Producto";
+                    
                     if (itemName.Length > 20)
                         itemName = itemName.Substring(0, 20);
                     else
