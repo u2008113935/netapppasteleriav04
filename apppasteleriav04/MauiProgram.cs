@@ -30,9 +30,9 @@ namespace apppasteleriav04
             builder.Services.AddSingleton<IBillingService, BillingService>();
             builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
             builder.Services.AddSingleton<ISyncService, SyncService>();
-
-            // TODO: Cuando agregues más servicios, configurarlos aquí
-            // builder.Services.AddSingleton<ISupabaseService, SupabaseService>();
+            
+            // Core services are already singletons, no need to register them here
+            // AuthService.Instance, SupabaseService.Instance, etc. are accessed directly
 
 #if DEBUG
             builder.Logging.AddDebug();
@@ -41,17 +41,15 @@ namespace apppasteleriav04
             var app = builder.Build();
 
             // Initialize database on startup
-            // Note: This is fire-and-forget, but database initialization is fast and services handle uninitialized state gracefully
             Task.Run(async () =>
             {
                 try
                 {
                     await AppDatabase.Instance.InitializeAsync();
-                    System.Diagnostics.Debug.WriteLine("[MauiProgram] Database initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[MauiProgram] Database initialization error: {ex}");
+                    System.Diagnostics.Debug.WriteLine($"[MauiProgram] Database initialization error: {ex.Message}");
                 }
             });
 

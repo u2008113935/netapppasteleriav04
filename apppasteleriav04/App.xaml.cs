@@ -29,33 +29,17 @@ namespace apppasteleriav04
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("[App] Cargando estado de autenticacion...");
-
-                // ========== TEMPORAL PARA TESTING:  LIMPIAR DATOS ==========
-                // Descomenta estas lineas para forzar un inicio limpio
-                // SecureStorage.Default. RemoveAll();
-                // System. Diagnostics.Debug. WriteLine("[App] SecureStorage limpiado para testing");
-                // ===========================================================
-
                 await AuthService.Instance.LoadFromStorageAsync();
-
-                // Log del estado actual
-                AuthService.Instance.LogCurrentState();
 
                 var token = await AuthService.Instance.GetAccessTokenAsync();
                 if (!string.IsNullOrWhiteSpace(token))
                 {
                     SupabaseService.Instance.SetUserToken(token);
-                    System.Diagnostics.Debug.WriteLine("[App] Token cargado y configurado");
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("[App] No se encontro token almacenado");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[App] InitializeAppAsync error:  {ex}");
+                System.Diagnostics.Debug.WriteLine($"[App] InitializeAppAsync error: {ex.Message}");
             }
             finally
             {

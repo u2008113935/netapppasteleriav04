@@ -26,15 +26,15 @@ namespace apppasteleriav04.Views.Auth
                 return;
             }
 
-            // TODO: Reemplazar por llamada real a SupabaseService.SignUpAsync(...)
+            // Register user through AuthService
             var ok = await AuthService.Instance.SignUpAsync(email, password, name, phone);
             if (!ok)
             {
-                await DisplayAlert("Error", "No se pudo crear la cuenta", "OK");
+                await DisplayAlert("Error", "No se pudo crear la cuenta. Verifique sus datos.", "OK");
                 return;
             }
 
-            await DisplayAlert("Éxito", "Cuenta creada. Ya puedes iniciar sesión.", "OK");
+            await DisplayAlert("Ã‰xito", "Cuenta creada exitosamente. Ya puedes iniciar sesiÃ³n.", "OK");
 
             // Navegar de vuelta a LoginPage
             await Navigation.PopAsync();

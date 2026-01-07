@@ -42,9 +42,32 @@ namespace apppasteleriav04.Services.Billing
             sb.AppendLine("DETALLE");
             sb.AppendLine("-------------------------------------------");
             
-            // TODO: Add invoice items when available
+            // Add invoice items
             sb.AppendLine("Item                     Cant    Precio");
-            sb.AppendLine("Producto demo              1     84.75");
+            
+            // If invoice has items, display them; otherwise show calculated subtotal
+            if (invoice.Items != null && invoice.Items.Any())
+            {
+                foreach (var item in invoice.Items)
+                {
+                    var itemName = item.ProductName ?? "Producto";
+                    // Ensure we have a non-empty string, then truncate or pad to exactly 20 characters
+                    if (string.IsNullOrEmpty(itemName))
+                        itemName = "Producto";
+                    
+                    if (itemName.Length > 20)
+                        itemName = itemName.Substring(0, 20);
+                    else
+                        itemName = itemName.PadRight(20);
+                    
+                    sb.AppendLine($"{itemName}    {item.Quantity,4}    {item.UnitPrice,7:F2}");
+                }
+            }
+            else
+            {
+                // Fallback when no items available
+                sb.AppendLine($"{"Producto",20}    {1,4}    {invoice.Subtotal,7:F2}");
+            }
             
             sb.AppendLine("-------------------------------------------");
             sb.AppendLine($"Subtotal:                S/ {invoice.Subtotal:F2}");
