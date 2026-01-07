@@ -23,8 +23,10 @@ public partial class InvoiceDetailPage : ContentPage
             var billingService = new Services.Billing.BillingService();
             var pdfBytes = await billingService.GeneratePdfAsync(invoice.Id);
             
-            // Save to device
-            var fileName = $"comprobante_{invoice.SerialNumber}_{invoice.CorrelativeNumber}.pdf";
+            // Sanitize filename to remove invalid characters
+            var serial = string.Join("_", invoice.SerialNumber.Split(Path.GetInvalidFileNameChars()));
+            var correlative = string.Join("_", invoice.CorrelativeNumber.ToString().Split(Path.GetInvalidFileNameChars()));
+            var fileName = $"comprobante_{serial}_{correlative}.pdf";
             var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
             await File.WriteAllBytesAsync(filePath, pdfBytes);
             

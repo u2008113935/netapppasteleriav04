@@ -241,7 +241,7 @@ namespace apppasteleriav04.Services.Core
                 var payload = new { refresh_token = refreshToken };
 
                 using var req = new HttpRequestMessage(HttpMethod.Post,
-                    $"{SupabaseConfig.SUPABASE_URL.TrimEnd('/')}/auth/v1/token? grant_type=refresh_token")
+                    $"{SupabaseConfig.SUPABASE_URL.TrimEnd('/')}/auth/v1/token?grant_type=refresh_token")
                 {
                     Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json")
                 };

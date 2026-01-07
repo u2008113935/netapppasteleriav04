@@ -50,7 +50,13 @@ namespace apppasteleriav04.Services.Billing
             {
                 foreach (var item in invoice.Items)
                 {
-                    var itemName = item.ProductName?.PadRight(20).Substring(0, 20) ?? "Producto";
+                    var itemName = item.ProductName ?? "Producto";
+                    // Truncate or pad to exactly 20 characters
+                    if (itemName.Length > 20)
+                        itemName = itemName.Substring(0, 20);
+                    else
+                        itemName = itemName.PadRight(20);
+                    
                     sb.AppendLine($"{itemName}    {item.Quantity,4}    {item.UnitPrice,7:F2}");
                 }
             }
