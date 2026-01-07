@@ -106,10 +106,7 @@ namespace apppasteleriav04.Services.Core
                     Quantity = qty
                 };
                 Items.Add(item);
-                // Items.CollectionChanged hará el resto (suscribirá y notificará)
             }
-
-            System.Diagnostics.Debug.WriteLine($"CartService.Add -> Items.Count={Items.Count}");
         }
 
         // Remueve un producto del carrito

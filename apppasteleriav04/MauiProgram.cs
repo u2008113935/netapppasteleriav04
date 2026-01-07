@@ -41,17 +41,15 @@ namespace apppasteleriav04
             var app = builder.Build();
 
             // Initialize database on startup
-            // Note: This is fire-and-forget, but database initialization is fast and services handle uninitialized state gracefully
             Task.Run(async () =>
             {
                 try
                 {
                     await AppDatabase.Instance.InitializeAsync();
-                    System.Diagnostics.Debug.WriteLine("[MauiProgram] Database initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[MauiProgram] Database initialization error: {ex}");
+                    System.Diagnostics.Debug.WriteLine($"[MauiProgram] Database initialization error: {ex.Message}");
                 }
             });
 

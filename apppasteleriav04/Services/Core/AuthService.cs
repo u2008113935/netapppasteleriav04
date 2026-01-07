@@ -33,26 +33,22 @@ namespace apppasteleriav04.Services.Core
 
         private AuthService()
         {
-            Debug.WriteLine("[AuthService] Instancia creada");
         }
 
         public async Task<bool> SignInAsync(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
             {
-                Debug.WriteLine("[AuthService] SignInAsync: email o password vacios");
                 return false;
             }
 
             try
             {
-                Debug.WriteLine($"[AuthService] SignInAsync: intentando login con {email}");
-
                 var res = await SupabaseService.Instance.SignInAsync(email.Trim(), password);
 
                 if (!res.Success)
                 {
-                    Debug.WriteLine($"[AuthService] SignInAsync:  supabase error:  {res.Error}");
+                    Debug.WriteLine($"[AuthService] Login failed: {res.Error}");
                     return false;
                 }
 
@@ -60,12 +56,6 @@ namespace apppasteleriav04.Services.Core
                 AccessToken = res.AccessToken;
                 UserId = res.UserId?.ToString();
                 UserEmail = !string.IsNullOrWhiteSpace(res.Email) ? res.Email : email.Trim();
-
-                Debug.WriteLine($"[AuthService] SignInAsync exitoso:");
-                Debug.WriteLine($"[AuthService] - AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : AccessToken.Substring(0, Math.Min(20, AccessToken.Length)) + "...")}");
-                Debug.WriteLine($"[AuthService] - UserId: {UserId}");
-                Debug.WriteLine($"[AuthService] - UserEmail: {UserEmail}");
-                Debug.WriteLine($"[AuthService] - IsAuthenticated: {IsAuthenticated}");
 
                 // Guardar en SecureStorage
                 try
@@ -81,8 +71,6 @@ namespace apppasteleriav04.Services.Core
 
                     if (!string.IsNullOrWhiteSpace(res.RefreshToken))
                         await SecureStorage.Default.SetAsync(RefreshKey, res.RefreshToken);
-
-                    Debug.WriteLine("[AuthService] Datos guardados en SecureStorage");
                 }
                 catch (Exception secEx)
                 {
@@ -105,22 +93,13 @@ namespace apppasteleriav04.Services.Core
         {
             try
             {
-                Debug.WriteLine("[AuthService] LoadFromStorageAsync:  cargando datos.. .");
-
                 AccessToken = await SecureStorage.Default.GetAsync(TokenKey);
                 UserId = await SecureStorage.Default.GetAsync(UserIdKey);
                 UserEmail = await SecureStorage.Default.GetAsync(UserEmailKey);
 
-                Debug.WriteLine($"[AuthService] LoadFromStorageAsync resultados:");
-                Debug.WriteLine($"[AuthService] - AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : "presente")}");
-                Debug.WriteLine($"[AuthService] - UserId: {UserId ?? "NULL"}");
-                Debug.WriteLine($"[AuthService] - UserEmail: {UserEmail ?? "NULL"}");
-                Debug.WriteLine($"[AuthService] - IsAuthenticated: {IsAuthenticated}");
-
                 if (!string.IsNullOrWhiteSpace(AccessToken))
                 {
                     SupabaseService.Instance.SetUserToken(AccessToken);
-                    Debug.WriteLine("[AuthService] Token configurado en SupabaseService");
                 }
             }
             catch (Exception ex)
@@ -136,20 +115,17 @@ namespace apppasteleriav04.Services.Core
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(name))
             {
-                Debug.WriteLine("[AuthService] SignUpAsync: Datos incompletos");
                 return false;
             }
 
             try
             {
-                Debug.WriteLine($"[AuthService] SignUpAsync: intentando registro con {email}");
-                
                 var supabaseUrl = Constants.SupabaseConstants.Url;
                 var supabaseKey = Constants.SupabaseConstants.AnonKey;
                 
                 if (string.IsNullOrEmpty(supabaseUrl) || string.IsNullOrEmpty(supabaseKey))
                 {
-                    Debug.WriteLine("[AuthService] SignUpAsync: URL o ANON_KEY no configurados");
+                    Debug.WriteLine("[AuthService] SignUpAsync: Supabase not configured");
                     return false;
                 }
 
@@ -172,17 +148,14 @@ namespace apppasteleriav04.Services.Core
                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
                 var response = await httpClient.PostAsync(signUpUrl, content);
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                Debug.WriteLine($"[AuthService] SignUpAsync: status={response.StatusCode}");
                 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine($"[AuthService] SignUpAsync error: {responseBody}");
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"[AuthService] SignUpAsync failed: {response.StatusCode} - {responseBody}");
                     return false;
                 }
 
-                Debug.WriteLine("[AuthService] SignUpAsync exitoso");
                 return true;
             }
             catch (Exception ex)
@@ -194,8 +167,6 @@ namespace apppasteleriav04.Services.Core
 
         public void Logout()
         {
-            Debug.WriteLine("[AuthService] Logout: limpiando datos...");
-
             AccessToken = null;
             UserId = null;
             UserEmail = null;
@@ -206,15 +177,13 @@ namespace apppasteleriav04.Services.Core
                 SecureStorage.Default.Remove(UserIdKey);
                 SecureStorage.Default.Remove(UserEmailKey);
                 SecureStorage.Default.Remove(RefreshKey);
-                Debug.WriteLine("[AuthService] SecureStorage limpiado");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[AuthService] Logout SecureStorage error: {ex.Message}");
+                Debug.WriteLine($"[AuthService] Logout error: {ex.Message}");
             }
 
             SupabaseService.Instance.SetUserToken(null);
-            Debug.WriteLine($"[AuthService] IsAuthenticated despues de logout: {IsAuthenticated}");
         }
 
         public async Task SignOutAsync()
@@ -266,7 +235,6 @@ namespace apppasteleriav04.Services.Core
 
                 if (string.IsNullOrWhiteSpace(refreshToken))
                 {
-                    Debug.WriteLine("[AuthService] RefreshAccessTokenAsync: no hay refresh token");
                     return false;
                 }
 
@@ -282,14 +250,15 @@ namespace apppasteleriav04.Services.Core
                 req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var resp = await SupabaseService.Instance._http.SendAsync(req);
-                var json = await resp.Content.ReadAsStringAsync();
-
+                
                 if (!resp.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine($"[AuthService] RefreshAccessTokenAsync failed: {resp.StatusCode}:  {json}");
+                    var json = await resp.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"[AuthService] RefreshAccessTokenAsync failed: {resp.StatusCode}");
                     return false;
                 }
 
+                var json = await resp.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<JsonElement>(json);
                 var newAccessToken = result.GetProperty("access_token").GetString();
                 var newRefreshToken = result.TryGetProperty("refresh_token", out var rt) ? rt.GetString() : null;
@@ -303,8 +272,6 @@ namespace apppasteleriav04.Services.Core
                         await SecureStorage.Default.SetAsync(RefreshKey, newRefreshToken);
 
                     SupabaseService.Instance.SetUserToken(newAccessToken);
-
-                    Debug.WriteLine("[AuthService] Token refrescado exitosamente");
                     return true;
                 }
 
@@ -315,17 +282,6 @@ namespace apppasteleriav04.Services.Core
                 Debug.WriteLine($"[AuthService] RefreshAccessTokenAsync error:  {ex.Message}");
                 return false;
             }
-        }
-
-        // Metodo auxiliar para verificar estado actual
-        public void LogCurrentState()
-        {
-            Debug.WriteLine("========== AuthService Estado Actual ==========");
-            Debug.WriteLine($"AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : "presente")}");
-            Debug.WriteLine($"UserId: {UserId ?? "NULL"}");
-            Debug.WriteLine($"UserEmail: {UserEmail ?? "NULL"}");
-            Debug.WriteLine($"IsAuthenticated:  {IsAuthenticated}");
-            Debug.WriteLine("===============================================");
         }
     }
 }

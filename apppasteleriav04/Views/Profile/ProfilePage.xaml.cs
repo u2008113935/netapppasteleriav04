@@ -23,8 +23,6 @@ namespace apppasteleriav04.Views.Profile
         {
             base.OnAppearing();
 
-            System.Diagnostics.Debug.WriteLine($"[ProfilePage] OnAppearing");
-
             // Check authentication
             if (!_viewModel.CheckAuthentication())
             {

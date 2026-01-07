@@ -18,10 +18,6 @@ namespace apppasteleriav04.Views.Cart
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            System.Diagnostics.Debug.WriteLine($"[CartPage] OnAppearing -> Items. Count={_cart.Items.Count}");
-            System.Diagnostics.Debug.WriteLine($"[CartPage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
-            System.Diagnostics.Debug.WriteLine($"[CartPage] UserId: {AuthService.Instance.UserId}");
-            System.Diagnostics.Debug.WriteLine($"[CartPage] UserEmail: {AuthService.Instance.UserEmail}");
         }
 
         void OnIncreaseClicked(object sender, EventArgs e)
@@ -63,18 +59,12 @@ namespace apppasteleriav04.Views.Cart
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error guardando carrito local: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[CartPage] Error guardando carrito local: {ex.Message}");
             }
 
-            // VERIFICAR AUTENTICACION
-            System.Diagnostics.Debug.WriteLine($"[CartPage] Verificando autenticacion...");
-            System.Diagnostics.Debug.WriteLine($"[CartPage] IsAuthenticated: {AuthService.Instance.IsAuthenticated}");
-            System.Diagnostics.Debug.WriteLine($"[CartPage] AccessToken is null?:  {string.IsNullOrEmpty(AuthService.Instance.AccessToken)}");
-
+            // Verificar autenticación
             if (!AuthService.Instance.IsAuthenticated)
             {
-                System.Diagnostics.Debug.WriteLine("[CartPage] Usuario NO autenticado, mostrando dialogo.. .");
-
                 bool goToLogin = await DisplayAlert(
                     "Iniciar Sesion Requerido",
                     "Debes iniciar sesion para realizar tu pedido.",
@@ -83,14 +73,12 @@ namespace apppasteleriav04.Views.Cart
 
                 if (goToLogin)
                 {
-                    // Navegar a login con parametro returnTo=cart
                     await Shell.Current.GoToAsync("login? returnTo=cart");
                 }
                 return;
             }
 
-            // Si esta autenticado, ir a Checkout
-            System.Diagnostics.Debug.WriteLine("[CartPage] Usuario autenticado, navegando a checkout...");
+            // Si está autenticado, ir a Checkout
             await Shell.Current.GoToAsync("checkout");
         }
     }
