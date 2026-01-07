@@ -23,12 +23,12 @@ public partial class InvoiceDetailPage : ContentPage
             var billingService = new Services.Billing.BillingService();
             var pdfBytes = await billingService.GeneratePdfAsync(invoice.Id);
             
-            // Save to device (simplified approach)
-            var fileName = $"comprobante_{invoice.SerialNumber}_{invoice.CorrelativeNumber}.txt";
+            // Save to device
+            var fileName = $"comprobante_{invoice.SerialNumber}_{invoice.CorrelativeNumber}.pdf";
             var filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
             await File.WriteAllBytesAsync(filePath, pdfBytes);
             
-            await DisplayAlert("Descarga", $"Comprobante guardado en {fileName}", "OK");
+            await DisplayAlert("Descarga", $"Comprobante guardado como {fileName}", "OK");
         }
         catch (Exception ex)
         {

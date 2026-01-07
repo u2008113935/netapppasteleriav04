@@ -250,15 +250,14 @@ namespace apppasteleriav04.Services.Core
                 req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var resp = await SupabaseService.Instance._http.SendAsync(req);
+                var json = await resp.Content.ReadAsStringAsync();
                 
                 if (!resp.IsSuccessStatusCode)
                 {
-                    var json = await resp.Content.ReadAsStringAsync();
                     Debug.WriteLine($"[AuthService] RefreshAccessTokenAsync failed: {resp.StatusCode}");
                     return false;
                 }
 
-                var json = await resp.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<JsonElement>(json);
                 var newAccessToken = result.GetProperty("access_token").GetString();
                 var newRefreshToken = result.TryGetProperty("refresh_token", out var rt) ? rt.GetString() : null;
