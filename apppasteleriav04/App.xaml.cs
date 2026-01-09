@@ -4,6 +4,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using apppasteleriav04.Data.Local.Database;
 
 namespace apppasteleriav04
 {
@@ -15,6 +16,8 @@ namespace apppasteleriav04
         public App()
         {
             InitializeComponent();
+
+            ShowDatabaseLocation();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
@@ -24,6 +27,27 @@ namespace apppasteleriav04
             splashPage.SetWindow(window);
             return window;
         }
+
+        //Ubicacion exacta de la base de datos local
+        private void ShowDatabaseLocation()
+        {
+            try
+            {
+                var dbPath = DatabaseConstants.DatabasePath;
+                var appDataDir = FileSystem.AppDataDirectory;
+                //System.Diagnostics.Debug.WriteLine($"[App] Database path:  {dbPath}");
+                System.Diagnostics.Debug.WriteLine($"DB: {dbPath} | {DeviceInfo.Platform} ({DeviceInfo.VersionString}) " +
+                    $"| Existe: {File.Exists(dbPath)}{(File.Exists(dbPath) ? $" | " +
+                    $"{new FileInfo(dbPath).Length / 1024:F1} KB" : "")}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error DB location:  {ex.Message}");
+            }
+
+        }
+
+
 
         public static async Task InitializeAppAsync()
         {

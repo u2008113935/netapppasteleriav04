@@ -5,20 +5,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Diagnostics;
 
 namespace apppasteleriav04.Data.Local.Repositories
 {
+    // Repositorio para manejar las órdenes locales
     public class LocalOrderRepository : ILocalRepository<LocalOrder>
     {
-        private SQLiteAsyncConnection Database => AppDatabase.Instance.Database;
+        private SQLiteAsyncConnection Database => AppDatabase.Instance.Database; // Acceso a la conexión de la base de datos
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1); // Semáforo para sincronización 
 
+        #region Metodos CRUD basicos
+
+        // Obtiene todas las órdenes locales         
         public async Task<List<LocalOrder>> GetAllAsync()
         {
-            return await Database.Table<LocalOrder>()
-                .OrderByDescending(o => o.CreatedAt)
-                .ToListAsync();
+            try
+            {
+                // Esperar para entrar en la sección crítica
+                var orders =  await Database.Table <LocalOrder>() 
+                    .OrderByDescending(o => o.CreatedAt)
+                    .ToListAsync();
+
+                Debug.WriteLine($"[LocalOrderRepository] {orders.Count} pedidos encontrados");
+                return orders;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[LocalOrderRepository] Error en GetAllAsync: {ex.Message}");
+                throw;
+            }
+            
         }
 
+        // Obtiene una orden local por su ID
         public async Task<LocalOrder?> GetByIdAsync(Guid id)
         {
             return await Database.Table<LocalOrder>()

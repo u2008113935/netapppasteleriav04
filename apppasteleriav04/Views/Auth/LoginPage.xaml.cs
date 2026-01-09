@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Maui.Controls;
 using apppasteleriav04.ViewModels.Auth;
+using apppasteleriav04.Services.Core; 
+
 
 namespace apppasteleriav04.Views.Auth
 {
@@ -9,7 +11,7 @@ namespace apppasteleriav04.Views.Auth
     {
         private readonly LoginViewModel _viewModel;
 
-        //MVVM: Propiedad para navegación (responsabilidad de la View)
+        //MVVM: Propiedad para navegación responsabilidad de la View
         public string ReturnTo { get; set; } = string.Empty;
 
         
@@ -27,6 +29,17 @@ namespace apppasteleriav04.Views.Auth
         {
             if (e.Success)
             {
+                // Cargar carrito tras login (si el ViewModel no lo hace)
+                try
+                {
+                    await CartService.Instance.LoadLocalAsync();
+                    System.Diagnostics.Debug.WriteLine("[LoginPage] Carrito cargado tras login");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[LoginPage] Error cargando carrito:  {ex.Message}");
+                }
+
                 // Mostrar mensaje de éxito
                 var message = "Sesión iniciada correctamente";
 
@@ -53,11 +66,8 @@ namespace apppasteleriav04.Views.Auth
             switch (ReturnTo?.ToLower())
             {
                 case "cart":
-                    await Shell.Current.GoToAsync("//cart");
-                    break;
-
                 case "checkout":
-                    await Shell.Current.GoToAsync("//cart");
+                    // Si viene del carrito o checkout, ir directo a checkout
                     await Shell.Current.GoToAsync("checkout");
                     break;
 
@@ -66,7 +76,7 @@ namespace apppasteleriav04.Views.Auth
                     break;
 
                 default:
-                    // Default: ir al catálogo
+                    // Default:  ir al catálogo
                     await Shell.Current.GoToAsync("//catalog");
                     break;
             }
