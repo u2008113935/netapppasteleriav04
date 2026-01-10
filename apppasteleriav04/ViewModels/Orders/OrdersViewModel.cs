@@ -47,41 +47,60 @@ namespace apppasteleriav04.ViewModels.Orders
 
         public async Task LoadOrdersAsync()
         {
+            System.Diagnostics.Debug.WriteLine("[OrdersViewModel] LoadOrdersAsync iniciado");
+
+            //Check authentication
             if (!AuthService.Instance.IsAuthenticated)
             {
+                System.Diagnostics.Debug.WriteLine("[OrdersViewModel] Usuario no autenticado");
                 ErrorMessage = "Debe iniciar sesión para ver sus pedidos";
                 return;
             }
 
+            //Cargar órdenes desde el servicio
             IsLoading = true;
             IsBusy = true;
             ErrorMessage = string.Empty;
 
             try
             {
+                //Obtener UserId
                 var userId = AuthService.Instance.UserId;
                 if (string.IsNullOrEmpty(userId))
                 {
+                    System.Diagnostics.Debug.WriteLine("[OrdersViewModel] UserId no válido o NULL o vacío");
                     ErrorMessage = "Usuario no válido";
                     return;
                 }
 
+                //Llamar al servicio para obtener órdenes
+                System.Diagnostics.Debug.WriteLine("[OrdersViewModel] Llamando a SupabaseService para obtener órdenes");
                 var orders = await SupabaseService.Instance.GetOrdersByUserAsync(Guid.Parse(userId));
-                
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] Órdenes obtenidas: {orders.Count}");
+
+                //Actualizar colección de órdenes
                 Orders.Clear();
                 foreach (var order in orders)
                 {
+                    //Agregar orden 
                     Orders.Add(order);
+                    System.Diagnostics.Debug.WriteLine($" - Pedido: {order.Id.ToString().Substring(0,8)}, " +
+                        $"Total: S/{order.Total}, Status: {order.Status}");
                 }
+                //Final log
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] Total pedidos: {Orders.Count}");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] EXCEPCION: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] STACKTRACE: {ex.StackTrace}");
                 ErrorMessage = $"Error al cargar pedidos: {ex.Message}";
             }
             finally
             {
                 IsLoading = false;
                 IsBusy = false;
+                System.Diagnostics.Debug.WriteLine("[OrdersViewModel] LoadOrdersAsync finalizado");
             }
         }
 

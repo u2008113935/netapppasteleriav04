@@ -7,8 +7,10 @@ namespace apppasteleriav04.Views.Cart
 {
     public partial class CheckoutPage : ContentPage
     {
+        // ATRIBUTOS (datos privados)
         private readonly CheckoutViewModel _viewModel;
 
+        // PROPIEDADES (ACCESO PUBLICO A LOS DATOS)
         public CheckoutPage()
         {
             InitializeComponent();
@@ -23,6 +25,8 @@ namespace apppasteleriav04.Views.Cart
             if (PaymentPicker?.Items?.Count > 0)
                 PaymentPicker.SelectedIndex = 0;
         }
+
+        //CONSTRUCTORES | METODOS | FUNCIONES
 
         protected override void OnAppearing()
         {

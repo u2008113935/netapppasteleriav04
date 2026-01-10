@@ -11,11 +11,14 @@ namespace apppasteleriav04.ViewModels.Cart
 {
     public class CheckoutViewModel : BaseViewModel
     {
+        // ATRIBUTOS
         private readonly CartService _cartService;
 
         public ObservableCollection<CartItem> Items => _cartService.Items;
 
         private string _address = string.Empty;
+        
+        // PROPIEDADES
         public string Address
         {
             get => _address;

@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace apppasteleriav04.Views.Orders
 {
-    public partial class OrderPage : ContentPage
+    public partial class OrdersPage : ContentPage
     {
         private readonly OrdersViewModel _viewModel;
 
-        public OrderPage()
+        public OrdersPage()
         {
             InitializeComponent();
             _viewModel = new OrdersViewModel();
@@ -25,19 +25,26 @@ namespace apppasteleriav04.Views.Orders
             StatusPicker.SelectedIndex = 0;
         }
 
-        protected override void OnAppearing()
+        
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _ = _viewModel.LoadOrdersAsync();
+
+            System.Diagnostics.Debug.WriteLine("[OrdersPage] OnAppearing - Cargando órdenes...");
+
+            await _viewModel.LoadOrdersAsync(); //Cargar órdenes al aparecer la página
+            
+            System.Diagnostics.Debug.WriteLine("[OrdersPage] Pedidos cagados: { _viewModel.Orders.Count}");
         }
 
+        //Cancelar operaciones en curso al desaparecer la página
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             _viewModel.CancelOperations();
         }
 
-        // Selection changed handler
+        // Seleccion de orden en la colección
         private async void OrdersCollection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var sel = e.CurrentSelection;
