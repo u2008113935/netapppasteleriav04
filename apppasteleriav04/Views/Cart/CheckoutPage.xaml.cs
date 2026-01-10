@@ -37,9 +37,25 @@ namespace apppasteleriav04.Views.Cart
 
         private async void OnOrderCompleted(object? sender, Guid orderId)
         {
-            var msg = $"Pedido creado correctamente.\nTotal: {_viewModel.Total:N2}";
-            await DisplayAlert("Pedido confirmado", msg, "OK");
-            await Shell.Current.GoToAsync("//orders");
+            System.Diagnostics.Debug.WriteLine($"[CheckoutPage] OnOrderCompleted disparado - OrderId: {orderId}");
+
+            try
+            {
+                var msg = $"Pedido creado correctamente\n\nID: {orderId.ToString().Substring(0, 8)}.. .\nTotal: S/ {_viewModel.Total:N2}";
+
+                System.Diagnostics.Debug.WriteLine("[CheckoutPage] Mostrando alerta de éxito");
+                await DisplayAlert("¡Pedido Confirmado!", msg, "Ver mis pedidos");
+
+                System.Diagnostics.Debug.WriteLine("[CheckoutPage] Navegando a //orders");
+                await Shell.Current.GoToAsync("//orders");
+
+                System.Diagnostics.Debug.WriteLine("[CheckoutPage] Navegación completada");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[CheckoutPage] Error en OnOrderCompleted: {ex.Message}");
+                await DisplayAlert("Error", "Pedido creado pero hubo un error al navegar", "OK");
+            }
         }
 
         private async void OnAuthenticationRequired(object? sender, EventArgs e)

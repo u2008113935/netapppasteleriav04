@@ -16,7 +16,7 @@ namespace apppasteleriav04.Data.Local.Repositories
         private SQLiteAsyncConnection Database => AppDatabase.Instance.Database; // Acceso a la conexión de la base de datos
         private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1); // Semáforo para sincronización 
 
-        #region Metodos CRUD basicos
+        //#region Metodos CRUD basicos
 
         // Obtiene todas las órdenes locales         
         public async Task<List<LocalOrder>> GetAllAsync()

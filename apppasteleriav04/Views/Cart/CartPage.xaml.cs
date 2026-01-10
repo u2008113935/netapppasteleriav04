@@ -60,10 +60,11 @@ namespace apppasteleriav04.Views.Cart
             try
             {
                 await _cart.SaveLocalAsync();
+                System.Diagnostics.Debug.WriteLine("[CartPage] Carrito guardado localmente");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error guardando carrito local: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[CartPage] Error guardando carrito: {ex.Message}");
             }
 
             // VERIFICAR AUTENTICACION
@@ -84,7 +85,8 @@ namespace apppasteleriav04.Views.Cart
                 if (goToLogin)
                 {
                     // Navegar a login con parametro returnTo=cart
-                    await Shell.Current.GoToAsync("login? returnTo=cart");
+                    System.Diagnostics.Debug.WriteLine("[CartPage] Navegando a login con returnTo=checkout");
+                    await Shell.Current.GoToAsync("login?returnTo=checkout");
                 }
                 return;
             }
