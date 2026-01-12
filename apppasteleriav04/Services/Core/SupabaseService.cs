@@ -403,7 +403,7 @@ namespace apppasteleriav04.Services.Core
         // Crear pedido + items
         public async Task<Order> CreateOrderAsync(Guid userid, List<OrderItem> items, CancellationToken cancellationToken = default)
         {
-            Debug.WriteLine($"[SupabaseService] CreateOrderAsync:  userid={userid}, items={items.Count}");
+            Debug.WriteLine($"[SupabaseService] CreateOrderAsync: userid={userid}, items={items.Count}");
 
             var total = items.Sum(it => it.Price * it.Quantity);
 
@@ -468,63 +468,136 @@ namespace apppasteleriav04.Services.Core
         // Obtener ordenes con filtros generales
         public async Task<List<Order>> GetOrdersAsync(Guid? userId = null, string? status = null, bool includeItems = false, int? limit = null, CancellationToken cancellationToken = default)
         {
+            Debug.WriteLine("==========================================");
+            Debug.WriteLine("[SupabaseService] GetOrdersAsync INICIADO");
+            Debug.WriteLine("==========================================");
+
             try
             {
+                // Construir URL
                 var sb = new StringBuilder();
                 sb.Append($"{_url}/rest/v1/pedidos?select=*");
 
                 if (userId.HasValue)
+                {
                     sb.Append($"&userid=eq.{userId.Value}");
+                    Debug.WriteLine($"[SupabaseService] Filtrando por UserId: {userId.Value}");
+                }
+                else
+                {
+                    Debug.WriteLine("[SupabaseService] Sin filtro de userId - buscando TODOS los pedidos");
+                }
 
                 if (!string.IsNullOrWhiteSpace(status))
+                {
                     sb.Append($"&status=eq.{Uri.EscapeDataString(status)}");
+                    Debug.WriteLine($"[SupabaseService] Filtrando por Status: {status}");
+                }
 
-                sb.Append("&order=created_at. desc");
+                // Ordenar por fecha descendente
+                sb.Append("&order=created_at.desc");
 
                 if (limit.HasValue && limit.Value > 0)
+                {
                     sb.Append($"&limit={limit.Value}");
+                    Debug.WriteLine($"[SupabaseService] Limitando a:  {limit.Value} resultados");
+                }
 
                 var url = sb.ToString();
-                Debug.WriteLine($"[SupabaseService] GetOrdersAsync: requesting {url}");
+                Debug.WriteLine($"[SupabaseService] URL COMPLETA: {url}");
 
+                // Mostrar headers
+                Debug.WriteLine($"[SupabaseService] HEADERS:");
+                Debug.WriteLine($"[SupabaseService]   - apikey: {(_anon?.Substring(0, Math.Min(20, _anon.Length)) ?? "NULL")}...");
+                Debug.WriteLine($"[SupabaseService]   - Authorization: {(_http.DefaultRequestHeaders.Authorization != null ? $"Bearer {_http.DefaultRequestHeaders.Authorization.Parameter?.Substring(0, 20)}..." : "NULL")}");
+
+                // Hacer petición
+                Debug.WriteLine($"[SupabaseService] Enviando petición GET...");
                 using var resp = await _http.GetAsync(url, cancellationToken);
                 var json = await resp.Content.ReadAsStringAsync(cancellationToken);
-                Debug.WriteLine($"[SupabaseService] GetOrdersAsync: status={resp.StatusCode}; bodyLength={(json?.Length ?? 0)}");
+
+                Debug.WriteLine($"[SupabaseService] ==========================================");
+                Debug.WriteLine($"[SupabaseService] RESPUESTA HTTP:");
+                Debug.WriteLine($"[SupabaseService]   - Status Code: {resp.StatusCode} ({(int)resp.StatusCode})");
+                Debug.WriteLine($"[SupabaseService]   - Body Length: {json?.Length ?? 0} caracteres");
+                Debug.WriteLine($"[SupabaseService]   - Body Content:  {json}");
+                Debug.WriteLine($"[SupabaseService] ==========================================");
 
                 if (!resp.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine($"[SupabaseService] GetOrdersAsync failed: {resp.StatusCode} - {json}");
+                    Debug.WriteLine($"[SupabaseService] ERROR HTTP: {resp.StatusCode}");
+                    Debug.WriteLine($"[SupabaseService] Response: {json}");
                     return new List<Order>();
                 }
 
+                // Deserializar
+                Debug.WriteLine($"[SupabaseService] Deserializando respuesta JSON...");
                 var orders = JsonSerializer.Deserialize<List<Order>>(json, _jsonOpts) ?? new List<Order>();
+                Debug.WriteLine($"[SupabaseService] Órdenes deserializadas:  {orders.Count}");
 
+                // Mostrar cada orden
+                if (orders.Count > 0)
+                {
+                    Debug.WriteLine($"[SupabaseService] ==========================================");
+                    Debug.WriteLine($"[SupabaseService] DETALLE DE ÓRDENES ENCONTRADAS:");
+                    for (int i = 0; i < orders.Count; i++)
+                    {
+                        var order = orders[i];
+                        Debug.WriteLine($"[SupabaseService] Orden #{i + 1}:");
+                        Debug.WriteLine($"[SupabaseService]   - Id: {order.Id}");
+                        Debug.WriteLine($"[SupabaseService]   - UserId: {order.UserId}");
+                        Debug.WriteLine($"[SupabaseService]   - Total: S/ {order.Total}");
+                        Debug.WriteLine($"[SupabaseService]   - Status: {order.Status}");
+                        Debug.WriteLine($"[SupabaseService]   - Created: {order.CreatedAt}");
+                        Debug.WriteLine($"[SupabaseService]   ---");
+                    }
+                    Debug.WriteLine($"[SupabaseService] ==========================================");
+                }
+                else
+                {
+                    Debug.WriteLine($"[SupabaseService] No se encontraron órdenes en la respuesta");
+                }
+
+                // Cargar items si se solicitó
                 if (includeItems && orders.Count > 0)
                 {
+                    Debug.WriteLine($"[SupabaseService] Cargando items para {orders.Count} órdenes.. .");
+
                     foreach (var o in orders)
                     {
                         try
                         {
+                            Debug.WriteLine($"[SupabaseService] Cargando items para orden {o.Id}...");
                             o.Items = await GetOrderItemsAsync(o.Id, cancellationToken);
+                            Debug.WriteLine($"[SupabaseService]   Cargados {o.Items.Count} items");
                         }
                         catch (Exception ex)
                         {
-                            Debug.WriteLine($"[SupabaseService] GetOrdersAsync:  error getting items for order {o.Id}: {ex}");
+                            Debug.WriteLine($"[SupabaseService] Error cargando items para orden {o.Id}:  {ex.Message}");
                         }
                     }
                 }
+                else if (includeItems && orders.Count == 0)
+                {
+                    Debug.WriteLine($"[SupabaseService] No hay órdenes para cargar items");
+                }
 
-                Debug.WriteLine($"[SupabaseService] GetOrdersAsync: {orders.Count} ordenes encontradas");
+                Debug.WriteLine($"[SupabaseService] TOTAL FINAL: {orders.Count} órdenes");
+                Debug.WriteLine($"[SupabaseService] ==========================================");
                 return orders;
             }
             catch (OperationCanceledException)
             {
-                Debug.WriteLine("[SupabaseService] GetOrdersAsync: cancelled");
+                Debug.WriteLine("[SupabaseService] Operación cancelada");
                 return new List<Order>();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[SupabaseService] GetOrdersAsync error: {ex}");
+                Debug.WriteLine($"[SupabaseService] ==========================================");
+                Debug.WriteLine($"[SupabaseService] EXCEPCIÓN EN GetOrdersAsync:");
+                Debug.WriteLine($"[SupabaseService] Mensaje: {ex.Message}");
+                Debug.WriteLine($"[SupabaseService] StackTrace: {ex.StackTrace}");
+                Debug.WriteLine($"[SupabaseService] ==========================================");
                 return new List<Order>();
             }
         }
@@ -532,17 +605,39 @@ namespace apppasteleriav04.Services.Core
         // Obtener ordenes de un usuario (nombre claro)
         public async Task<List<Order>> GetOrdersByUserAsync(Guid userId, bool includeItems = false, CancellationToken cancellationToken = default)
         {
-            return await GetOrdersAsync(userId: userId, includeItems: includeItems, cancellationToken: cancellationToken);
+            Debug.WriteLine("==========================================");
+            Debug.WriteLine($"[SupabaseService] GetOrdersByUserAsync llamado");
+            Debug.WriteLine($"[SupabaseService] UserId solicitado: {userId}");
+            Debug.WriteLine($"[SupabaseService] IncludeItems: {includeItems}");
+            Debug.WriteLine("==========================================");
+
+            var result = await GetOrdersAsync(userId: userId, includeItems: includeItems, cancellationToken: cancellationToken);
+
+            Debug.WriteLine($"[SupabaseService] GetOrdersByUserAsync retornando {result.Count} órdenes");
+            Debug.WriteLine("==========================================");
+
+            return result;
         }
 
-        // Obtener una orden especifica
+        // CORREGIDO:  Obtener UNA orden especifica por ID
         public async Task<Order?> GetOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
         {
+            Debug.WriteLine("==========================================");
+            Debug.WriteLine($"[SupabaseService] GetOrderAsync INICIADO");
+            Debug.WriteLine($"[SupabaseService] OrderId solicitado: {orderId}");
+            Debug.WriteLine("==========================================");
+
             try
             {
-                var resp = await _http.GetAsync($"{_url}/rest/v1/pedidos? id=eq.{orderId}&select=*", cancellationToken);
+                // URL sin espacios
+                var url = $"{_url}/rest/v1/pedidos?idpedido=eq.{orderId}&select=*";
+                Debug.WriteLine($"[SupabaseService] URL: {url}");
+
+                var resp = await _http.GetAsync(url, cancellationToken);
                 var json = await resp.Content.ReadAsStringAsync(cancellationToken);
-                Debug.WriteLine($"[SupabaseService] GetOrderAsync: status={resp.StatusCode}; bodyLength={(json?.Length ?? 0)}");
+
+                Debug.WriteLine($"[SupabaseService] GetOrderAsync:  status={resp.StatusCode}; bodyLength={(json?.Length ?? 0)}");
+                Debug.WriteLine($"[SupabaseService] Response body: {json}");
 
                 if (!resp.IsSuccessStatusCode)
                 {
@@ -555,21 +650,32 @@ namespace apppasteleriav04.Services.Core
 
                 if (order != null)
                 {
+                    Debug.WriteLine($"[SupabaseService] Orden encontrada: {order.Id}");
+
                     try
                     {
+                        Debug.WriteLine($"[SupabaseService] Cargando items para la orden.. .");
                         order.Items = await GetOrderItemsAsync(order.Id, cancellationToken);
+                        Debug.WriteLine($"[SupabaseService] Items cargados: {order.Items.Count}");
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"[SupabaseService] GetOrderAsync: error loading items for order {order.Id}: {ex}");
+                        Debug.WriteLine($"[SupabaseService] Error cargando items:  {ex.Message}");
                     }
                 }
+                else
+                {
+                    Debug.WriteLine($"[SupabaseService] Orden no encontrada");
+                }
 
+                Debug.WriteLine("==========================================");
                 return order;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[SupabaseService] GetOrderAsync error:  {ex}");
+                Debug.WriteLine($"[SupabaseService] GetOrderAsync error: {ex.Message}");
+                Debug.WriteLine($"[SupabaseService] StackTrace: {ex.StackTrace}");
+                Debug.WriteLine("==========================================");
                 return null;
             }
         }
@@ -579,17 +685,24 @@ namespace apppasteleriav04.Services.Core
         {
             try
             {
-                var resp = await _http.GetAsync($"{_url}/rest/v1/pedido_items? pedido_id=eq.{orderId}&select=*", cancellationToken);
+                // CORREGIDO: URL sin espacios
+                var url = $"{_url}/rest/v1/pedido_items?pedido_id=eq.{orderId}&select=*";
+                Debug.WriteLine($"[SupabaseService] GetOrderItemsAsync URL: {url}");
+
+                var resp = await _http.GetAsync(url, cancellationToken);
                 var json = await resp.Content.ReadAsStringAsync(cancellationToken);
+
                 Debug.WriteLine($"[SupabaseService] GetOrderItemsAsync: status={resp.StatusCode}; bodyLength={(json?.Length ?? 0)}");
 
                 if (!resp.IsSuccessStatusCode)
                 {
-                    Debug.WriteLine($"[SupabaseService] GetOrderItemsAsync failed:  {resp.StatusCode} - {json}");
+                    Debug.WriteLine($"[SupabaseService] GetOrderItemsAsync failed: {resp.StatusCode} - {json}");
                     return new List<OrderItem>();
                 }
 
                 var items = JsonSerializer.Deserialize<List<OrderItem>>(json, _jsonOpts) ?? new List<OrderItem>();
+                Debug.WriteLine($"[SupabaseService] Items deserializados: {items.Count}");
+
                 return items;
             }
             catch (Exception ex)

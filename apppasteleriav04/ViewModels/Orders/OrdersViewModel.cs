@@ -47,7 +47,10 @@ namespace apppasteleriav04.ViewModels.Orders
 
         public async Task LoadOrdersAsync()
         {
+            
+            System.Diagnostics.Debug.WriteLine("--------------------------------------------------");
             System.Diagnostics.Debug.WriteLine("[OrdersViewModel] LoadOrdersAsync iniciado");
+            System.Diagnostics.Debug.WriteLine("--------------------------------------------------");
 
             //Check authentication
             if (!AuthService.Instance.IsAuthenticated)
@@ -57,6 +60,7 @@ namespace apppasteleriav04.ViewModels.Orders
                 return;
             }
 
+            System.Diagnostics.Debug.WriteLine("[OrdersViewModel] Usuario autenticado");
             //Cargar órdenes desde el servicio
             IsLoading = true;
             IsBusy = true;
@@ -66,6 +70,8 @@ namespace apppasteleriav04.ViewModels.Orders
             {
                 //Obtener UserId
                 var userId = AuthService.Instance.UserId;
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] UserId RAW: {userId ?? "NULL"}");
+
                 if (string.IsNullOrEmpty(userId))
                 {
                     System.Diagnostics.Debug.WriteLine("[OrdersViewModel] UserId no válido o NULL o vacío");
@@ -73,27 +79,52 @@ namespace apppasteleriav04.ViewModels.Orders
                     return;
                 }
 
+                System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] UserId válido: {userId}");
+                System.Diagnostics.Debug.WriteLine("[OrdersViewModel] UserId como GUID: {Guid.Parse(userId)}");
+
+
                 //Llamar al servicio para obtener órdenes
                 System.Diagnostics.Debug.WriteLine("[OrdersViewModel] Llamando a SupabaseService para obtener órdenes");
-                var orders = await SupabaseService.Instance.GetOrdersByUserAsync(Guid.Parse(userId));
+
+                //Llamada al servicio y espera de resultados
+                var orders = await SupabaseService.Instance.GetOrdersByUserAsync(Guid.Parse(userId), includeItems: true);
                 System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] Órdenes obtenidas: {orders.Count}");
 
                 //Actualizar colección de órdenes
                 Orders.Clear();
-                foreach (var order in orders)
+
+                if (orders.Count == 0)
                 {
-                    //Agregar orden 
-                    Orders.Add(order);
-                    System.Diagnostics.Debug.WriteLine($" - Pedido: {order.Id.ToString().Substring(0,8)}, " +
-                        $"Total: S/{order.Total}, Status: {order.Status}");
+                    System.Diagnostics.Debug.WriteLine("[OrdersViewModel] No se encontraron pedidos para el usuario");
+                    ErrorMessage = $"No se encontraron pedidos para el usuario {userId.Substring(0, 8)}...";
+                    //return;
+                }
+                else
+                {
+                    foreach (var order in orders)
+                    {
+                        //Agregar orden 
+                        Orders.Add(order);
+                        System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] Pedido agregado:");
+                        System.Diagnostics.Debug.WriteLine($" - ID: {order.Id}");
+                        System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] - UserId: {order.UserId}");                        
+                        System.Diagnostics.Debug.WriteLine($" - Total: S/{order.Total}");
+                        System.Diagnostics.Debug.WriteLine($" - Status: {order.Status}");
+                        System.Diagnostics.Debug.WriteLine($" - CreatedAt: {order.CreatedAt}");
+                        System.Diagnostics.Debug.WriteLine($" - Items: {order.Items?.Count ?? 0}");
+                        //System.Diagnostics.Debug.WriteLine($" - Pedido: {order.Id.ToString().Substring(0, 8)}, " +
+                        //  $"Total: S/{order.Total}, Status: {order.Status}");
+                    }
                 }
                 //Final log
                 System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] Total pedidos: {Orders.Count}");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("--------------------------------------------------");
                 System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] EXCEPCION: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"[OrdersViewModel] STACKTRACE: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine("--------------------------------------------------");
                 ErrorMessage = $"Error al cargar pedidos: {ex.Message}";
             }
             finally
@@ -101,6 +132,7 @@ namespace apppasteleriav04.ViewModels.Orders
                 IsLoading = false;
                 IsBusy = false;
                 System.Diagnostics.Debug.WriteLine("[OrdersViewModel] LoadOrdersAsync finalizado");
+                System.Diagnostics.Debug.WriteLine("--------------------------------------------------");
             }
         }
 
