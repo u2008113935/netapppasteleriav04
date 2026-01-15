@@ -1,11 +1,15 @@
 ﻿using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Models.Local;
+using apppasteleriav04.Data.Local.Repositories;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
+
 
 namespace apppasteleriav04.Services.Core
 {
@@ -13,6 +17,9 @@ namespace apppasteleriav04.Services.Core
     public class CartService : INotifyPropertyChanged
     {
         public static CartService Instance { get; } = new CartService();
+
+        private readonly LocalCartRepository _cartRepository;
+        private Guid? _currentUserId;
 
         public ObservableCollection<CartItem> Items { get; } = new ObservableCollection<CartItem>();
 
@@ -30,9 +37,16 @@ namespace apppasteleriav04.Services.Core
         const string CartStorageKey = "local_cart_v1";
         private CartService()
         {
+            _cartRepository = new LocalCartRepository();
             Items.CollectionChanged += Items_CollectionChanged;
+
+            Debug.WriteLine("[CartService] Instancia creada");
+
+            // Cargar carrito al iniciar
+            _ = LoadFromDatabaseAsync();
         }
 
+        #region Event Handlers
         private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // Suscribir a PropertyChanged de los nuevos items para detectar cambios en Quantity
@@ -50,7 +64,7 @@ namespace apppasteleriav04.Services.Core
                 foreach (var oi in e.OldItems.OfType<CartItem>())
                 {
                     oi.PropertyChanged -= CartItem_PropertyChanged;
-                }
+                }              
             }
 
             // Si hubo un reset (Clear), desuscribir todos
@@ -60,13 +74,10 @@ namespace apppasteleriav04.Services.Core
                 // (si los items ya referenciados implementan INotifyPropertyChanged)
                 // No tenemos acceso directo a los antiguos, así que solo notificamos
             }
-
             // Notificar cambios derivables
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Count));
             OnPropertyChanged(nameof(Total));
-
-
             CartChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -77,15 +88,80 @@ namespace apppasteleriav04.Services.Core
             {
                 OnPropertyChanged(nameof(Count));
                 OnPropertyChanged(nameof(Total));
-
-
                 CartChanged?.Invoke(this, EventArgs.Empty);
+
+                // Actualizar en BD
+                if (sender is CartItem item)
+                {
+                    _ = UpdateQuantityInDatabaseAsync(item);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        
+        /// Agrega un producto al carrito (versión asíncrona)
+        
+        public async Task AddAsync(Product product, int qty = 1)
+        {
+            if (product == null) throw new ArgumentNullException(nameof(product));
+            if (qty <= 0) qty = 1;
+
+            try
+            {
+                Debug.WriteLine($"[CartService] Agregando {qty}x {product.Nombre}");
+
+                // Crear item local
+                var localItem = new LocalCartItem
+                {
+                    UserId = _currentUserId,
+                    ProductId = product.Id,
+                    ProductName = product.Nombre,
+                    ImagePath = product.ImagenPath ?? string.Empty,
+                    Price = product.Precio ?? 0m,
+                    Quantity = qty
+                };
+
+                // Guardar en BD
+                await _cartRepository.AddToCartAsync(localItem);
+
+                // Actualizar colección en memoria
+                var existing = Items.FirstOrDefault(i => i.ProductId == product.Id);
+
+                if (existing != null)
+                {
+                    existing.Quantity += qty;
+                }
+                else
+                {
+                    var item = new CartItem
+                    {
+                        ProductId = product.Id,
+                        Nombre = product.Nombre,
+                        ImagenPath = product.ImagenPath,
+                        Price = product.Precio ?? 0m,
+                        Quantity = qty
+                    };
+                    Items.Add(item);
+                }
+
+                Debug.WriteLine($"[CartService] Producto agregado.  Total items: {Count}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CartService] Error en AddAsync: {ex.Message}");
+                throw;
             }
         }
 
         // Agregar un item al carrito, si existe aumentar
         public void Add(Product product, int qty = 1)
         {
+            _ = AddAsync(product, qty);
+            /*
             if (product == null) throw new ArgumentNullException(nameof(product));
             if (qty <= 0) qty = 1;
 
@@ -108,20 +184,164 @@ namespace apppasteleriav04.Services.Core
                 Items.Add(item);
                 // Items.CollectionChanged hará el resto (suscribirá y notificará)
             }
-
             System.Diagnostics.Debug.WriteLine($"CartService.Add -> Items.Count={Items.Count}");
+            */
+        }
+
+        /// Elimina un producto del carrito (versión asíncrona)        
+        public async Task RemoveAsync(Guid productId)
+        {
+            try
+            {
+                Debug.WriteLine($"[CartService] Eliminando producto {productId}");
+
+                var item = Items.FirstOrDefault(i => i.ProductId == productId);
+                if (item != null)
+                {
+                    // Eliminar de BD
+                    var localItems = await _cartRepository.GetCartItemsAsync(_currentUserId);
+                    var localItem = localItems.FirstOrDefault(i => i.ProductId == productId);
+
+                    if (localItem != null)
+                    {
+                        await _cartRepository.RemoveFromCartAsync(localItem.Id);
+                    }
+
+                    // Eliminar de colección
+                    Items.Remove(item);
+                    Debug.WriteLine($"[CartService] Producto eliminado. Total items: {Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CartService] Error en RemoveAsync: {ex.Message}");
+                throw;
+            }
         }
 
         // Remueve un producto del carrito
         public void Remove(Guid productId)
         {
+            _ = RemoveAsync(productId);
+            /*
             var existing = Items.FirstOrDefault(i => i.ProductId == productId);
             if (existing != null)
             {
                 Items.Remove(existing);
                 // Items.CollectionChanged notificará Count/Total
             }
+            */
         }
+
+        public async Task ClearAsync()
+        {
+            try
+            {
+                Debug.WriteLine($"[CartService] Limpiando carrito");
+
+                await _cartRepository.ClearCartAsync(_currentUserId);
+                Items.Clear();
+
+                Debug.WriteLine($"[CartService] Carrito limpiado.");
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CartService] Error en ClearAsync: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void Clear()
+        {
+            _ = ClearAsync();
+        }
+
+        public async Task LoadFromDatabaseAsync(Guid? userId = null)
+        {            
+                try
+                {
+                    Debug.WriteLine($"[CartService] Cargando carrito para usuario:  {userId?.ToString() ?? "anónimo"}");
+
+                    _currentUserId = userId;
+                    var localItems = await _cartRepository.GetCartItemsAsync(userId);
+
+                    Items.Clear();
+                    foreach (var local in localItems)
+                    {
+                        Items.Add(new CartItem
+                        {
+                            ProductId = local.ProductId,
+                            Nombre = local.ProductName,
+                            ImagenPath = local.ImagePath,
+                            Price = local.Price,
+                            Quantity = local.Quantity
+                        });
+                    }
+
+                    Debug.WriteLine($"[CartService] {Items.Count} items cargados");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[CartService] Error en LoadFromDatabaseAsync:  {ex.Message}");
+                }
+        }
+
+        public async Task MigrateAnonymousCartAsync(Guid userId)
+        {
+            try
+            {
+                Debug.WriteLine($"[CartService] Migrando carrito anónimo a usuario {userId}");
+
+                await _cartRepository.MigrateAnonymousCartAsync(userId);
+                await LoadFromDatabaseAsync(userId);
+
+                Debug.WriteLine("[CartService] Migración completada");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CartService] Error en MigrateAnonymousCartAsync: {ex.Message}");
+                throw;
+            }
+        }
+
+        #endregion
+
+
+        #region Private Methods
+
+        /// <summary>
+        /// Actualiza la cantidad de un item en la base de datos
+        /// </summary>
+        private async Task UpdateQuantityInDatabaseAsync(CartItem item)
+        {
+            try
+            {
+                var localItems = await _cartRepository.GetCartItemsAsync(_currentUserId);
+                var localItem = localItems.FirstOrDefault(i => i.ProductId == item.ProductId);
+
+                if (localItem != null)
+                {
+                    await _cartRepository.UpdateQuantityAsync(localItem.Id, item.Quantity);
+                    Debug.WriteLine($"[CartService] Cantidad actualizada en BD:  {item.Quantity}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CartService] Error actualizando cantidad en BD: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
 
         // Actualizar la cantidad de un producto en el carrito
         public void UpdateQuantity(Guid productId, int qty)
@@ -138,14 +358,7 @@ namespace apppasteleriav04.Services.Core
                 existing.Quantity = qty; // CartItem.PropertyChanged -> CartService reagirá
             }
         }
-
-        // Limpiar el carrito
-        public void Clear()
-        {
-            Items.Clear();
-            // Items.CollectionChanged notificará Count/Total
-        }
-
+                
         public OrderItem[] ToOrderItems()
         {
             return Items.Select(i => new OrderItem
@@ -160,10 +373,7 @@ namespace apppasteleriav04.Services.Core
 
         public bool ContainsProduct(Guid productId) => Items.Any(i => i.ProductId == productId);
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
 
         // -------------------------
         // Persistencia local (Preferences)

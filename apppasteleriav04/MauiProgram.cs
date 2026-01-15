@@ -12,7 +12,9 @@ namespace apppasteleriav04
 {
     public static class MauiProgram
     {
+        public static IServiceProvider Services { get; private set; } = default!;
         public static MauiApp CreateMauiApp()
+
         {
             var builder = MauiApp.CreateBuilder();
 

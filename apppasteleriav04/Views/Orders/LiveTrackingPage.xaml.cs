@@ -26,18 +26,25 @@ namespace apppasteleriav04.Views.Orders
         readonly int _pollIntervalSeconds = 5;
 
         Pin? _courierPin;
-        Microsoft.Maui.Controls.Maps.Polyline? _routeLine;  // ✅ Especificamos explícitamente
+        Microsoft.Maui.Controls.Maps.Polyline? _routeLine;  // Especificamos explícitamente
 
         public LiveTrackingPage(Guid orderId)
         {
             InitializeComponent();
             _orderId = orderId;
-            _routeLine = new Microsoft.Maui.Controls.Maps.Polyline  // ✅ Especificamos explícitamente
+
+            // Configurar posición inicial del mapa (Lima, Perú)
+            var initialPosition = new Location(-12.0464, -77.0428);
+            MapControl.MoveToRegion(MapSpan.FromCenterAndRadius(initialPosition, Distance.FromKilometers(5)));
+
+            _routeLine = new Microsoft.Maui.Controls.Maps.Polyline  // Especificamos explícitamente
             {
                 StrokeColor = Colors.Blue,
                 StrokeWidth = 4
             };
             MapControl.MapElements.Add(_routeLine);
+
+            Debug.WriteLine($"[LiveTrackingPage] Inicializado para orden {_orderId}");
         }
 
         protected override void OnAppearing()
@@ -119,7 +126,10 @@ namespace apppasteleriav04.Views.Orders
         {
             try
             {
-                var order = await _supabase.GetOrderAsync(_orderId, token);
+                Debug.WriteLine($"[LiveTrakingPage] Obteniendo la orden {_orderId}...");
+                //var order = await _supabase.GetOrderAsync(_orderId, token);                
+                var order = await _supabase.GetOrderAsync(_orderId);
+                
                 if (order == null)
                 {
                     await MainThread.InvokeOnMainThreadAsync(() =>
@@ -129,19 +139,30 @@ namespace apppasteleriav04.Views.Orders
                     return;
                 }
 
+                Debug.WriteLine($"[LiveTrackingPage] Orden encontrada: {order.Id}, Status: {order.Status}");
                 // Actualizar texto de estado
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
+                    var repartidorInfo = order.RepartidorAsignado.HasValue
+                        ? $"ID: {order.RepartidorAsignado.Value.ToString().Substring(0, 8)}..."
+                        : "No asignado";
+
                     LblStatus.Text = $"Estado: {order.Status} | Repartidor: {(order.RepartidorAsignado?.ToString() ?? "-")}";
                     LblLastUpdate.Text = $"Última actualización: {DateTime.Now:HH:mm:ss}";
                 });
 
+                
                 // Actualizar pin del repartidor si hay lat/lng
-                if (order.LatitudActual.HasValue && order.LongitudActual.HasValue)
+                if (order.RepartidorAsignado.HasValue &&
+                    order.LatitudActual.HasValue && 
+                    order.LongitudActual.HasValue)
                 {
                     var lat = order.LatitudActual.Value;
                     var lng = order.LongitudActual.Value;
 
+                    Debug.WriteLine($"[LiveTrackingPage] Repartidor en:  {lat}, {lng}");
+
+                    
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         var loc = new Location(lat, lng);
@@ -151,8 +172,10 @@ namespace apppasteleriav04.Views.Orders
                             _courierPin = new Pin
                             {
                                 Label = "Repartidor",
-                                Location = loc
+                                Location = loc,
+                                Type = PinType.Place
                             };
+                            
                             MapControl.Pins.Add(_courierPin);
                             MapControl.MoveToRegion(MapSpan.FromCenterAndRadius(loc, Distance.FromKilometers(1)));
                         }
@@ -170,15 +193,36 @@ namespace apppasteleriav04.Views.Orders
                         _routeLine.Geopath.Add(loc);
                     });
                 }
+                else 
+                {
+                    Debug.WriteLine("[LiveTrackingPage] No hay repartidor asignado o sin coordenadas");
 
-                // Opcional: cargar histórico reciente y dibujar ruta completa
-                var locs = await _supabase.GetOrderLocationsAsync(_orderId, limit: 200, cancellationToken: token);
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        LblStatus.Text = $"Estado: {order.Status} | Esperando asignación de repartidor";
+
+                        // Si no hay repartidor, mostrar ubicación por defecto (Lima, Perú)
+                        var defaultLocation = new Location(-12.0464, -77.0428);
+                        MapControl.MoveToRegion(MapSpan.FromCenterAndRadius(defaultLocation, Distance.FromKilometers(5)));
+                    });
+
+                }
+
+                // Cargar histórico reciente y dibujar ruta completa
+                var locs = await _supabase.GetOrderLocationsAsync(_orderId, limit: 200);
+                
                 if (locs != null && locs.Count > 0)
                 {
+                    Debug.WriteLine($"[LiveTrackingPage] {locs.Count} ubicaciones históricas encontradas");
+
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         // reconstruir polyline
-                        _routeLine ??= new Microsoft.Maui.Controls.Maps.Polyline { StrokeColor = Colors.Blue, StrokeWidth = 4 };
+                        _routeLine ??= new Microsoft.Maui.Controls.Maps.Polyline 
+                        { 
+                            StrokeColor = Colors.Blue, 
+                            StrokeWidth = 4 
+                        };
                         _routeLine.Geopath.Clear();
 
                         // Los registros vienen ordenados por registrado_en desc; invertimos para dibujar en orden cronológico
@@ -195,7 +239,12 @@ namespace apppasteleriav04.Views.Orders
                         // actualizar pin también con el último
                         if (_courierPin == null)
                         {
-                            _courierPin = new Pin { Label = "Repartidor", Location = lastLoc };
+                            _courierPin = new Pin 
+                            { 
+                                Label = "Repartidor", 
+                                Location = lastLoc, 
+                                Type = PinType.Place
+                            };
                             MapControl.Pins.Add(_courierPin);
                         }
                         else
@@ -204,14 +253,15 @@ namespace apppasteleriav04.Views.Orders
                         }
                     });
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.WriteLine("RefreshOnceAsync cancelled");
-            }
+                else {                     
+                    Debug.WriteLine("[LiveTrackingPage] No hay ubicaciones históricas");                
+                }
+            }            
             catch (Exception ex)
             {
-                Debug.WriteLine($"RefreshOnceAsync error: {ex}");
+                Debug.WriteLine($"[LiveTrackingPage] RefreshOnceAsync error: {ex.Message}");
+                Debug.WriteLine($"[LiveTrackingPage] StackTrace: {ex.StackTrace}");
+
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     LblStatus.Text = $"Error: {ex.Message}";
