@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 
 
-namespace apppasteleriav04.Models.Local
+namespace apppasteleriav04.Data.Local.Repositories
 {
     public class LocalCartRepository
     {

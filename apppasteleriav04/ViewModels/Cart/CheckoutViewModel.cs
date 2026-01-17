@@ -25,7 +25,7 @@ namespace apppasteleriav04.ViewModels.Cart
         public ObservableCollection<CartItem> Items => _cartService.Items;
 
         private string _address = string.Empty;
-        
+
         // PROPIEDADES
         public string Address
         {
@@ -65,26 +65,40 @@ namespace apppasteleriav04.ViewModels.Cart
         public event EventHandler? AuthenticationRequired;
         public event EventHandler? GoBackRequested;
 
+        #region contructor
+        //=======================================================
+        // CONSTRUCTOR
+        //=======================================================
         public CheckoutViewModel()
         {
-            _cartService = CartService.Instance;            
+            _cartService = CartService.Instance;
             _connectivityService = MauiProgram.Services.GetService<IConnectivityService>()
                 ?? throw new InvalidOperationException("IConnectivityService not registered");
-            Title = "Finalizar Compra";
 
+            //Repositorio de ordenes locales
+            _orderRepository = new LocalOrderRepository();
+
+            Title = "Finalizar Compra";
             PlaceOrderCommand = new AsyncRelayCommand(PlaceOrderAsync, () => !IsBusy);
             GoBackCommand = new RelayCommand(() => GoBackRequested?.Invoke(this, EventArgs.Empty));
         }
+        #endregion
 
+        #region public methods
+        //Verificar autenticacion
         public bool CheckAuthentication()
         {
             return AuthService.Instance.IsAuthenticated;
         }
+        #endregion
 
+        #region Private Methods
         //Metodo OFFLINE-FIRST para colocar orden
         //1. Guardar en SQLite
         //2. Marcar para sincronizacion
-        //3. Si falla encola para reintento
+        //3. Si falla, aplicamos la estrategia de ENCOLAR y luego reintentar.
+
+        //Metodo para colocar orden
         private async Task PlaceOrderAsync()
         {
             ErrorMessage = string.Empty;
@@ -119,6 +133,7 @@ namespace apppasteleriav04.ViewModels.Cart
             IsBusy = true;
             Debug.WriteLine("[CheckoutViewModel] Iniciando creación de pedido...");
 
+            // Obtener UserId
             try
             {
                 var userId = Guid.Parse(AuthService.Instance.UserId ?? Guid.Empty.ToString());
@@ -126,8 +141,10 @@ namespace apppasteleriav04.ViewModels.Cart
 
 
                 // ═════════════════════════════════════════
-                // PASO 1: CREAR ORDEN LOCAL (SIEMPRE)
+                // PASO 1: CREAR ORDEN LOCAL (SIEMPRE PRIMERO)
                 // ═════════════════════════════════════════
+                Debug.WriteLine("[CheckoutViewModel] Paso 1: Creando orden local...");
+                // Crear la orden local
                 var localOrder = new LocalOrder
                 {
                     Id = Guid.NewGuid(),
@@ -137,10 +154,11 @@ namespace apppasteleriav04.ViewModels.Cart
                     DeliveryAddress = IsDelivery ? Address : "Recojo en tienda",
                     IsDelivery = IsDelivery,
                     CreatedAt = DateTime.UtcNow,
-                    IsSynced = false, // ⚠️ Importante
+                    IsSynced = false, // Importante: Marcar como no sincronizado, eso quiere decir que falta sincronizar
                     SyncedAt = null
                 };
 
+                // Crear los items locales
                 var localItems = Items.Select(item => new LocalOrderItem
                 {
                     OrderId = localOrder.Id,
@@ -151,22 +169,23 @@ namespace apppasteleriav04.ViewModels.Cart
                     Subtotal = item.Price * item.Quantity
                 }).ToList();
 
-                Debug.WriteLine($"[CheckoutViewModel] Orden local creada:  {localOrder.Id}");
+                Debug.WriteLine($"[CheckoutViewModel] Orden ID:  {localOrder.Id}");
                 Debug.WriteLine($"[CheckoutViewModel] Items: {localItems.Count}");
                 Debug.WriteLine($"[CheckoutViewModel] Total: S/ {localOrder.Total:N2}");
 
                 // Guardar en SQLite
                 await _orderRepository.SaveWithItemsAsync(localOrder, localItems);
-                Debug.WriteLine("[CheckoutViewModel] Orden guardada en SQLite");
+                Debug.WriteLine("[CheckoutViewModel] Orden guardada en la base local SQLite");
 
                 // ═════════════════════════════════════════
                 // PASO 2: INTENTAR SINCRONIZAR
                 // ═════════════════════════════════════════
+                // Intentar sincronizar inmediatamente
                 bool syncSuccess = false;
 
                 if (_connectivityService.IsConnected)
                 {
-                    Debug.WriteLine("[CheckoutViewModel] Hay conexión, intentando sincronizar...");
+                    Debug.WriteLine("[CheckoutViewModel] Paso 2: Hay conexión, intentando sincronizar...");
 
                     try
                     {
@@ -207,8 +226,10 @@ namespace apppasteleriav04.ViewModels.Cart
                 if (!syncSuccess)
                 {
                     Debug.WriteLine("[CheckoutViewModel] Encolando para sincronización posterior");
-
+                    // Obtener el servicio de sincronización
                     var syncService = MauiProgram.Services.GetService<ISyncService>();
+
+                    // Encolar la orden para sincronización posterior
                     if (syncService != null)
                     {
                         var payload = JsonSerializer.Serialize(new
@@ -225,6 +246,8 @@ namespace apppasteleriav04.ViewModels.Cart
                 // ═════════════════════════════════════════
                 // PASO 4: LIMPIAR CARRITO Y NOTIFICAR
                 // ═════════════════════════════════════════
+                Debug.WriteLine("[CheckoutViewModel] Paso 4: Limpiando carrito y notificando...");
+
                 await _cartService.ClearAsync();
                 Debug.WriteLine("[CheckoutViewModel] Carrito limpiado");
 
@@ -244,54 +267,57 @@ namespace apppasteleriav04.ViewModels.Cart
             finally
             {
                 IsBusy = false;
-            }
-        
-
-        // Convert CartItems to OrderItems
-        var orderItems = Items.Select(item => new OrderItem
-                {
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    Price = item.Price
-                }).ToList();
-
-                System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Items a enviar: {orderItems.Count}");
-                System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Total: {Total}");
-
-                // Create order in Supabase
-                System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Llamando a SupabaseService. CreateOrderAsync.. .");
-                var createdOrder = await SupabaseService.Instance.CreateOrderAsync(userId, orderItems);
-                
-                if (createdOrder != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Pedido creado:  {createdOrder.Id}");
-
-                    //Limpiar carrito
-                    _cartService.Clear();
-                    System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Carrito limpiado");
-
-                    OrderCompleted?.Invoke(this, createdOrder.Id);
-                    System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Evento OrderCompleted disparado");
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] createdOrder es NULL");
-                    ErrorMessage = "No se pudo crear el pedido. Por favor intente nuevamente.";
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] EXCEPCIÓN: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] StackTrace: {ex.StackTrace}");
-                ErrorMessage = $"Error al crear el pedido: {ex.Message}";
-            }
-            finally
-            {
-                IsBusy = false;
-                System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] PlaceOrderAsync finalizado");
+                Debug.WriteLine("[CheckoutViewModel] PlaceOrderAsync finalizado");
             }
         }
+        #endregion
     }
 }
-}
-}
+
+/*
+// Convert CartItems to OrderItems
+var orderItems = Items.Select(item => new OrderItem
+        {
+            ProductId = item.ProductId,
+            Quantity = item.Quantity,
+            Price = item.Price
+        }).ToList();
+
+        System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Items a enviar: {orderItems.Count}");
+        System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Total: {Total}");
+
+        // Create order in Supabase
+        System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Llamando a SupabaseService. CreateOrderAsync.. .");
+        var createdOrder = await SupabaseService.Instance.CreateOrderAsync(userId, orderItems);
+
+        if (createdOrder != null)
+        {
+            System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] Pedido creado:  {createdOrder.Id}");
+
+            //Limpiar carrito
+            _cartService.Clear();
+            System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Carrito limpiado");
+
+            OrderCompleted?.Invoke(this, createdOrder.Id);
+            System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] Evento OrderCompleted disparado");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] createdOrder es NULL");
+            ErrorMessage = "No se pudo crear el pedido. Por favor intente nuevamente.";
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] EXCEPCIÓN: {ex.Message}");
+        System.Diagnostics.Debug.WriteLine($"[CheckoutViewModel] StackTrace: {ex.StackTrace}");
+        ErrorMessage = $"Error al crear el pedido: {ex.Message}";
+    }
+    finally
+    {
+        IsBusy = false;
+        System.Diagnostics.Debug.WriteLine("[CheckoutViewModel] PlaceOrderAsync finalizado");
+    }
+
+*/
+

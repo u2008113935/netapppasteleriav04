@@ -13,28 +13,40 @@ using System.Runtime.CompilerServices;
 
 namespace apppasteleriav04.Services.Core
 {
-    // Mantener el carrito de compras en memoria
+    // Servicio Singleton para gestionar el carrito con persistencia SQLite
     public class CartService : INotifyPropertyChanged
     {
         public static CartService Instance { get; } = new CartService();
 
+        // Repositorio local para operaciones de carrito SQLite 
         private readonly LocalCartRepository _cartRepository;
+
+        // Usuario actual (null = anónimo)
         private Guid? _currentUserId;
 
+        // Colección observable de items en el carrito
         public ObservableCollection<CartItem> Items { get; } = new ObservableCollection<CartItem>();
 
+        // Eventos de notificación de cambios
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        // Evento cuando el carrito cambia (items agregados, removidos o modificados)
         public event EventHandler? CartChanged;
 
         // Total del carrito (suma precio * cantidad)
         public decimal Total => Items.Sum(i => i.Price * i.Quantity);
 
+        // Cantidad total de items en el carrito
         public int Count => Items.Sum(i => i.Quantity);
+        
+        // Método para obtener la cantidad de items
         public int GetItemCount() => Count;
 
         // Key para almacenamiento local
-        const string CartStorageKey = "local_cart_v1";
+        //const string CartStorageKey = "local_cart_v1";
+
+        //Constructor privado para implementar el patrón singleton
+        //Se ejecuta una sola vez al acceder a Instance
         private CartService()
         {
             _cartRepository = new LocalCartRepository();
@@ -42,14 +54,18 @@ namespace apppasteleriav04.Services.Core
 
             Debug.WriteLine("[CartService] Instancia creada");
 
-            // Cargar carrito al iniciar
+            // Cargar carrito al iniciar desde la base de datos SQLite
             _ = LoadFromDatabaseAsync();
         }
 
+
+        //Manejo de eventos
         #region Event Handlers
+
+        //Metodo para manejar los cambios en la coleccion de items
         private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            // Suscribir a PropertyChanged de los nuevos items para detectar cambios en Quantity
+            // Nuevos items agregados
             if (e.NewItems != null)
             {
                 foreach (var ni in e.NewItems.OfType<CartItem>())
@@ -58,7 +74,7 @@ namespace apppasteleriav04.Services.Core
                 }
             }
 
-            // Desuscribir de los items eliminados
+            // Items elimiandos 
             if (e.OldItems != null)
             {
                 foreach (var oi in e.OldItems.OfType<CartItem>())
@@ -78,9 +94,12 @@ namespace apppasteleriav04.Services.Core
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Count));
             OnPropertyChanged(nameof(Total));
+
+            // Disparar evento de cambio de carrito
             CartChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        // Maneja cambios en las propiedades de los items del carrito
         private void CartItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // Si cambia la cantidad o el precio, recalcular Count/Total
@@ -90,7 +109,7 @@ namespace apppasteleriav04.Services.Core
                 OnPropertyChanged(nameof(Total));
                 CartChanged?.Invoke(this, EventArgs.Empty);
 
-                // Actualizar en BD
+                // Actualizar cantidad en la base de datos asíncronamente SQLite
                 if (sender is CartItem item)
                 {
                     _ = UpdateQuantityInDatabaseAsync(item);
@@ -102,22 +121,31 @@ namespace apppasteleriav04.Services.Core
 
         #region Public Methods
 
-        
-        /// Agrega un producto al carrito (versión asíncrona)
-        
+        // Metodos publicos como el API del servicio
+        // Agrega un producto al carrito (versión asíncrona, es decir en SQLite)
+        // Flujo Offline-First:
+        // 1. Validar datos
+        // 2. Guardar en BD local es decir en SQLite
+        // 3. Actualizar UI (Items Collection)
+
+        //Metodo para agregar un producto al carrito de forma asincronica, es decir en SQLite
         public async Task AddAsync(Product product, int qty = 1)
         {
+            // Validacion 1: Producto no nulo, cantidad positiva
             if (product == null) throw new ArgumentNullException(nameof(product));
+
+            // Validacion 2: Cantidad minima 1
             if (qty <= 0) qty = 1;
 
             try
             {
                 Debug.WriteLine($"[CartService] Agregando {qty}x {product.Nombre}");
 
+                //Paso 1: Crear el item del carrito local, es decir en SQLite
                 // Crear item local
                 var localItem = new LocalCartItem
                 {
-                    UserId = _currentUserId,
+                    UserId = _currentUserId,        // Puede ser null para anónimo
                     ProductId = product.Id,
                     ProductName = product.Nombre,
                     ImagePath = product.ImagenPath ?? string.Empty,
@@ -125,9 +153,11 @@ namespace apppasteleriav04.Services.Core
                     Quantity = qty
                 };
 
+                // Paso 2: Guardar el item en la base de datos local SQLite
                 // Guardar en BD
                 await _cartRepository.AddToCartAsync(localItem);
 
+                // Paso 3: Actualizar la colección en memoria UI
                 // Actualizar colección en memoria
                 var existing = Items.FirstOrDefault(i => i.ProductId == product.Id);
 
@@ -137,6 +167,7 @@ namespace apppasteleriav04.Services.Core
                 }
                 else
                 {
+                    //No existe entonces crear nuevo item
                     var item = new CartItem
                     {
                         ProductId = product.Id,
@@ -160,7 +191,7 @@ namespace apppasteleriav04.Services.Core
         // Agregar un item al carrito, si existe aumentar
         public void Add(Product product, int qty = 1)
         {
-            _ = AddAsync(product, qty);
+            _ = AddAsync(product, qty);  // Llamar a la versión asíncrona
             /*
             if (product == null) throw new ArgumentNullException(nameof(product));
             if (qty <= 0) qty = 1;
@@ -257,6 +288,8 @@ namespace apppasteleriav04.Services.Core
             _ = ClearAsync();
         }
 
+
+        // Carga el carrito desde la base de datos SQLite para el usuario actual (o anónimo)
         public async Task LoadFromDatabaseAsync(Guid? userId = null)
         {            
                 try
@@ -344,6 +377,7 @@ namespace apppasteleriav04.Services.Core
         #endregion
 
         // Actualizar la cantidad de un producto en el carrito
+        /*
         public void UpdateQuantity(Guid productId, int qty)
         {
             var existing = Items.FirstOrDefault(i => i.ProductId == productId);
@@ -358,7 +392,8 @@ namespace apppasteleriav04.Services.Core
                 existing.Quantity = qty; // CartItem.PropertyChanged -> CartService reagirá
             }
         }
-                
+        */
+
         public OrderItem[] ToOrderItems()
         {
             return Items.Select(i => new OrderItem
@@ -380,6 +415,7 @@ namespace apppasteleriav04.Services.Core
         // -------------------------
 
         // Guarda el carrito en Preferences (serializado JSON)
+        /*
         public async Task SaveLocalAsync()
         {
             try
@@ -394,8 +430,10 @@ namespace apppasteleriav04.Services.Core
             }
             await Task.CompletedTask;
         }
+        */
 
         // Carga el carrito desde Preferences (reemplaza el contenido actual)
+        /*
         public async Task LoadLocalAsync()
         {
             try
@@ -417,8 +455,10 @@ namespace apppasteleriav04.Services.Core
             }
             await Task.CompletedTask;
         }
+        */
 
         // Merge: suma cantidades si producto existe, o añade nuevo.
+        /*
         public void MergeFrom(CartItem[] other)
         {
             if (other == null || other.Length == 0) return;
@@ -440,5 +480,6 @@ namespace apppasteleriav04.Services.Core
             // Notificar cambio de carrito
             CartChanged?.Invoke(this, EventArgs.Empty);
         }
+        */
     }
 }

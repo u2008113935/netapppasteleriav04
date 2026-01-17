@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using apppasteleriav04.Services.Core;
@@ -63,6 +64,72 @@ namespace apppasteleriav04.ViewModels.Auth
 
         private async Task LoginAsync()
         {
+
+            ErrorMessage = string.Empty;
+            CartRestoredMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                ErrorMessage = "Por favor ingrese su correo electrónico";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Por favor ingrese su contraseña";
+                return;
+            }
+
+            IsLoading = true;
+            IsBusy = true;
+
+            try
+            {
+                // PASO 1: Autenticar usuario (llama al AuthService tal como antes)
+                var success = await AuthService.Instance.SignInAsync(Email, Password);
+
+                if (!success)
+                {
+                    // Login fallido: notificar y salir
+                    ErrorMessage = "Credenciales inválidas. Por favor intente nuevamente.";
+                    LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
+                    {
+                        Success = false,
+                        Message = ErrorMessage
+                    });
+                    return;
+                }
+
+                // PASO 2: Login exitoso -> migrar/cargar carrito desde SQLite
+                // Esto cubre el caso en que el usuario agregó items como anónimo.
+                await LoadCartAfterLoginAsync();
+
+                // PASO 3: Notificar éxito a la View
+                LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
+                {
+                    Success = true,
+                    Message = "Sesión iniciada correctamente",
+                    UserId = AuthService.Instance.UserId?.ToString(),
+                    Email = Email
+                });
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores: informar a la UI
+                ErrorMessage = $"Error al iniciar sesión: {ex.Message}";
+                LoginCompleted?.Invoke(this, new LoginCompletedEventArgs
+                {
+                    Success = false,
+                    Message = ErrorMessage
+                });
+            }
+            finally
+            {
+                IsLoading = false;
+                IsBusy = false;
+            }
+
+            /*
             ErrorMessage = string.Empty;
             CartRestoredMessage = string.Empty;
 
@@ -119,11 +186,52 @@ namespace apppasteleriav04.ViewModels.Auth
                 IsLoading = false;
                 IsBusy = false;
             }
+            */
+
         }
 
-        // NUEVO: Método para cargar carrito tras login (LÓGICA EN VIEWMODEL)
+        // Método para cargar carrito tras login (LÓGICA EN VIEWMODEL)
         private async Task LoadCartAfterLoginAsync()
         {
+            try
+            {
+                // Obtener userId desde AuthService (debe estar definido después del login)
+                var userIdString = AuthService.Instance.UserId;
+                if (string.IsNullOrEmpty(userIdString))
+                {
+                    Debug.WriteLine("[LoginViewModel] Warning: UserId vacío después del login.");
+                    return;
+                }
+
+                // Intentar parsear a Guid (si tu app usa GUIDs)
+                if (!Guid.TryParse(userIdString, out var userId))
+                {
+                    Debug.WriteLine($"[LoginViewModel] Warning: UserId no es GUID válido: {userIdString}");
+                    return;
+                }
+
+                Debug.WriteLine($"[LoginViewModel] Migrando carrito anónimo al usuario {userId} (si aplica)...");
+
+                // 1) Migrar carrito anónimo (UserId = NULL) al userId autenticado.
+                //    LocalCartRepository.MigrateAnonymousCartAsync hace:
+                //    - mueve items anónimos al userId
+                //    - combina cantidades con items existentes del usuario si aplica
+                await CartService.Instance.MigrateAnonymousCartAsync(userId);
+
+                // 2) Cargar el carrito desde SQLite para el usuario autenticado
+                await CartService.Instance.LoadFromDatabaseAsync(userId);
+
+                // Mensaje para UI opcional
+                CartRestoredMessage = "Carrito restaurado correctamente.";
+                Debug.WriteLine("[LoginViewModel] Carrito migrado y cargado desde SQLite.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[LoginViewModel] Error migrando/cargando carrito: {ex.Message}");
+                // No lanzar: no debería bloquear el flujo de login; informar a la UI si quieres
+                CartRestoredMessage = "No se pudo restaurar el carrito local.";
+            }
+            /*
             try
             {
                 System.Diagnostics.Debug.WriteLine("[LoginViewModel] Cargando carrito guardado...");
@@ -136,7 +244,7 @@ namespace apppasteleriav04.ViewModels.Auth
 
                 System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Carrito cargado: {itemCount} items, Total: S/ {totalAmount: F2}");
 
-                // ✅ Actualizar propiedad para mostrar en UI (opcional)
+                // Actualizar propiedad para mostrar en UI (opcional)
                 if (itemCount > 0)
                 {
                     CartRestoredMessage = $"Se restauraron {itemCount} productos (S/ {totalAmount:F2})";
@@ -147,6 +255,7 @@ namespace apppasteleriav04.ViewModels.Auth
                 System.Diagnostics.Debug.WriteLine($"[LoginViewModel] Error cargando carrito: {ex.Message}");
                 // No lanzar excepción - la carga del carrito no debe impedir el login
             }
+            */
         }
 
 

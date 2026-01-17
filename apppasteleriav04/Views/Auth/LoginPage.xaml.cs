@@ -1,8 +1,8 @@
 using System;
 using Microsoft.Maui.Controls;
 using apppasteleriav04.ViewModels.Auth;
-using apppasteleriav04.Services.Core; 
-
+using apppasteleriav04.Services.Core;
+using System.Threading.Tasks;
 
 namespace apppasteleriav04.Views.Auth
 {
@@ -25,23 +25,47 @@ namespace apppasteleriav04.Views.Auth
             _viewModel.LoginCompleted += OnLoginCompleted;
         }
 
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            // Desuscribir para evitar fugas si la página se instancia de nuevo
+            _viewModel.LoginCompleted -= OnLoginCompleted;
+        }
+
         private async void OnLoginCompleted(object? sender, LoginCompletedEventArgs e)
         {
             if (e.Success)
             {
-                // Cargar carrito tras login (si el ViewModel no lo hace)
+                // Ya no llamamos a LoadLocalAsync (método comentado).
+                // El ViewModel realiza la migración y carga del carrito (LoadCartAfterLoginAsync).
+                // Aquí solo mostramos mensajes y navegamos.
+                
+                var message = "Sesión iniciada correctamente";
+
+                /*
                 try
                 {
-                    await CartService.Instance.LoadLocalAsync();
+                    //await CartService.Instance.LoadLocalAsync();
                     System.Diagnostics.Debug.WriteLine("[LoginPage] Carrito cargado tras login");
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"[LoginPage] Error cargando carrito:  {ex.Message}");
                 }
+                */
+                // Agregar mensaje de carrito restaurado si existe (lo establece el ViewModel)
+                if (!string.IsNullOrEmpty(_viewModel.CartRestoredMessage))
+                {
+                    message += $"\n\n{_viewModel.CartRestoredMessage}";
+                }
+
+                await DisplayAlert("Éxito", message, "OK");
+
+                // MVVM: Navegación (responsabilidad de la View)
+                await NavigateAfterLoginAsync();
 
                 // Mostrar mensaje de éxito
-                var message = "Sesión iniciada correctamente";
+                //var message = "Sesión iniciada correctamente";
 
                 // Agregar mensaje de carrito restaurado si existe
                 if (!string.IsNullOrEmpty(_viewModel.CartRestoredMessage))

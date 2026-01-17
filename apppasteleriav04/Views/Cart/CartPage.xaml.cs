@@ -2,11 +2,13 @@
 using Microsoft.Maui.Controls;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace apppasteleriav04.Views.Cart
 {
     public partial class CartPage : ContentPage
     {
+        
         readonly CartService _cart = CartService.Instance;
 
         public CartPage()
@@ -29,25 +31,48 @@ namespace apppasteleriav04.Views.Cart
             if (sender is Button btn && btn.CommandParameter is Guid productId)
             {
                 var existing = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
-                if (existing != null) _cart.UpdateQuantity(productId, existing.Quantity + 1);
+                if (existing != null)
+                {
+                    //_cart.UpdateQuantity(productId, existing.Quantity + 1);
+                    existing.Quantity++; // CartService escuchará el cambio y actualizará la DB
+                    System.Diagnostics.Debug.WriteLine($"[CartPage] Incrementado {existing.Nombre} -> {existing.Quantity}");
+                }
             }
         }
 
-        void OnDecreaseClicked(object sender, EventArgs e)
+        // Decrementa la cantidad; si llega a 0 elimina el item
+        async void OnDecreaseClicked(object sender, EventArgs e)
         {
             if (sender is Button btn && btn.CommandParameter is Guid productId)
             {
                 var existing = _cart.Items.FirstOrDefault(i => i.ProductId == productId);
-                if (existing != null) _cart.UpdateQuantity(productId, existing.Quantity - 1);
-            }
+                if (existing != null)                
+                {
+                    //_cart.UpdateQuantity(productId, existing.Quantity - 1);
+                    existing.Quantity--; // CartService escuchará y actualizará DB
+                    System.Diagnostics.Debug.WriteLine($"[CartPage] Decrementado {existing.Nombre} -> {existing.Quantity}");
+                }
+                else
+                {
+                    // Si la cantidad sería 0, eliminar el item de forma asíncrona
+                    await _cart.RemoveAsync(productId);
+                    System.Diagnostics.Debug.WriteLine($"[CartPage] Item eliminado: {existing.Nombre}");
+                }
+            }            
         }
 
-        void OnRemoveClicked(object sender, EventArgs e)
+        // Elimina item del carrito usando la versión asíncrona
+        async void OnRemoveClicked(object sender, EventArgs e)
         {
             if (sender is Button btn && btn.CommandParameter is Guid productId)
-                _cart.Remove(productId);
+            {
+                await _cart.RemoveAsync(productId);
+                System.Diagnostics.Debug.WriteLine($"[CartPage] RemoveClicked -> ProductId: {productId}");
+            }                
         }
 
+
+        // Confirmar compra: no llamar SaveLocalAsync (persistencia en SQLite automática)
         async void OnConfirmPurchaseClicked(object sender, EventArgs e)
         {
             if (_cart.Items.Count == 0)
@@ -56,6 +81,7 @@ namespace apppasteleriav04.Views.Cart
                 return;
             }
 
+            /*
             // Guardar carrito local
             try
             {
@@ -66,6 +92,10 @@ namespace apppasteleriav04.Views.Cart
             {
                 System.Diagnostics.Debug.WriteLine($"[CartPage] Error guardando carrito: {ex.Message}");
             }
+            */
+
+            // Ya NO se debe llamar a SaveLocalAsync
+            System.Diagnostics.Debug.WriteLine("[CartPage] Preparando checkout... (no se llama SaveLocalAsync)");
 
             // VERIFICAR AUTENTICACION
             System.Diagnostics.Debug.WriteLine($"[CartPage] Verificando autenticacion...");
