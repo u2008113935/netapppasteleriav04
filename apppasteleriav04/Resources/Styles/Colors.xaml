@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -42,9 +42,7 @@
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
 
-
-    <!-- AGREGAR AL FINAL DEL ARCHIVO (antes de </ResourceDictionary>) -->
-
+    
     <!-- TEMA OSCURO STYLE -->
     <Color x:Key="BackgroundPrimary">#000000</Color>
     <Color x:Key="BackgroundSecondary">#1C1C1E</Color>
@@ -76,5 +74,33 @@
     <!-- rosa pastel: PinkLight -->
     <Color x:Key="EntryBorderColor">#FF6B9D</Color>
     <!-- rosa principal si quieres borde -->
+
+    
+    <!--  ALIAS / KEYS PARA COMPATIBILIDAD (usar valores literales) -->
+
+    <!-- define claves que usan tus páginas (valores duplicados de los ya definidos arriba) -->
+    <Color x:Key="PrimaryColor">#512BD4</Color>
+    <Color x:Key="SecondaryColor">#DFD8F7</Color>
+    <Color x:Key="PageBackgroundColor">#000000</Color>
+
+    <Color x:Key="PrimaryText">#000000</Color>
+    <Color x:Key="SecondaryText">#514F60</Color>
+
+    <!--
+    <Color x:Key="PrimaryTextColor">#000000</Color>
+    <Color x:Key="SecondaryTextColor">#514F60</Color>
+    <Color x:Key="HeaderTitleTextColor">#FFFFFF</Color>
+    <Color x:Key="HeaderSubtitleTextColor">#CCCCCC</Color>
+    
+    <Color x:Key="CardBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="EntryBackgroundColor">#2C2C2E</Color>
+    <Color x:Key="EntryTextColor">#FFFFFF</Color>
+    <Color x:Key="EntryPlaceholderColor">#FFA8C5</Color>
+    -->
+    
+    <!-- Brushes opcionalmente -->
+    <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
+    <SolidColorBrush x:Key="PageBackgroundBrush" Color="{StaticResource PageBackgroundColor}" />
+
 
 </ResourceDictionary>
