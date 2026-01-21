@@ -39,8 +39,8 @@ public partial class AppShell : Shell
         // RUTAS DE EMPLEADO (agregar)
         Routing.RegisterRoute("employee-dashboard", typeof(EmployeeDashboardPage));
         Routing.RegisterRoute("employee-kitchen", typeof(EmployeeKitchenPage));
-        //Routing.RegisterRoute("employee-delivery", typeof(EmployeeDeliveryPage));
-        //Routing.RegisterRoute("employee-backoffice", typeof(EmployeeBackofficePage));
+        Routing.RegisterRoute("employee-delivery", typeof(EmployeeDeliveryPage));
+        Routing.RegisterRoute("employee-backoffice", typeof(EmployeeBackofficePage));
 
     }
 

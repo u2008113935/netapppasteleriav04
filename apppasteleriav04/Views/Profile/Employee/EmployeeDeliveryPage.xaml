@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="apppasteleriav04.Views.Profile.Employee.EmployeeDeliveryPage"
+             Title="Reparto">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               Padding="20" 
+               BackgroundColor="#4CAF50"
+               CornerRadius="0">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Entregas Pendientes" 
+                       FontSize="24" 
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+                <Label x:Name="LblOrdersCount"              
+                    Text="0 pedidos para entregar"
+                       FontSize="14"
+                       TextColor="White"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Orders Queue -->
+        <RefreshView Grid.Row="1" 
+                     x:Name="RefreshOrders"                 
+            Refreshing="OnRefreshing">
+
+            <CollectionView x:Name="OrdersCollectionView"   
+                SelectionMode="Single"
+                            SelectionChanged="OnOrderSelected">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20" 
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Center">
+                        <Label Text="🚗" 
+                               FontSize="64"
+                               HorizontalOptions="Center"/>
+                        <Label Text="No hay pedidos para entregar" 
+                               FontSize="18"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"
+                               Margin="0,10,0,0"/>
+                        <Label Text="Los pedidos listos aparecerán aquí" 
+                               FontSize="14"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10,5" 
+                               Padding="15" 
+                               CornerRadius="10"
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+
+                                <!-- Order Header -->
+                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Id, StringFormat='Pedido #{0:N}'}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <Frame Grid.Column="1"
+                                           Padding="8,4"
+                                           CornerRadius="10"
+                                           BackgroundColor="#4CAF50">
+                                        <Label Text="{Binding Status}" 
+                                               FontSize="12"
+                                               TextColor="White"
+                                               FontAttributes="Bold"/>
+                                    </Frame>
+                                </Grid>
+
+                                <!-- Customer Info -->
+                                <Label Grid.Row="1"
+                                       Text="{Binding UserId, StringFormat='Cliente ID: {0:N}'}" 
+                                       FontSize="13"
+                                       TextColor="Gray"/>
+
+                                <!-- Address (Placeholder) -->
+                                <Label Grid.Row="2"
+                                       Text="📍 Dirección de entrega" 
+                                       FontSize="13"
+                                       TextColor="Gray"/>
+
+                                <!-- Total -->
+                                <Label Grid.Row="3"
+                                       Text="{Binding Total, StringFormat='Total: S/ {0:F2}'}" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="Black"/>
+
+                                <!-- Action Button -->
+                                <Button Grid.Row="4"
+                                        Text="Iniciar Entrega"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.StartDeliveryCommand}"
+                                        CommandParameter="{Binding . }"
+                                        BackgroundColor="#4CAF50"
+                                        TextColor="White"
+                                        CornerRadius="8"
+                                        Padding="15,10"
+                                        FontAttributes="Bold"
+                                        Clicked="OnStartDeliveryClicked"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Current Order Panel -->
+        <Frame Grid.Row="2"
+               x:Name="CurrentOrderFrame"
+               IsVisible="False"
+               Padding="20"
+               BackgroundColor="#E8F5E9"
+               CornerRadius="15"
+               Margin="10">
+            <VerticalStackLayout Spacing="10">
+                <Label x:Name="LblCurrentOrderId"
+                       Text="Pedido #12345678"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#1B5E20"/>
+
+                <Label Text="Entrega en curso..." 
+                       FontSize="14"
+                       TextColor="Gray"/>
+
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                    <Button Text="Ver Detalles"
+                            Clicked="OnViewCurrentOrderClicked"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HorizontalOptions="FillAndExpand"/>
+
+                    <Button Text="Marcar Entregado"
+                            Clicked="OnMarkDeliveredClicked"
+                            BackgroundColor="#2E7D32"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+
+</ContentPage>
