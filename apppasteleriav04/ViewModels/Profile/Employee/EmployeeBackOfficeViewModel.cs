@@ -1,10 +1,11 @@
-﻿using System;
+﻿using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Services.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using apppasteleriav04.Models.Domain;
 
 namespace apppasteleriav04.ViewModels.Profile.Employee
 {
@@ -118,18 +119,38 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             IsLoading = true;
             try
             {
-                // TODO: Load all orders from EmployeeService
-                // Separate by status:  pendiente, en_preparacion, listo, en_camino, entregado
-                await Task.Delay(100);
+                //await Task.Delay(100);
+                //AllOrders.Clear();
+                //PendingOrders.Clear();
+                //InProgressOrders.Clear();
+                //CompletedOrders.Clear();
+
+                // Cargar TODOS los pedidos por estado
+                var pending = await EmployeeService.Instance.GetOrdersByStatusAsync("pendiente");
+                var inProgress = await EmployeeService.Instance.GetOrdersByStatusAsync("en_preparacion");
+                var ready = await EmployeeService.Instance.GetOrdersByStatusAsync("listo");
+                var inDelivery = await EmployeeService.Instance.GetOrdersByStatusAsync("en_camino");
+                var delivered = await EmployeeService.Instance.GetOrdersByStatusAsync("entregado");
 
                 AllOrders.Clear();
                 PendingOrders.Clear();
                 InProgressOrders.Clear();
                 CompletedOrders.Clear();
+
+                // Agregar a colecciones correspondientes
+                foreach (var order in pending)
+                    PendingOrders.Add(order);
+                foreach (var order in inProgress.Concat(ready).Concat(inDelivery))
+                    InProgressOrders.Add(order);
+                foreach (var order in delivered)
+                    CompletedOrders.Add(order);
+                foreach (var order in pending.Concat(inProgress).Concat(ready).Concat(inDelivery).Concat(delivered))
+                    AllOrders.Add(order);
+
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[BackOfficeViewModel] Error loading orders:  {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[BackOfficeViewModel] Error:  {ex.Message}");
             }
             finally
             {
@@ -144,10 +165,19 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             try
             {
                 // TODO: Update order status via EmployeeService
-                await Task.Delay(100);
+                //await Task.Delay(100);
+                //SelectedOrder.Status = newStatus;
+                //await LoadOrdersAsync();
 
-                SelectedOrder.Status = newStatus;
-                await LoadOrdersAsync();
+                // Actualizar estado via EmployeeService
+                bool success = await EmployeeService.Instance.UpdateOrderStatusAsync(SelectedOrder.Id, newStatus);
+
+                if (success)
+                {
+                    SelectedOrder.Status = newStatus;
+                    await LoadOrdersAsync();
+                }
+
             }
             catch (Exception ex)
             {

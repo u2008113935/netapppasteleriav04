@@ -1,10 +1,11 @@
-﻿using System;
+﻿using apppasteleriav04.Models.Domain;
+using apppasteleriav04.Services.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using apppasteleriav04.Models.Domain;
 
 namespace apppasteleriav04.ViewModels.Profile.Employee
 {
@@ -91,15 +92,24 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             IsLoading = true;
             try
             {
-                // TODO: Load ready orders for delivery from EmployeeService
-                // Filter by status:  "listo" or "en_camino"
-                await Task.Delay(100);
+
+                //await Task.Delay(100);
+                //OrdersToDeliver.Clear();
+
+                // Llamar a EmployeeService para cargar pedidos listos
+                var orders = await EmployeeService.Instance.GetOrdersByStatusAsync("listo");
+                // O también pueden estar "en_camino"
+                var inDelivery = await EmployeeService.Instance.GetOrdersByStatusAsync("en_camino");
 
                 OrdersToDeliver.Clear();
+                foreach (var order in orders.Concat(inDelivery))
+                {
+                    OrdersToDeliver.Add(order);
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error loading orders:  {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error:  {ex.Message}");
             }
             finally
             {
@@ -117,11 +127,18 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
                 IsDelivering = true;
 
                 // TODO: Update order status to "en_camino" via EmployeeService
-                await Task.Delay(100);
+                //await Task.Delay(100);
+
+                // Actualizar estado a "en_camino"
+                bool success = await EmployeeService.Instance.UpdateOrderStatusAsync(order.Id, "en_camino");
+
+                if (!success)
+                    System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error updating status");
+
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error starting delivery: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[DeliveryViewModel] Error: {ex.Message}");
             }
         }
 
@@ -132,11 +149,21 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
             try
             {
                 // TODO: Update order status to "entregado" via EmployeeService
-                await Task.Delay(100);
+                //await Task.Delay(100);
+                //IsDelivering = false;
+                //CurrentOrder = null;
+                //await LoadOrdersAsync();
 
-                IsDelivering = false;
-                CurrentOrder = null;
-                await LoadOrdersAsync();
+                // Actualizar estado a "entregado"
+                bool success = await EmployeeService.Instance.UpdateOrderStatusAsync(CurrentOrder.Id, "entregado");
+
+                if (success)
+                {
+                    IsDelivering = false;
+                    CurrentOrder = null;
+                    await LoadOrdersAsync();
+                }
+
             }
             catch (Exception ex)
             {
