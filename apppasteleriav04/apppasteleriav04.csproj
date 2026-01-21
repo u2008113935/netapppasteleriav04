@@ -82,6 +82,9 @@
 	  <Compile Update="Views\Catalog\CatalogPage.xaml.cs">
 	    <DependentUpon>CatalogPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Profile\Employee\EmployeeKitchenPage.xaml.cs">
+	    <DependentUpon>EmployeeKitchenPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>

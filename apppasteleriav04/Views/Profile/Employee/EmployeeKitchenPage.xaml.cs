@@ -3,14 +3,14 @@ using apppasteleriav04.ViewModels.Profile.Employee;
 
 namespace apppasteleriav04.Views.Profile.Employee;
 
-public partial class KitchenPage : ContentPage
+public partial class EmployeeKitchenPage : ContentPage
 {
-	private readonly KitchenViewModel _viewModel;
+	private readonly EmployeeKitchenViewModel _viewModel;
 
-	public KitchenPage()
+	public EmployeeKitchenPage()
 	{
 		InitializeComponent();
-		_viewModel = new KitchenViewModel();
+		_viewModel = new EmployeeKitchenViewModel();
 		BindingContext = _viewModel;
 		OrdersCollectionView.ItemsSource = _viewModel.OrdersToPrepare;
 	}

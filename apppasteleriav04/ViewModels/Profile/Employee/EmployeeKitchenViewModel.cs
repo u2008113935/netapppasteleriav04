@@ -8,7 +8,7 @@ using apppasteleriav04.Models.Domain;
 
 namespace apppasteleriav04.ViewModels.Profile.Employee
 {
-    public class KitchenViewModel : INotifyPropertyChanged
+    public class EmployeeKitchenViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Order> _ordersToPrepare;
         private Order? _currentOrder;
@@ -63,7 +63,7 @@ namespace apppasteleriav04.ViewModels.Profile.Employee
         public ICommand StartPreparingCommand { get; }
         public ICommand MarkReadyCommand { get; }
 
-        public KitchenViewModel()
+        public EmployeeKitchenViewModel()
         {
             _ordersToPrepare = new ObservableCollection<Order>();
 

@@ -23,10 +23,15 @@ namespace apppasteleriav04.Services.Core
         const string RefreshKey = "auth_refresh";
         const string UserIdKey = "auth_user_id";
         const string UserEmailKey = "auth_user_email";
+        const string UserRoleKey = "auth_user_role";
+        const string UserFullNameKey = "auth_user_fullname";
+
 
         public string? AccessToken { get; private set; }
         public string? UserId { get; private set; }
         public string? UserEmail { get; private set; }
+        public string? UserRole { get; private set; }
+        public string? UserFullName { get; private set; }
 
         // IMPORTANTE: Verificar que AccessToken NO este vacio
         public bool IsAuthenticated => !string.IsNullOrWhiteSpace(AccessToken) && !string.IsNullOrWhiteSpace(UserId);
@@ -61,10 +66,35 @@ namespace apppasteleriav04.Services.Core
                 UserId = res.UserId?.ToString();
                 UserEmail = !string.IsNullOrWhiteSpace(res.Email) ? res.Email : email.Trim();
 
+                //Obetener perfil con rol y nombre completo
+                if (Guid.TryParse(UserId, out var userId))
+                {
+                    // Obtener perfil desde SupabaseService
+                    var profile = await SupabaseService.Instance.GetProfileAsync(userId);
+
+                    // Si existe perfil, guardar rol y nombre completo
+                    if (profile != null) 
+                    {
+                        UserRole = profile.Role?? "cliente";
+                        UserFullName = profile.FullName;
+
+                        Debug.WriteLine($"[AuthService] - Perfil: {UserRole}");
+                        Debug.WriteLine($"[AuthService] - Nombre: {UserFullName}");
+                        Debug.Write($"[AuthService] - Rol: {UserRole}");
+                    }
+                    else
+                    {
+                        UserRole = "cliente";
+                        Debug.WriteLine("[AuthService] - Perfil no encontrado, rol por defecto: cliente");
+                    }
+                }
+
+
                 Debug.WriteLine($"[AuthService] SignInAsync exitoso:");
                 Debug.WriteLine($"[AuthService] - AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : AccessToken.Substring(0, Math.Min(20, AccessToken.Length)) + "...")}");
                 Debug.WriteLine($"[AuthService] - UserId: {UserId}");
                 Debug.WriteLine($"[AuthService] - UserEmail: {UserEmail}");
+                Debug.WriteLine($"[AuthService] - UserRole: {UserRole}");
                 Debug.WriteLine($"[AuthService] - IsAuthenticated: {IsAuthenticated}");
 
                 // Guardar en SecureStorage
@@ -78,6 +108,12 @@ namespace apppasteleriav04.Services.Core
 
                     if (!string.IsNullOrEmpty(UserEmail))
                         await SecureStorage.Default.SetAsync(UserEmailKey, UserEmail);
+
+                    if (!string.IsNullOrWhiteSpace(UserRole))
+                        await SecureStorage.Default.SetAsync(UserRoleKey, UserRole);
+
+                    if (!string.IsNullOrWhiteSpace(UserFullName))
+                        await SecureStorage.Default.SetAsync(UserFullNameKey, UserFullName);
 
                     if (!string.IsNullOrWhiteSpace(res.RefreshToken))
                         await SecureStorage.Default.SetAsync(RefreshKey, res.RefreshToken);
@@ -101,6 +137,7 @@ namespace apppasteleriav04.Services.Core
             }
         }
 
+        // Cargar datos desde SecureStorage
         public async Task LoadFromStorageAsync()
         {
             try
@@ -110,11 +147,15 @@ namespace apppasteleriav04.Services.Core
                 AccessToken = await SecureStorage.Default.GetAsync(TokenKey);
                 UserId = await SecureStorage.Default.GetAsync(UserIdKey);
                 UserEmail = await SecureStorage.Default.GetAsync(UserEmailKey);
+                UserRole = await SecureStorage.Default.GetAsync(UserRoleKey);
+                UserFullName = await SecureStorage.Default.GetAsync(UserFullNameKey);
 
                 Debug.WriteLine($"[AuthService] LoadFromStorageAsync resultados:");
                 Debug.WriteLine($"[AuthService] - AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : "presente")}");
                 Debug.WriteLine($"[AuthService] - UserId: {UserId ?? "NULL"}");
                 Debug.WriteLine($"[AuthService] - UserEmail: {UserEmail ?? "NULL"}");
+                Debug.WriteLine($"[AuthService] - UserRole: {UserRole ?? "NULL"}");
+                Debug.WriteLine($"[AuthService] - UserFullName: {UserFullName ?? "NULL"}");
                 Debug.WriteLine($"[AuthService] - IsAuthenticated: {IsAuthenticated}");
 
                 if (!string.IsNullOrWhiteSpace(AccessToken))
@@ -129,6 +170,8 @@ namespace apppasteleriav04.Services.Core
                 AccessToken = null;
                 UserId = null;
                 UserEmail = null;
+                UserRole = null;
+                UserFullName = null;
             }
         }
 
@@ -146,12 +189,16 @@ namespace apppasteleriav04.Services.Core
             AccessToken = null;
             UserId = null;
             UserEmail = null;
+            UserRole = null;
+            UserFullName = null;
 
             try
             {
                 SecureStorage.Default.Remove(TokenKey);
                 SecureStorage.Default.Remove(UserIdKey);
                 SecureStorage.Default.Remove(UserEmailKey);
+                SecureStorage.Default.Remove(UserRoleKey);
+                SecureStorage.Default.Remove(UserFullNameKey);
                 SecureStorage.Default.Remove(RefreshKey);
                 Debug.WriteLine("[AuthService] SecureStorage limpiado");
             }
@@ -170,6 +217,7 @@ namespace apppasteleriav04.Services.Core
             await Task.CompletedTask;
         }
 
+        // Obtener token de acceso, primero desde memoria, luego desde SecureStorage
         public async Task<string?> GetAccessTokenAsync()
         {
             // Si ya tenemos token en memoria, devolverlo
@@ -192,6 +240,12 @@ namespace apppasteleriav04.Services.Core
 
                     if (string.IsNullOrWhiteSpace(UserEmail))
                         UserEmail = await SecureStorage.Default.GetAsync(UserEmailKey);
+
+                    if (string.IsNullOrWhiteSpace(UserRole))
+                        UserRole = await SecureStorage.Default.GetAsync(UserRoleKey);
+
+                    if (string.IsNullOrWhiteSpace(UserFullName))
+                        UserFullName = await SecureStorage.Default.GetAsync(UserFullNameKey);
 
                     SupabaseService.Instance.SetUserToken(AccessToken);
                 }
@@ -264,15 +318,25 @@ namespace apppasteleriav04.Services.Core
             }
         }
 
-        // Metodo auxiliar para verificar estado actual
+        // Metodo auxiliar para verificar estado actual        
         public void LogCurrentState()
         {
             Debug.WriteLine("========== AuthService Estado Actual ==========");
             Debug.WriteLine($"AccessToken: {(string.IsNullOrEmpty(AccessToken) ? "NULL" : "presente")}");
             Debug.WriteLine($"UserId: {UserId ?? "NULL"}");
             Debug.WriteLine($"UserEmail: {UserEmail ?? "NULL"}");
+            Debug.WriteLine($"UserRole: {UserRole ?? "NULL"}");
+            Debug.WriteLine($"UserFullName: {UserFullName ?? "NULL"}");
             Debug.WriteLine($"IsAuthenticated:  {IsAuthenticated}");
             Debug.WriteLine("===============================================");
         }
+
+        //Metodos auxiliares para verificar rol
+        public bool IsEmployee() => UserRole == "cocina" || UserRole == "reparto" || UserRole == "backoffice";
+        public bool IsCliente() => UserRole == "cliente";
+        public bool IsCocina() => UserRole == "cocina";
+        public bool IsReparto() => UserRole == "reparto";
+        public bool IsBackoffice() => UserRole == "backoffice";
+
     }
 }

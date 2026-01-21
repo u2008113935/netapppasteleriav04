@@ -84,25 +84,72 @@ namespace apppasteleriav04.Views.Auth
             }
         }
 
-        // Método separado para navegación (clean code)
+        // Método actualizado para navegar después del rol
         private async Task NavigateAfterLoginAsync()
         {
-            switch (ReturnTo?.ToLower())
+            //Obetener el rol del usuario autenticado
+            var userRole = AuthService.Instance.UserRole;
+            var userEmail = AuthService.Instance.UserEmail;
+
+            System.Diagnostics.Debug.WriteLine($"[LoginPage] Navegando usuario: {userEmail} (Rol: {userRole})");
+
+
+            // Si viene de un parametro especifico (cart, checkout, profile) navegar ahi
+            if (!string.IsNullOrEmpty(ReturnTo))
+            { 
+                    switch (ReturnTo?.ToLower())
+                    {
+                        case "cart":
+                        case "checkout":
+                            // Si viene del carrito o checkout, ir directo a checkout
+                            await Shell.Current.GoToAsync("checkout");
+                            break;
+
+                        case "profile":
+                            await Shell.Current.GoToAsync("//profile");
+                            break;
+
+                        default:
+                            // Default:  ir al catálogo
+                            await Shell.Current.GoToAsync("//catalog");
+                            break;
+                    }
+            }
+
+            // Navegar segun el rol
+            if(AuthService.Instance.IsEmployee())
             {
-                case "cart":
-                case "checkout":
-                    // Si viene del carrito o checkout, ir directo a checkout
-                    await Shell.Current.GoToAsync("checkout");
-                    break;
+                System.Diagnostics.Debug.WriteLine($"[LoginPage] Empleado detectado (Rol: {userRole})");
 
-                case "profile":
-                    await Shell.Current.GoToAsync("//profile");
-                    break;
-
-                default:
-                    // Default:  ir al catálogo
-                    await Shell.Current.GoToAsync("//catalog");
-                    break;
+                //Navegar segun el tipo de empleado
+                if (AuthService.Instance.IsCocina())
+                {
+                    await Shell.Current.GoToAsync("employee-kitchen");
+                }
+                else if (AuthService.Instance.IsReparto())
+                {
+                    await Shell.Current.GoToAsync("employee-delivery");
+                }
+                else if (AuthService.Instance.IsBackoffice())
+                {
+                    await Shell.Current.GoToAsync("employee-backoffice");
+                }
+                else 
+                {                     
+                    // Default empleado:  ir al dashboard general
+                    await Shell.Current.GoToAsync("employee-dashboard");
+                }
+            }
+            else if (AuthService.Instance.IsCliente())
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoginPage] Cliente detectado (Rol: {userRole})");
+                //Cliente: ir al catalogo
+                await Shell.Current.GoToAsync("//catalog");
+            }            
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"[LoginPage] Rol desconocido, navegando a default");
+                await Shell.Current.GoToAsync("//catalog");
             }
         }
         

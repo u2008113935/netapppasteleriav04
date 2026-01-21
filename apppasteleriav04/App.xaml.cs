@@ -55,17 +55,13 @@ namespace apppasteleriav04
             {
                 System.Diagnostics.Debug.WriteLine("[App] Cargando estado de autenticacion...");
 
-                // ========== TEMPORAL PARA TESTING:  LIMPIAR DATOS ==========
-                // Descomenta estas lineas para forzar un inicio limpio
-                // SecureStorage.Default. RemoveAll();
-                // System. Diagnostics.Debug. WriteLine("[App] SecureStorage limpiado para testing");
-                // ===========================================================
-
+                // CARGAR DATOS DEL STORAGE
                 await AuthService.Instance.LoadFromStorageAsync();
 
                 // Log del estado actual
                 AuthService.Instance.LogCurrentState();
 
+                // SI HAY TOKEN ALMACENADO, CONFIGURARLO EN SUPABASE
                 var token = await AuthService.Instance.GetAccessTokenAsync();
                 if (!string.IsNullOrWhiteSpace(token))
                 {

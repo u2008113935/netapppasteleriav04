@@ -8,21 +8,25 @@ namespace apppasteleriav04.Models.Domain
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        // Alinear con el nombre de columna usado en tu API (se usa "full_name" en el payload)
+        
         [JsonPropertyName("full_name")]
         public string FullName { get; set; } = string.Empty;
 
-        // Alinear con el nombre de columna usado en tu API (se usa "avatar_url" en el payload)
+        
         [JsonPropertyName("avatar_url")]
         public string AvatarUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("role")]
         public string Role { get; set; } = string.Empty;
 
-        [JsonIgnore]
-
-        // Propiedad adicional para el correo electrónico
+        [JsonPropertyName("email")]        
         public string Email { get; set; } = string.Empty;
+
+        [JsonPropertyName("created_at")]
+        public DateTime? CreatedAt { get; set; }
+
+        [JsonPropertyName("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
 
         // Propiedad calculada para obtener la URL pública completa del avatar
         public string AvatarPublicUrl
