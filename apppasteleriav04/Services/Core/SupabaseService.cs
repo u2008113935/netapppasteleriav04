@@ -818,9 +818,10 @@ namespace apppasteleriav04.Services.Core
         {
             try
             {
-                Debug.WriteLine($"[SupabaseService] GetProfileAsync:  buscando perfil para id={id}");
+                var userIdString = id.ToString().Trim();
+                Debug.WriteLine($"[SupabaseService] GetProfileAsync:  buscando perfil para id={userIdString}");
 
-                var resp = await _http.GetAsync($"{_url}/rest/v1/profiles?id=eq. {id}&select=*", cancellationToken);
+                var resp = await _http.GetAsync($"{_url}/rest/v1/profiles?id=eq.{id}&select=*", cancellationToken);
                 var json = await resp.Content.ReadAsStringAsync(cancellationToken);
 
                 Debug.WriteLine($"[SupabaseService] GetProfileAsync:  status={resp.StatusCode}");

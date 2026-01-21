@@ -44,8 +44,11 @@
                             Command="{Binding CancelEditCommand}" 
                             IsVisible="{Binding IsEditing}" />
                     <Button Text="Cerrar sesión" 
-                            Command="{Binding LogoutCommand}" 
-                            IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}" />
+                            Command="{Binding LogoutCommand}"                             
+                            BackgroundColor="#FF6B6B"        
+                            TextColor="White"
+                            FontAttributes="Bold"                            
+                            />
                 </HorizontalStackLayout>
 
                 <ActivityIndicator IsVisible="{Binding IsBusy}" 

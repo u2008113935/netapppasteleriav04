@@ -36,36 +36,7 @@ namespace apppasteleriav04.Views.Auth
         {
             if (e.Success)
             {
-                // Ya no llamamos a LoadLocalAsync (método comentado).
-                // El ViewModel realiza la migración y carga del carrito (LoadCartAfterLoginAsync).
-                // Aquí solo mostramos mensajes y navegamos.
-                
                 var message = "Sesión iniciada correctamente";
-
-                /*
-                try
-                {
-                    //await CartService.Instance.LoadLocalAsync();
-                    System.Diagnostics.Debug.WriteLine("[LoginPage] Carrito cargado tras login");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[LoginPage] Error cargando carrito:  {ex.Message}");
-                }
-                */
-                // Agregar mensaje de carrito restaurado si existe (lo establece el ViewModel)
-                if (!string.IsNullOrEmpty(_viewModel.CartRestoredMessage))
-                {
-                    message += $"\n\n{_viewModel.CartRestoredMessage}";
-                }
-
-                await DisplayAlert("Éxito", message, "OK");
-
-                // MVVM: Navegación (responsabilidad de la View)
-                await NavigateAfterLoginAsync();
-
-                // Mostrar mensaje de éxito
-                //var message = "Sesión iniciada correctamente";
 
                 // Agregar mensaje de carrito restaurado si existe
                 if (!string.IsNullOrEmpty(_viewModel.CartRestoredMessage))
@@ -73,14 +44,21 @@ namespace apppasteleriav04.Views.Auth
                     message += $"\n\n{_viewModel.CartRestoredMessage}";
                 }
 
-                await DisplayAlert("Éxito", message, "OK");
+                // Proteger:  verificar que la página está cargada
+                if (this != null && this.IsLoaded)
+                {
+                    await DisplayAlert("Éxito", message, "OK");
+                }
 
-                // MVVM: Navegación (responsabilidad de la View)
+                // MVVM:  Navegación (responsabilidad de la View)
                 await NavigateAfterLoginAsync();
             }
             else
             {
-                await DisplayAlert("Error", e.Message, "OK");
+                if (this != null && this.IsLoaded)
+                {
+                    await DisplayAlert("Error", e.Message, "OK");
+                }
             }
         }
 
