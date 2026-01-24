@@ -36,11 +36,13 @@ namespace apppasteleriav04.Services.Core
         // IMPORTANTE: Verificar que AccessToken NO este vacio
         public bool IsAuthenticated => !string.IsNullOrWhiteSpace(AccessToken) && !string.IsNullOrWhiteSpace(UserId);
 
+        // Constructor privado para singleton
         private AuthService()
         {
             Debug.WriteLine("[AuthService] Instancia creada");
         }
 
+        // Iniciar sesión con email y password
         public async Task<bool> SignInAsync(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
@@ -61,12 +63,12 @@ namespace apppasteleriav04.Services.Core
                     return false;
                 }
 
-                // Guardar en memoria
+                // Paso 1: Guardar en memoria
                 AccessToken = res.AccessToken;
                 UserId = res.UserId?.ToString();
                 UserEmail = !string.IsNullOrWhiteSpace(res.Email) ? res.Email : email.Trim();
 
-                //Obetener perfil con rol y nombre completo
+                //Paso 2: Obetener perfil con rol y nombre completo
                 if (Guid.TryParse(UserId, out var userId))
                 {
                     // Obtener perfil desde SupabaseService
@@ -97,7 +99,7 @@ namespace apppasteleriav04.Services.Core
                 Debug.WriteLine($"[AuthService] - UserRole: {UserRole}");
                 Debug.WriteLine($"[AuthService] - IsAuthenticated: {IsAuthenticated}");
 
-                // Guardar en SecureStorage
+                // Paso 3: Guardar en SecureStorage
                 try
                 {
                     if (!string.IsNullOrEmpty(AccessToken))
@@ -125,7 +127,7 @@ namespace apppasteleriav04.Services.Core
                     Debug.WriteLine($"[AuthService] SecureStorage error: {secEx.Message}");
                 }
 
-                // Configurar token en SupabaseService
+                // Paso 4: Configurar token en SupabaseService
                 SupabaseService.Instance.SetUserToken(AccessToken);
 
                 return true;
@@ -175,6 +177,7 @@ namespace apppasteleriav04.Services.Core
             }
         }
 
+        // Registrar nuevo usuario
         public async Task<bool> SignUpAsync(string email, string password, string name, string? phone = null)
         {
             // TODO: Implementar registro real
@@ -182,16 +185,19 @@ namespace apppasteleriav04.Services.Core
             return true;
         }
 
-        public void Logout()
+        // LOGOUT ASINCONO 
+        public async Task LogoutAsync()
         {
-            Debug.WriteLine("[AuthService] Logout: limpiando datos...");
+            Debug.WriteLine("[AuthService] LogoutAsync: limpiando datos...");
 
+            //Paso 1: Limpiar memoria
             AccessToken = null;
             UserId = null;
             UserEmail = null;
             UserRole = null;
             UserFullName = null;
 
+            // Pasio 2: Limpiar SecureStorage de forma Asincrona
             try
             {
                 SecureStorage.Default.Remove(TokenKey);
@@ -207,14 +213,27 @@ namespace apppasteleriav04.Services.Core
                 Debug.WriteLine($"[AuthService] Logout SecureStorage error: {ex.Message}");
             }
 
+            // Paso 3: Limpiar token en SupabaseService
             SupabaseService.Instance.SetUserToken(null);
+            Debug.WriteLine("[AuthService] LogoutAsync completado");
             Debug.WriteLine($"[AuthService] IsAuthenticated despues de logout: {IsAuthenticated}");
+
+            LogCurrentState();
+
         }
 
+
+        // Mantener el metodo Sincrono Logout para compatibilidad
+        public void Logout()
+        {
+            // Llamar a la version asincrona y no esperar
+            _ = LogoutAsync();
+        }
+
+        // Metodo asincrono para logout
         public async Task SignOutAsync()
         {
-            Logout();
-            await Task.CompletedTask;
+            await LogoutAsync();
         }
 
         // Obtener token de acceso, primero desde memoria, luego desde SecureStorage
@@ -337,6 +356,7 @@ namespace apppasteleriav04.Services.Core
         public bool IsCocina() => UserRole == "cocina";
         public bool IsReparto() => UserRole == "reparto";
         public bool IsBackoffice() => UserRole == "backoffice";
+        public bool IsManager() => UserRole == "gerente";
 
     }
 }

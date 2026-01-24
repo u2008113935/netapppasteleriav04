@@ -69,12 +69,13 @@ namespace apppasteleriav04.Views.Profile
         // Dispara el evento cuando se completa el cierre de sesión
         private async void OnLogoutCompleted(object? sender, EventArgs e)
         {
+            // Mostrar confirmacion de cierre de sesión
             await DisplayAlert(
                 title:"Sesión cerrada", 
                 message:"Has cerrado sesión correctamente",
                 cancel:"OK");
 
-            // Navegar a la pagina de catalogo
+            // Forzar reload de AppShell para actualizar OnNavigated
             await Shell.Current.GoToAsync("//catalog");
         }
     }

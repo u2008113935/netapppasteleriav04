@@ -226,7 +226,6 @@ namespace apppasteleriav04.ViewModels.Profile
         }
 
 
-
         private void SaveProfile()
         {
             // Sincronizar valores editados al objeto UserProfile
@@ -243,10 +242,10 @@ namespace apppasteleriav04.ViewModels.Profile
         }
 
         // Ejecuta logout del usuario
-        private void Logout()
+        private async void Logout()
         {
             // Elimina sesion del servicio
-            AuthService.Instance.Logout();
+            AuthService.Instance.LogoutAsync();
 
             // Limpiar datos del perfil
             UserProfile = null;
